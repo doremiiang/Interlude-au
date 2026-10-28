@@ -353,3 +353,51 @@ input:focus-visible {
     transform: none;
   }
 }
+
+
+/* ===== LOCKSCREEN DREAMY CLOCK 01 ===== */
+
+.lockscreen {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+}
+
+/* Date */
+.lockscreen .lock-date {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.24);
+}
+
+/* Main clock */
+.lockscreen .lock-clock {
+  margin-top: 5px;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: clamp(76px, 21vw, 92px);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.065em;
+  line-height: 1.05;
+  color: #fff;
+  text-shadow:
+    0 0 12px rgba(218, 197, 255, 0.20),
+    0 0 32px rgba(188, 160, 240, 0.15),
+    0 4px 22px rgba(0, 0, 0, 0.20);
+}
+
+/* Soft glass notification */
+.lockscreen .lock-message {
+  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(24, 21, 34, 0.42);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  backdrop-filter: blur(24px) saturate(140%);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.13),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
