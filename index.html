@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#101014">
+  <meta name="description" content="Interlude Phone — a fictional interactive phone for Interlude AU.">
+  <title>Interlude Phone</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0b10;
+      --panel: #17171e;
+      --panel-2: #22222c;
+      --text: #f7f4f2;
+      --muted: #a5a2b0;
+      --accent: #c6b4ee;
+      --accent-dark: #78659f;
+      --line: #ffffff16;
+      --green: #8ad9ad;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      background:
+        radial-gradient(ellipse at 20% 15%, #39304f 0, transparent 38%),
+        radial-gradient(ellipse at 80% 90%, #222e38 0, transparent 35%),
+        #09090d;
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button, input, textarea { font: inherit; }
+    button { color: inherit; cursor: pointer; }
+    button:focus-visible, input:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .stage {
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .device {
+      position: relative;
+      width: min(100%, 390px);
+      height: min(820px, calc(100dvh - 48px));
+      min-height: 580px;
+      overflow: hidden;
+      isolation: isolate;
+      border: 7px solid #29292e;
+      border-radius: 48px;
+      background: #111116;
+      box-shadow: 0 35px 100px #0009, 0 0 0 1px #ffffff1b;
+    }
+    .device::before {
+      content: "";
+      position: absolute;
+      z-index: 50;
+      top: 9px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 88px;
+      height: 23px;
+      border-radius: 20px;
+      background: #050507;
+      box-shadow: inset 0 0 0 1px #ffffff0b;
+      pointer-events: none;
+    }
+    .screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #14131a;
+    }
+
+    .wallpaper {
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(ellipse at 18% 28%, #bba8d44f 0, transparent 32%),
+        radial-gradient(ellipse at 82% 70%, #7195a345 0, transparent 38%),
+        linear-gradient(145deg, #292536, #12151d 53%, #30293b);
+    }
+    .wallpaper::before {
+      content: "";
+      position: absolute;
+      width: 270px;
+      height: 430px;
+      right: -100px;
+      top: 18%;
+      border: 1px solid #ffffff16;
+      border-radius: 48% 52% 39% 61%;
+      transform: rotate(31deg);
+      box-shadow: 0 0 0 22px #ffffff05, 0 0 0 55px #ffffff04;
+    }
+    .wallpaper::after {
+      content: "INTERLUDE";
+      position: absolute;
+      left: -7px;
+      bottom: 13%;
+      font-size: clamp(40px, 13vw, 64px);
+      letter-spacing: .15em;
+      font-weight: 800;
+      color: #ffffff0b;
+      transform: rotate(-90deg) translateX(-8%);
+      transform-origin: left bottom;
+      pointer-events: none;
+    }
+
+    .status {
+      position: absolute;
+      z-index: 30;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 43px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 20px 0;
+      font-size: 11px;
+      font-weight: 700;
+      pointer-events: none;
+    }
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+    .battery {
+      width: 17px; height: 9px;
+      border: 1px solid currentColor;
+      border-radius: 3px;
+      position: relative;
+    }
+    .battery::before {
+      content: ""; position: absolute; inset: 2px;
+      border-radius: 1px; background: currentColor;
+    }
+    .battery::after {
+      content: ""; position: absolute; right: -3px; top: 2px;
+      height: 3px; width: 2px; border-radius: 0 2px 2px 0;
+      background: currentColor;
+    }
+
+    .view {
+      position: absolute;
+      inset: 0;
+      display: none;
+      overflow: hidden;
+      animation: appear .22s ease-out;
+    }
+    .view.active { display: flex; flex-direction: column; }
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .lockscreen {
+      align-items: center;
+      text-align: center;
+      padding: 100px 24px 30px;
+      background: linear-gradient(#0909110b, #09091124 65%, #0909117a);
+    }
+    .lock-date { font-size: 13px; color: #ffffffd2; letter-spacing: .04em; }
+    .lock-clock {
+      margin-top: 7px;
+      font-size: clamp(68px, 20vw, 88px);
+      font-weight: 250;
+      letter-spacing: -.075em;
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+    .lock-message {
+      margin-top: 40px;
+      padding: 15px;
+      width: 100%;
+      border: 1px solid #ffffff25;
+      background: #14141b6b;
+      backdrop-filter: blur(18px);
+      border-radius: 20px;
+      text-align: left;
+    }
+    .lock-message strong { font-size: 12px; }
+    .lock-message p { margin: 5px 0 0; font-size: 13px; color: #eeeaf4; }
+    .lock-bottom { margin-top: auto; width: 100%; }
+    .unlock {
+      width: 100%;
+      padding: 15px;
+      border: 1px solid #ffffff40;
+      border-radius: 24px;
+      background: #ffffff18;
+      backdrop-filter: blur(15px);
+      font-weight: 650;
+    }
+    .unlock:active { transform: scale(.98); }
+    .lock-hint { margin-top: 14px; font-size: 11px; color: #ffffffb4; }
+
+    .home {
+      padding: 57px 19px 25px;
+      background: #12121b30;
+    }
+    .greeting { font-size: 12px; color: #ffffffa8; }
+    .home-heading {
+      margin: 5px 0 18px;
+      font-size: 25px;
+      font-weight: 650;
+      letter-spacing: -.04em;
+    }
+    .widget {
+      border: 1px solid #ffffff1c;
+      border-radius: 22px;
+      padding: 15px;
+      background: #11111b72;
+      backdrop-filter: blur(20px);
+      margin-bottom: 25px;
+    }
+    .widget-top { display: flex; justify-content: space-between; font-size: 11px; color: #e2dce9b8; }
+    .widget-title { margin-top: 12px; font-size: 17px; font-weight: 650; }
+    .widget-sub { margin-top: 5px; font-size: 12px; color: #c3bfcd; }
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 23px 9px;
+    }
+    .app-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      padding: 0;
+      border: 0;
+      background: transparent;
+    }
+    .app-art {
+      width: clamp(48px, 14vw, 57px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border: 1px solid #ffffff25;
+      border-radius: 17px;
+      background: linear-gradient(145deg, #ffffff26, #ffffff09);
+      box-shadow: 0 5px 15px #0002;
+      font-size: 24px;
+      backdrop-filter: blur(12px);
+      transition: transform .15s;
+    }
+    .app-icon:active .app-art { transform: scale(.91); }
+    .app-name { font-size: 10px; color: #fff; text-shadow: 0 1px 5px #0009; }
+    .app-art.chat { background: linear-gradient(145deg, #5da98a, #2e6556); }
+    .app-art.photos { background: linear-gradient(145deg, #bca2ef, #6c609b); }
+    .app-art.notes { background: linear-gradient(145deg, #e5d6a0, #a58a55); }
+    .app-art.phone { background: linear-gradient(145deg, #72c9a1, #3e8569); }
+    .app-art.settings { background: linear-gradient(145deg, #a5a5b2, #555562); }
+    .app-art.music { background: linear-gradient(145deg, #d49cb7, #8a537e); }
+    .dock {
+      display: flex;
+      justify-content: space-around;
+      gap: 12px;
+      margin-top: auto;
+      padding: 12px 8px;
+      border: 1px solid #ffffff1c;
+      border-radius: 25px;
+      background: #ffffff16;
+      backdrop-filter: blur(24px);
+    }
+    .dock .app-art { width: 48px; border-radius: 15px; }
+
+    .app-view {
+      background: #f5f3f8;
+      color: #211f28;
+    }
+    .app-header {
+      flex: 0 0 auto;
+      padding: 53px 18px 14px;
+      background: #f5f3f8;
+      border-bottom: 1px solid #211f280e;
+    }
+    .app-header-row { display: flex; align-items: center; gap: 12px; }
+    .back {
+      flex: 0 0 36px;
+      width: 36px; height: 36px;
+      border: 0; border-radius: 50%;
+      background: #211f280b;
+      color: #27232e;
+      font-size: 22px;
+    }
+    .app-header h2 { margin: 0; font-size: 22px; letter-spacing: -.04em; }
+    .app-subtitle { margin-top: 4px; color: #77727f; font-size: 11px; }
+    .app-content { flex: 1; overflow: auto; padding: 16px; overscroll-behavior: contain; }
+    .app-content::-webkit-scrollbar, .messages::-webkit-scrollbar { display: none; }
+
+    .contact-card {
+      display: flex; align-items: center; gap: 12px;
+      width: 100%; padding: 14px; margin-bottom: 10px;
+      border: 1px solid #211f280c; border-radius: 17px;
+      background: white; text-align: left; color: #211f28;
+    }
+    .avatar {
+      display: grid; place-items: center;
+      flex: 0 0 44px; height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(145deg, #cdbce9, #8f7aa9);
+      color: #30283c; font-weight: 750;
+    }
+    .contact-info { flex: 1; min-width: 0; }
+    .contact-info strong { display: block; font-size: 13px; }
+    .contact-info small { display: block; margin-top: 5px; color: #77727f; font-size: 11px; }
+    .online { color: #39976b !important; }
+    .section-label { margin: 4px 0 12px; color: #797481; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+
+    .chat-view { background: #eeeaf1; }
+    .chat-header { background: #f8f6fa; }
+    .chat-header .app-header-row { align-items: center; }
+    .chat-person { flex: 1; }
+    .chat-person strong { display: block; font-size: 14px; }
+    .chat-person small { display: block; margin-top: 3px; color: #77727f; font-size: 10px; }
+    .messages {
+      flex: 1; overflow: auto; display: flex; flex-direction: column;
+      gap: 10px; padding: 17px 13px;
+    }
+    .day-divider {
+      align-self: center; padding: 6px 10px; margin-bottom: 4px;
+      border-radius: 12px; background: #ffffffad; color: #817a89;
+      font-size: 10px;
+    }
+    .bubble {
+      max-width: 83%; padding: 10px 12px;
+      border-radius: 16px; font-size: 13px; line-height: 1.45;
+      overflow-wrap: anywhere; box-shadow: 0 2px 5px #211f2807;
+    }
+    .bubble.incoming {
+      align-self: flex-start; background: white;
+      border-bottom-left-radius: 5px;
+    }
+    .bubble.outgoing {
+      align-self: flex-end; background: #dcd0f0;
+      border-bottom-right-radius: 5px;
+    }
+    .bubble time { display: block; margin-top: 5px; font-size: 9px; color: #7b7484; text-align: right; }
+    .chat-compose {
+      display: flex; gap: 8px; align-items: end;
+      padding: 10px; padding-bottom: max(12px, env(safe-area-inset-bottom));
+      background: #f8f6fa; border-top: 1px solid #211f280c;
+    }
+    .chat-compose textarea {
+      flex: 1; resize: none; max-height: 90px; min-height: 40px;
+      border: 0; outline: none; border-radius: 18px; padding: 12px;
+      color: #211f28; background: white; font-size: 13px;
+    }
+    .send {
+      width: 40px; height: 40px; border: 0; border-radius: 50%;
+      background: #77638f; color: white; font-size: 17px;
+    }
+
+    .photo-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
+    .photo-tile {
+      min-height: 140px; aspect-ratio: 4 / 5; padding: 12px;
+      display: flex; flex-direction: column; justify-content: end;
+      border: 0; border-radius: 16px; text-align: left; color: white;
+      background: linear-gradient(155deg, #5f596d, #222530);
+      overflow: hidden; position: relative;
+    }
+    .photo-tile:nth-child(2) { background: linear-gradient(155deg, #9c8298, #4e415e); }
+    .photo-tile:nth-child(3) { background: linear-gradient(155deg, #7c958e, #354e4c); }
+    .photo-tile:nth-child(4) { background: linear-gradient(155deg, #ad9878, #594d48); }
+    .photo-tile:nth-child(5) { background: linear-gradient(155deg, #8c9ab7, #45465c); }
+    .photo-tile:nth-child(6) { background: linear-gradient(155deg, #ab8d9a, #5e3f54); }
+    .photo-symbol { position: absolute; top: 20px; left: 15px; font-size: 30px; opacity: .8; }
+    .photo-tile strong { font-size: 12px; }
+    .photo-tile small { margin-top: 4px; font-size: 10px; color: #ffffffc4; }
+
+    .note {
+      padding: 16px; margin-bottom: 12px; border-radius: 16px;
+      background: white; box-shadow: 0 4px 15px #211f2805;
+    }
+    .note strong { font-size: 14px; }
+    .note p { margin: 8px 0 0; color: #696472; font-size: 12px; line-height: 1.6; }
+    .setting-row {
+      display: flex; justify-content: space-between; align-items: center; gap: 12px;
+      padding: 15px 0; border-bottom: 1px solid #211f280d; font-size: 13px;
+    }
+    .setting-row small { display: block; margin-top: 4px; color: #77727f; font-size: 10px; }
+    .toggle {
+      width: 40px; height: 23px; border: 0; border-radius: 20px;
+      background: #c5c1cc; padding: 3px; transition: background .15s;
+    }
+    .toggle::before {
+      content: ""; display: block; width: 17px; height: 17px;
+      border-radius: 50%; background: white; transition: transform .15s;
+    }
+    .toggle.on { background: #806b9e; }
+    .toggle.on::before { transform: translateX(17px); }
+    .dial {
+      min-height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+    }
+    .dial-number { margin: 20px 0; font-size: 30px; letter-spacing: .08em; }
+    .dial-pad { display: grid; grid-template-columns: repeat(3, 64px); gap: 12px; }
+    .dial-pad button {
+      height: 60px; border: 0; border-radius: 50%;
+      background: #e7e2ec; color: #332d3a; font-size: 22px;
+    }
+    .dial-call { margin-top: 20px; border: 0; border-radius: 25px; padding: 13px 28px; background: #469a71; color: white; }
+    .toast {
+      position: absolute; z-index: 60; left: 50%; bottom: 40px;
+      transform: translate(-50%, 10px); opacity: 0; pointer-events: none;
+      padding: 10px 15px; border: 1px solid #ffffff20;
+      border-radius: 18px; background: #24232c; color: white;
+      font-size: 11px; white-space: nowrap; transition: .2s;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .nav-bar {
+      position: absolute; z-index: 40; bottom: 5px; left: 50%;
+      transform: translateX(-50%); width: 105px; height: 4px;
+      border: 0; border-radius: 5px; background: #ffffffb8;
+      padding: 0;
+    }
+    .app-view ~ .nav-bar { background: #3b3544a0; }
+    .hidden { display: none !important; }
+
+    @media (max-width: 480px) {
+      .stage { padding: 0; }
+      .device {
+        width: 100%; height: 100dvh; min-height: 0;
+        border: 0; border-radius: 0;
+      }
+      .device::before { top: 9px; }
+      .screen { height: 100dvh; }
+    }
+    @media (max-height: 650px) and (min-width: 481px) {
+      .stage { padding: 10px; }
+      .device { height: calc(100dvh - 20px); min-height: 0; border-radius: 36px; }
+      .home { padding-top: 45px; }
+      .widget { margin-bottom: 14px; padding: 11px; }
+      .app-grid { gap: 13px 8px; }
+      .lockscreen { padding-top: 65px; }
+      .lock-clock { font-size: 65px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage">
+    <section class="device" aria-label="Interlude virtual phone">
+      <div class="screen" id="screen">
+        <div class="wallpaper"></div>
+
+        <div class="status">
+          <span id="statusTime">09:41</span>
+          <div class="status-icons" aria-label="Sinyal, Wi-Fi, baterai">
+            <span>▮▮▮</span><span>⌁</span><span class="battery"></span>
+          </div>
+        </div>
+
+        <section class="view lockscreen active" id="lockView">
+          <div class="lock-date" id="lockDate">MONDAY, 28 OCTOBER</div>
+          <div class="lock-clock" id="lockClock">09:41</div>
+          <div class="lock-message">
+            <strong>◉  Messages · now</strong>
+            <p>Someone left a little message for you.</p>
+          </div>
+          <div class="lock-bottom">
+            <button class="unlock" id="unlockButton">Unlock phone ↗</button>
+            <div class="lock-hint">INTERLUDE AU · PERSONAL DEVICE</div>
+          </div>
+        </section>
+
+        <section class="view home" id="homeView">
+          <div class="greeting" id="homeDate">YOUR PERSONAL SPACE</div>
+          <h1 class="home-heading">Good to see you.</h1>
+
+          <div class="widget">
+            <div class="widget-top"><span>INTERLUDE · TODAY</span><span>✦</span></div>
+            <div class="widget-title">A little world of your own.</div>
+            <div class="widget-sub">Your messages, memories and moments live here.</div>
+          </div>
+
+          <div class="app-grid">
+            <button class="app-icon" data-app="chat">
+              <span class="app-art chat">▰</span><span class="app-name">Messages</span>
+            </button>
+            <button class="app-icon" data-app="photos">
+              <span class="app-art photos">✿</span><span class="app-name">Photos</span>
+            </button>
+            <button class="app-icon" data-app="notes">
+              <span class="app-art notes">▤</span><span class="app-name">Notes</span>
+            </button>
+            <button class="app-icon" data-app="phone">
+              <span class="app-art phone">☎</span><span class="app-name">Phone</span>
+            </button>
+            <button class="app-icon" data-app="music">
+              <span class="app-art music">♫</span><span class="app-name">Music</span>
+            </button>
+            <button class="app-icon" data-app="settings">
+              <span class="app-art settings">⚙</span><span class="app-name">Settings</span>
+            </button>
+          </div>
+
+          <div class="dock">
+            <button class="app-icon" data-app="phone" aria-label="Phone"><span class="app-art phone">☎</span></button>
+            <button class="app-icon" data-app="chat" aria-label="Messages"><span class="app-art chat">▰</span></button>
+            <button class="app-icon" data-app="photos" aria-label="Photos"><span class="app-art photos">✿</span></button>
+            <button class="app-icon" data-app="settings" aria-label="Settings"><span class="app-art settings">⚙</span></button>
+          </div>
+        </section>
+
+        <section class="view app-view" id="chatView">
+          <header class="app-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <div><h2>Messages</h2><div class="app-subtitle">Your conversations</div></div>
+            </div>
+          </header>
+          <div class="app-content">
+            <div class="section-label">Pinned</div>
+            <button class="contact-card" id="openChat">
+              <span class="avatar">S</span>
+              <span class="contact-info"><strong>Shaq</strong><small>Don't forget to text me when you're home.</small></span>
+              <span style="color:#8a8292;font-size:10px">now</span>
+            </button>
+            <button class="contact-card" id="openChat2">
+              <span class="avatar" style="background:linear-gradient(145deg,#a8c5bc,#688c80)">K</span>
+              <span class="contact-info"><strong>Kris</strong><small>See you tomorrow.</small></span>
+            </button>
+          </div>
+        </section>
+
+        <section class="view app-view chat-view" id="conversationView">
+          <header class="app-header chat-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <span class="avatar" id="chatAvatar">S</span>
+              <div class="chat-person"><strong id="chatName">Shaq</strong><small>fictional conversation</small></div>
+              <button class="back" id="chatInfo" aria-label="Contact info">ⓘ</button>
+            </div>
+          </header>
+          <div class="messages" id="messages">
+            <div class="day-divider">Today</div>
+            <div class="bubble incoming">You're home yet?<time>20:41</time></div>
+            <div class="bubble outgoing">Almost. Why?</div>
+            <div class="bubble outgoing">miss me already? 😭<time>20:42</time></div>
+            <div class="bubble incoming">Don't get ahead of yourself.</div>
+            <div class="bubble incoming">Just text me when you're home, okay?<time>20:43</time></div>
+          </div>
+          <form class="chat-compose" id="chatForm">
+            <textarea id="chatInput" rows="1" placeholder="Message..." aria-label="Write a message"></textarea>
+            <button class="send" type="submit" aria-label="Send message">➤</button>
+          </form>
+        </section>
+
+        <section class="view app-view" id="photosView">
+          <header class="app-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <div><h2>Photos</h2><div class="app-subtitle">Little things worth keeping</div></div>
+            </div>
+          </header>
+          <div class="app-content">
+            <div class="section-label">Memories · Demo collection</div>
+            <div class="photo-grid">
+              <button class="photo-tile" data-photo="Late afternoon"><span class="photo-symbol">☼</span><strong>Late afternoon</strong><small>28 October</small></button>
+              <button class="photo-tile" data-photo="A blurry moment"><span class="photo-symbol">◌</span><strong>A blurry moment</strong><small>Somewhere</small></button>
+              <button class="photo-tile" data-photo="Quiet days"><span class="photo-symbol">⌁</span><strong>Quiet days</strong><small>Camera roll</small></button>
+              <button class="photo-tile" data-photo="On the way home"><span class="photo-symbol">↗</span><strong>On the way home</strong><small>Recent</small></button>
+              <button class="photo-tile" data-photo="Saved for later"><span class="photo-symbol">✦</span><strong>Saved for later</strong><small>Favorites</small></button>
+              <button class="photo-tile" data-photo="Us, maybe"><span class="photo-symbol">♡</span><strong>Us, maybe</strong><small>Private album</small></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view app-view" id="notesView">
+          <header class="app-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <div><h2>Notes</h2><div class="app-subtitle">Saved on this device</div></div>
+            </div>
+          </header>
+          <div class="app-content">
+            <div class="note"><strong>Things to remember</strong><p>Text them when you get home.<br>Buy something to drink tomorrow.<br>Don't forget the little details.</p></div>
+            <div class="note"><strong>Draft — Interlude</strong><p>Some conversations don't end when the screen goes dark. Sometimes they stay with you.</p></div>
+            <div class="note"><strong>Private</strong><p>This is a demo note. Later, we can connect notes to your own AU data.</p></div>
+          </div>
+        </section>
+
+        <section class="view app-view" id="phoneView">
+          <header class="app-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <div><h2>Phone</h2><div class="app-subtitle">Dial pad demo</div></div>
+            </div>
+          </header>
+          <div class="app-content">
+            <div class="dial">
+              <div style="color:#77727f;font-size:11px">Enter a number</div>
+              <div class="dial-number" id="dialNumber">&nbsp;</div>
+              <div class="dial-pad" id="dialPad"></div>
+              <button class="dial-call" id="callButton">Call</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="view app-view" id="settingsView">
+          <header class="app-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <div><h2>Settings</h2><div class="app-subtitle">Make it feel like yours</div></div>
+            </div>
+          </header>
+          <div class="app-content">
+            <div class="contact-card">
+              <span class="avatar">I</span>
+              <span class="contact-info"><strong>Interlude Phone</strong><small>Personal device · Preview build</small></span>
+            </div>
+            <div class="setting-row"><span>Dark appearance<small>Current interface theme</small></span><button class="toggle on" id="darkToggle" aria-label="Toggle dark appearance" aria-pressed="true"></button></div>
+            <div class="setting-row"><span>Show lockscreen notification<small>Demo notification</small></span><button class="toggle on" id="notifToggle" aria-label="Toggle notification" aria-pressed="true"></button></div>
+            <div class="setting-row"><span>Device name<small>Interlude Phone</small></span><span>✎</span></div>
+            <div class="note" style="margin-top:18px"><strong>About</strong><p>This is the first working prototype. The demo messages are not connected to a server and will reset when the page is refreshed.</p></div>
+          </div>
+        </section>
+
+        <section class="view app-view" id="musicView">
+          <header class="app-header">
+            <div class="app-header-row">
+              <button class="back" data-back aria-label="Back">‹</button>
+              <div><h2>Music</h2><div class="app-subtitle">Your listening corner</div></div>
+            </div>
+          </header>
+          <div class="app-content" style="display:grid;place-items:center;text-align:center">
+            <div>
+              <div style="width:180px;height:180px;border-radius:28px;background:radial-gradient(circle at 30% 25%,#d9b9d8,#645b7d 55%,#242634);display:grid;place-items:center;font-size:60px;margin:0 auto 25px">♫</div>
+              <div style="font-size:19px;font-weight:700">A song for later</div>
+              <p style="color:#77727f;font-size:12px;line-height:1.6">Your fictional music player.<br>We'll add playlists and album art later.</p>
+              <button class="contact-card" id="musicNotice" style="justify-content:center">♡ &nbsp; Save this mood</button>
+            </div>
+          </div>
+        </section>
+
+        <button class="nav-bar" id="navHome" aria-label="Go to home"></button>
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const views = [...document.querySelectorAll(".view")];
+      let currentView = "lockView";
+      let previousView = "homeView";
+      let activeContact = "Shaq";
+      let dialValue = "";
+      let toastTimer;
+
+      function showToast(message) {
+        const el = $("toast");
+        el.textContent = message;
+        el.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
+      }
+
+      function openView(id) {
+        if (!$ (id)) return;
+        if (id !== "conversationView") previousView = id === "lockView" ? "homeView" : id;
+        views.forEach(view => view.classList.toggle("active", view.id === id));
+        currentView = id;
+        $("navHome").style.background = id === "lockView" ? "#ffffffb8" : "#3b3544a0";
+        if (id === "conversationView") {
+          $("messages").scrollTop = $("messages").scrollHeight;
+          setTimeout(() => $("chatInput").focus({ preventScroll: true }), 100);
+        }
+      }
+
+      function updateClock() {
+        const now = new Date();
+        const time = now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false });
+        const date = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
+        $("statusTime").textContent = time;
+        $("lockClock").textContent = time;
+        $("lockDate").textContent = date.toUpperCase();
+        $("homeDate").textContent = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }).toUpperCase();
+      }
+
+      $("unlockButton").addEventListener("click", () => openView("homeView"));
+      document.querySelectorAll("[data-app]").forEach(button => {
+        button.addEventListener("click", () => {
+          const id = button.dataset.app + "View";
+          if ($(id)) openView(id);
+        });
+      });
+      document.querySelectorAll("[data-back]").forEach(button => {
+        button.addEventListener("click", () => {
+          if (currentView === "conversationView") openView("chatView");
+          else openView("homeView");
+        });
+      });
+      $("navHome").addEventListener("click", () => {
+        if (currentView === "lockView") openView("homeView");
+        else openView("homeView");
+      });
+
+      function openConversation(name) {
+        activeContact = name;
+        $("chatName").textContent = name;
+        $("chatAvatar").textContent = name.charAt(0).toUpperCase();
+        const messages = $("messages");
+        messages.innerHTML = '<div class="day-divider">Today</div>';
+        const sample = name === "Shaq"
+          ? [["in","You're home yet?","20:41"],["out","Almost. Why?","20:42"],["out","miss me already? 😭","20:42"],["in","Don't get ahead of yourself.","20:43"],["in","Just text me when you're home, okay?","20:43"]]
+          : [["in","Hey, got a minute?","18:12"],["out","For you? Maybe.","18:13"],["in","Very funny. See you tomorrow.","18:14"]];
+        sample.forEach(([type, text, time]) => addBubble(text, type, time));
+        openView("conversationView");
+      }
+      $("openChat").addEventListener("click", () => openConversation("Shaq"));
+      $("openChat2").addEventListener("click", () => openConversation("Kris"));
+      $("chatInfo").addEventListener("click", () => showToast(activeContact + " · Interlude contact"));
+
+      function addBubble(text, type, time) {
+        const bubble = document.createElement("div");
+        bubble.className = "bubble " + (type === "out" ? "outgoing" : "incoming");
+        bubble.append(document.createTextNode(text));
+        const stamp = document.createElement("time");
+        stamp.textContent = time || new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false });
+        bubble.append(stamp);
+        $("messages").append(bubble);
+      }
+
+      $("chatForm").addEventListener("submit", event => {
+        event.preventDefault();
+        const input = $("chatInput");
+        const text = input.value.trim();
+        if (!text) return;
+        addBubble(text, "out");
+        input.value = "";
+        input.style.height = "auto";
+        $("messages").scrollTop = $("messages").scrollHeight;
+      });
+      $("chatInput").addEventListener("input", () => {
+        const input = $("chatInput");
+        input.style.height = "auto";
+        input.style.height = Math.min(input.scrollHeight, 90) + "px";
+      });
+
+      document.querySelectorAll("[data-photo]").forEach(tile => {
+        tile.addEventListener("click", () => showToast(tile.dataset.photo + " · Demo album"));
+      });
+
+      $("darkToggle").addEventListener("click", event => {
+        const button = event.currentTarget;
+        const on = button.classList.toggle("on");
+        button.setAttribute("aria-pressed", String(on));
+        document.documentElement.style.setProperty("--bg", on ? "#0b0b10" : "#f5f3f8");
+        showToast(on ? "Dark appearance enabled" : "Dark appearance selected off");
+      });
+      $("notifToggle").addEventListener("click", event => {
+        const button = event.currentTarget;
+        const on = button.classList.toggle("on");
+        button.setAttribute("aria-pressed", String(on));
+        $("lockView").querySelector(".lock-message").classList.toggle("hidden", !on);
+        showToast(on ? "Notification enabled" : "Notification hidden");
+      });
+      $("musicNotice").addEventListener("click", () => showToast("Mood saved ♡"));
+
+      const dialPad = $("dialPad");
+      ["1","2","3","4","5","6","7","8","9","⌫","0","+"].forEach(key => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = key;
+        button.addEventListener("click", () => {
+          if (key === "⌫") dialValue = dialValue.slice(0, -1);
+          else if (dialValue.length < 18) dialValue += key;
+          $("dialNumber").textContent = dialValue || "\u00a0";
+        });
+        dialPad.append(button);
+      });
+      $("callButton").addEventListener("click", () => showToast(dialValue ? "Calling is a visual demo only" : "Enter a number first"));
+
+      updateClock();
+      setInterval(updateClock, 15000);
+
+      document.addEventListener("keydown", event => {
+        if (event.key === "Escape" || event.key === "Backspace") {
+          if (currentView === "conversationView") openView("chatView");
+          else if (currentView !== "lockView") openView("homeView");
+        }
+      });
+
+      let touchStartY = 0;
+      $("screen").addEventListener("touchstart", event => {
+        touchStartY = event.changedTouches[0].screenY;
+      }, { passive: true });
+      $("screen").addEventListener("touchend", event => {
+        const endY = event.changedTouches[0].screenY;
+        if (currentView === "lockView" && touchStartY - endY > 45) openView("homeView");
+      }, { passive: true });
+    })();
+  </script>
+</body>
+</html>
