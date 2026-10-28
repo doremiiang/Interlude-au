@@ -260,7 +260,6 @@ input:focus-visible {
 
 /* Small Android screens */
 
-/* Small Android screens — virtual phone mockup */
 @media (max-width: 480px) {
   .stage {
     padding: 12px;
@@ -313,5 +312,44 @@ input:focus-visible {
   .photo-tile,
   .unlock {
     transition: none;
+  }
+}
+
+/* UI POLISH 02 — Home screen icons */
+
+.app-grid {
+  column-gap: 10px;
+  row-gap: 18px;
+}
+
+.app-icon {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-art {
+  border-radius: 22%;
+  transform-origin: center;
+  backface-visibility: hidden;
+}
+
+.app-name {
+  margin-top: 6px;
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+/* Respect compact Android screens */
+@media (max-width: 360px) {
+  .app-grid {
+    column-gap: 6px;
+    row-gap: 15px;
+  }
+}
+
+/* Keep motion comfortable */
+@media (prefers-reduced-motion: reduce) {
+  .app-icon:active .app-art {
+    transform: none;
   }
 }
