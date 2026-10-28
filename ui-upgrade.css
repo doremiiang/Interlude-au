@@ -554,3 +554,19 @@ input:focus-visible {
   margin-top: auto;
   padding-bottom: 0;
 }
+
+/* WALLPAPER UPGRADE 01 — Shaqil */
+.lockscreen {
+  background-color: #100d1b;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(8, 7, 18, 0.12) 0%,
+      rgba(12, 9, 24, 0.18) 38%,
+      rgba(8, 7, 17, 0.68) 100%
+    ),
+    url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+}
