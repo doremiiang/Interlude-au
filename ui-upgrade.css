@@ -1235,8 +1235,29 @@ input:focus-visible {
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
-/* Soft highlight on the glass surface */
+
+/* Soft highlight — safer glass layering */
 .lockscreen .lock-message::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.03) 45%,
+    rgba(205, 185, 240, 0.08) 100%
+  );
+}
+
+/* Keep notification text above the glass highlight */
+.lockscreen .lock-message > * {
+  position: relative;
+  z-index: 1;
+}
+
   content: "";
   position: absolute;
   inset: 0;
