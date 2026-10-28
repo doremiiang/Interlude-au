@@ -1386,3 +1386,126 @@ input:focus-visible {
   fill: currentColor;
   stroke: none;
 }
+
+
+
+/* IPHONE-STYLE LOCKSCREEN CONTROLS */
+
+#lockView {
+  position: absolute;
+  inset: 0;
+  padding:
+    max(100px, calc(env(safe-area-inset-top) + 90px))
+    24px
+    max(26px, env(safe-area-inset-bottom));
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+#lockView.active {
+  display: flex;
+}
+
+#lockView .lock-date,
+#lockView .lock-clock,
+#lockView .lock-message {
+  flex-shrink: 0;
+}
+
+#lockView .lock-message {
+  width: 100%;
+}
+
+#lockView .lock-bottom {
+  display: none !important;
+}
+
+#lockView .lock-controls {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding: 0 3px 18px;
+}
+
+#lockView .lock-control {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.20);
+  border-radius: 50%;
+  color: rgba(255,255,255,.95);
+  background: rgba(30,28,38,.32);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+#lockView .lock-control svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#lockView .lock-control:active {
+  transform: scale(.92);
+  background: rgba(255,255,255,.24);
+}
+
+#lockView .lock-swipe-hint {
+  width: 100%;
+  flex: 0 0 auto;
+  text-align: center;
+  color: rgba(255,255,255,.82);
+  padding-bottom: 4px;
+}
+
+#lockView .lock-swipe-hint span {
+  display: block;
+  width: 134px;
+  height: 5px;
+  margin: 0 auto 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.88);
+}
+
+#lockView .lock-swipe-hint p {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: .02em;
+  text-shadow: 0 1px 5px #0008;
+}
+
+/* Keep controls above the wallpaper effects */
+#lockView .lock-controls,
+#lockView .lock-swipe-hint {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-height: 700px) {
+  #lockView {
+    padding-top: 78px;
+  }
+
+  #lockView .lock-clock {
+    font-size: clamp(68px, 19vw, 86px);
+  }
+
+  #lockView .lock-message {
+    margin-top: 24px;
+  }
+
+  #lockView .lock-controls {
+    padding-bottom: 10px;
+  }
+}
