@@ -1849,3 +1849,81 @@ input:focus-visible {
 #lockView .lock-swipe-hint p {
   margin: 0;
 }
+
+/* ===== HOME SCREEN POLISH 02 ===== */
+/* Micro-refinement only. Existing markup and app logic stay untouched. */
+
+/* More intentional visual hierarchy */
+#homeView .greeting {
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+#homeView .home-heading {
+  text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Softer, more refined widget surface */
+#homeView .widget {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#homeView .widget::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.045),
+    transparent 42%,
+    rgba(203, 184, 239, 0.045)
+  );
+}
+
+#homeView .widget-top {
+  line-height: 1.4;
+}
+
+#homeView .widget-title {
+  text-wrap: balance;
+}
+
+#homeView .widget-sub {
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+/* Keep icon interaction subtle and consistent */
+#homeView .app-icon {
+  position: relative;
+  user-select: none;
+}
+
+#homeView .app-art {
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#homeView .app-icon:active .app-art {
+  transform: scale(0.94);
+}
+
+/* Avoid accidental text selection on dock labels/icons */
+#homeView .dock .app-icon {
+  user-select: none;
+}
+
+/* Compact-height screens */
+@media (max-height: 700px) {
+  #homeView .widget-sub {
+    line-height: 1.4;
+  }
+}
+
+/* ===== END HOME SCREEN POLISH 02 ===== */
