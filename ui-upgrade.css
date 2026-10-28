@@ -1328,3 +1328,61 @@ input:focus-visible {
   font-weight: 500;
   letter-spacing: 0;
 }
+
+/* INTERLUDE — REFINED STATUS BAR ICONS */
+
+.status {
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+    "Segoe UI", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  color: #fff;
+}
+
+.status-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 17px;
+  height: 14px;
+  overflow: visible;
+}
+
+.signal-icon {
+  width: 16px;
+  fill: currentColor;
+}
+
+.wifi-icon {
+  width: 17px;
+  fill: currentColor;
+}
+
+.wifi-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.battery-icon {
+  width: 22px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.battery-icon .battery-level {
+  fill: currentColor;
+  stroke: none;
+}
