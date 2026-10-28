@@ -402,18 +402,13 @@ input:focus-visible {
     inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
-/* ===== INTERLUDE AU · LOCKSCREEN UPGRADE 02 ===== */
 
+/* ===== LOCKSCREEN UPGRADE 02 — LAYER FIX ===== */
+
+/* Keep the original lockscreen layout untouched */
 .lockscreen {
-  position: relative;
   isolation: isolate;
-  overflow: hidden;
   background:
-    radial-gradient(
-      ellipse at 50% 28%,
-      rgba(177, 139, 231, 0.23),
-      transparent 48%
-    ),
     linear-gradient(
       180deg,
       rgba(8, 7, 18, 0.06) 0%,
@@ -422,34 +417,34 @@ input:focus-visible {
     );
 }
 
-/* Atmospheric glow — cahaya bergerak perlahan */
+/* Ambient glow: behind content, above the background */
 .lockscreen::before {
   content: "";
   position: absolute;
-  z-index: -1;
-  inset: -30%;
+  inset: 0;
+  z-index: 0;
   pointer-events: none;
   background:
     radial-gradient(
       ellipse at 30% 35%,
       rgba(192, 156, 255, 0.20),
-      transparent 38%
+      transparent 48%
     ),
     radial-gradient(
       ellipse at 72% 60%,
       rgba(118, 126, 215, 0.15),
-      transparent 40%
+      transparent 45%
     );
-  filter: blur(28px);
+  filter: blur(18px);
   animation: iu-ambient-drift 12s ease-in-out infinite alternate;
 }
 
-/* Fine grain / tiny light particles */
+/* Floating light particles */
 .lockscreen::after {
   content: "";
   position: absolute;
-  z-index: -1;
   inset: 0;
+  z-index: 0;
   pointer-events: none;
   opacity: 0.24;
   background-image:
@@ -461,12 +456,15 @@ input:focus-visible {
   animation: iu-particle-drift 24s linear infinite;
 }
 
-/* Clock — tegas, clean, tetap dreamy */
-.lockscreen .lock-clock {
+/* Keep lockscreen content above decorative layers */
+.lockscreen > * {
   position: relative;
   z-index: 1;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+}
+
+/* Clock */
+.lockscreen .lock-clock {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: clamp(76px, 21vw, 92px);
   font-weight: 500;
   letter-spacing: -0.065em;
@@ -479,23 +477,17 @@ input:focus-visible {
 
 /* Date */
 .lockscreen .lock-date {
-  position: relative;
-  z-index: 1;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
+  line-height: 1.5;
   color: rgba(255,255,255,.9);
-  text-shadow: 0 2px 12px rgba(0,0,0,.25);
   animation: iu-clock-arrive 750ms ease-out both;
 }
 
-/* Frosted-glass notification */
+/* Glass notification */
 .lockscreen .lock-message {
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
   border: 1px solid rgba(255,255,255,.23);
   border-radius: 22px;
   background: linear-gradient(
@@ -512,10 +504,8 @@ input:focus-visible {
   animation: iu-notification-arrive 850ms 120ms ease-out both;
 }
 
-/* Unlock button gets a gentle highlight */
+/* Unlock interaction */
 .lockscreen .unlock {
-  position: relative;
-  z-index: 1;
   transition: transform .22s ease, background .22s ease;
 }
 
@@ -523,15 +513,14 @@ input:focus-visible {
   transform: scale(.96);
 }
 
-/* Motion */
 @keyframes iu-ambient-drift {
-  from { transform: translate3d(-2%, -1%, 0) scale(1); }
-  to   { transform: translate3d(2%, 2%, 0) scale(1.06); }
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
 }
 
 @keyframes iu-particle-drift {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-18px, -28px, 0); }
+  from { background-position: 12px 18px, 52px 76px, 31px 9px; }
+  to   { background-position: -6px -10px, 34px 48px, 13px -19px; }
 }
 
 @keyframes iu-clock-arrive {
@@ -544,7 +533,6 @@ input:focus-visible {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Respect reduced-motion settings */
 @media (prefers-reduced-motion: reduce) {
   .lockscreen::before,
   .lockscreen::after,
@@ -554,7 +542,6 @@ input:focus-visible {
     animation: none !important;
   }
 }
-
 
 /* FIX 03 — restore original lockscreen layout */
 .lockscreen {
