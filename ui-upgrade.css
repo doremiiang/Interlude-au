@@ -570,3 +570,155 @@ input:focus-visible {
   background-size: cover, cover;
   background-repeat: no-repeat;
 }
+
+/* INTERLUDE — WALLPAPER BLENDING + TYPOGRAPHY 02 */
+
+.lockscreen {
+  color: #f4efff;
+  background-color: #100d1b;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(14, 10, 25, 0.08) 0%,
+      rgba(20, 13, 34, 0.12) 32%,
+      rgba(13, 10, 24, 0.48) 65%,
+      rgba(8, 7, 17, 0.82) 100%
+    ),
+    url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+}
+
+/* More refined system typography */
+.device,
+.device button,
+.device input,
+.device textarea {
+  font-family:
+    "Helvetica Neue",
+    "Arial",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lock screen date */
+.lockscreen .lock-date {
+  color: rgba(244, 239, 255, 0.82);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 12px rgba(10, 5, 20, 0.28);
+}
+
+/* Clock */
+.lockscreen .lock-clock {
+  color: #fffafc;
+  font-weight: 400;
+  letter-spacing: -0.075em;
+  text-shadow:
+    0 2px 18px rgba(15, 8, 30, 0.32),
+    0 0 30px rgba(210, 190, 255, 0.12);
+}
+
+/* Glass notification */
+.lockscreen .lock-message {
+  color: #f5efff;
+  border-color: rgba(238, 225, 255, 0.20);
+  background: linear-gradient(
+    135deg,
+    rgba(55, 43, 72, 0.48),
+    rgba(20, 16, 32, 0.62)
+  );
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* Keep notification body softer than its title */
+.lockscreen .lock-message p {
+  color: rgba(245, 239, 255, 0.78);
+  line-height: 1.45;
+}
+
+/* Unlock button */
+.lockscreen .unlock {
+  color: #f6efff;
+  letter-spacing: 0.015em;
+}
+
+/* INTERLUDE — WALLPAPER BLENDING + TYPOGRAPHY 02 */
+
+.lockscreen {
+  color: #f4efff;
+  background-color: #100d1b;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(14, 10, 25, 0.08) 0%,
+      rgba(20, 13, 34, 0.12) 32%,
+      rgba(13, 10, 24, 0.48) 65%,
+      rgba(8, 7, 17, 0.82) 100%
+    ),
+    url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+}
+
+/* More refined system typography */
+.device,
+.device button,
+.device input,
+.device textarea {
+  font-family:
+    "Helvetica Neue",
+    "Arial",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Lock screen date */
+.lockscreen .lock-date {
+  color: rgba(244, 239, 255, 0.82);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 12px rgba(10, 5, 20, 0.28);
+}
+
+/* Clock */
+.lockscreen .lock-clock {
+  color: #fffafc;
+  font-weight: 400;
+  letter-spacing: -0.075em;
+  text-shadow:
+    0 2px 18px rgba(15, 8, 30, 0.32),
+    0 0 30px rgba(210, 190, 255, 0.12);
+}
+
+/* Glass notification */
+.lockscreen .lock-message {
+  color: #f5efff;
+  border-color: rgba(238, 225, 255, 0.20);
+  background: linear-gradient(
+    135deg,
+    rgba(55, 43, 72, 0.48),
+    rgba(20, 16, 32, 0.62)
+  );
+  box-shadow:
+    0 16px 38px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+/* Keep notification body softer than its title */
+.lockscreen .lock-message p {
+  color: rgba(245, 239, 255, 0.78);
+  line-height: 1.45;
+}
+
+/* Unlock button */
+.lockscreen .unlock {
+  color: #f6efff;
+  letter-spacing: 0.015em;
+}
