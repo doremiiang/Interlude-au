@@ -1824,3 +1824,28 @@ input:focus-visible {
   }
 }
 /* ===== END HOME SCREEN POLISH 01 ===== */
+
+/* FIX 05 — Lock screen swipe indicator */
+
+#lockView .lock-swipe-hint {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+#lockView .lock-swipe-hint span {
+  width: 108px;
+  height: 4px;
+  margin: 0 auto 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: none;
+}
+
+/* Keep the swipe hint near the bottom of the phone screen */
+#lockView .lock-controls {
+  padding-bottom: 12px;
+}
+
+#lockView .lock-swipe-hint p {
+  margin: 0;
+}
