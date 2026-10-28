@@ -1386,3 +1386,544 @@ input:focus-visible {
   fill: currentColor;
   stroke: none;
 }
+
+
+
+/* IPHONE-STYLE LOCKSCREEN CONTROLS */
+
+#lockView {
+  position: absolute;
+  inset: 0;
+  padding:
+    max(100px, calc(env(safe-area-inset-top) + 90px))
+    24px
+    max(26px, env(safe-area-inset-bottom));
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+#lockView.active {
+  display: flex;
+}
+
+#lockView .lock-date,
+#lockView .lock-clock,
+#lockView .lock-message {
+  flex-shrink: 0;
+}
+
+#lockView .lock-message {
+  width: 100%;
+}
+
+#lockView .lock-bottom {
+  display: none !important;
+}
+
+#lockView .lock-controls {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding: 0 3px 18px;
+}
+
+#lockView .lock-control {
+  width: 58px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1px solid rgba(255,255,255,.20);
+  border-radius: 50%;
+  color: rgba(255,255,255,.95);
+  background: rgba(30,28,38,.32);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+}
+
+#lockView .lock-control svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+#lockView .lock-control:active {
+  transform: scale(.92);
+  background: rgba(255,255,255,.24);
+}
+
+#lockView .lock-swipe-hint {
+  width: 100%;
+  flex: 0 0 auto;
+  text-align: center;
+  color: rgba(255,255,255,.82);
+  padding-bottom: 4px;
+}
+
+#lockView .lock-swipe-hint span {
+  display: block;
+  width: 134px;
+  height: 5px;
+  margin: 0 auto 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.88);
+}
+
+#lockView .lock-swipe-hint p {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: .02em;
+  text-shadow: 0 1px 5px #0008;
+}
+
+/* Keep controls above the wallpaper effects */
+#lockView .lock-controls,
+#lockView .lock-swipe-hint {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-height: 700px) {
+  #lockView {
+    padding-top: 78px;
+  }
+
+  #lockView .lock-clock {
+    font-size: clamp(68px, 19vw, 86px);
+  }
+
+  #lockView .lock-message {
+    margin-top: 24px;
+  }
+
+  #lockView .lock-controls {
+    padding-bottom: 10px;
+  }
+}
+
+/* INTERLUDE FIX 05 — lockscreen layout */
+#lockView {
+  box-sizing: border-box;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: max(100px, calc(env(safe-area-inset-top) + 90px))
+    24px max(26px, env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
+#lockView.active {
+  display: flex;
+  animation: none;
+}
+
+#lockView .lock-owner {
+  margin-bottom: 22px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,.78);
+}
+
+#lockView .lock-date,
+#lockView .lock-clock,
+#lockView .lock-message {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#lockView .lock-clock {
+  margin-top: 5px;
+}
+
+#lockView .lock-message {
+  width: 100%;
+  margin-top: 30px;
+  animation: none;
+}
+
+#lockView .lock-controls {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+#lockView .lock-swipe-hint {
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+#lockView .lock-bottom,
+#lockView .unlock,
+#lockView .lock-hint {
+  display: none !important;
+}
+
+@media (max-height: 700px) {
+  #lockView {
+    padding-top: 78px;
+  }
+
+  #lockView .lock-owner {
+    margin-bottom: 14px;
+  }
+
+  #lockView .lock-message {
+    margin-top: 20px;
+  }
+}
+
+/* ===== INTERLUDE HOME SCREEN · POLISH 01 ===== */
+/* Scoped to home screen and its dock. Keep existing app icons. */
+
+#homeView {
+  background:
+    radial-gradient(
+      ellipse at 12% 24%,
+      rgba(190, 165, 224, 0.10),
+      transparent 43%
+    ),
+    linear-gradient(
+      160deg,
+      rgba(18, 17, 29, 0.22),
+      rgba(12, 13, 22, 0.48)
+    );
+
+  padding: 58px 20px 27px;
+}
+
+/* Greeting and heading */
+#homeView .greeting {
+  color: rgba(241, 234, 250, 0.68);
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.105em;
+  line-height: 1.5;
+}
+
+#homeView .home-heading {
+  margin: 6px 0 19px;
+  font-size: clamp(23px, 6.2vw, 26px);
+  font-weight: 650;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+}
+
+/* Main glass widget */
+#homeView .widget {
+  margin-bottom: 25px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 23px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(190, 169, 222, 0.10),
+      rgba(255, 255, 255, 0.025) 55%,
+      rgba(112, 130, 165, 0.07)
+    ),
+    rgba(22, 21, 34, 0.56);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 12px 28px rgba(0, 0, 0, 0.12);
+
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  backdrop-filter: blur(24px) saturate(135%);
+}
+
+#homeView .widget-top {
+  color: rgba(230, 220, 245, 0.72);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.055em;
+}
+
+#homeView .widget-title {
+  margin-top: 13px;
+  font-size: 16px;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+
+#homeView .widget-sub {
+  margin-top: 6px;
+  color: rgba(220, 214, 231, 0.72);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+/* App grid */
+#homeView .app-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: 8px;
+  row-gap: 21px;
+}
+
+#homeView .app-icon {
+  gap: 8px;
+  min-width: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#homeView .app-art {
+  width: clamp(48px, 13.5vw, 55px);
+  flex: 0 0 auto;
+  border-radius: 17px;
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.08),
+    0 7px 17px rgba(0, 0, 0, 0.17);
+
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+
+  transition:
+    transform 160ms ease,
+    filter 160ms ease,
+    box-shadow 160ms ease;
+}
+
+#homeView .app-name {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: 0.005em;
+
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  #homeView .app-icon:hover .app-art {
+    filter: brightness(1.08);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.25),
+      0 9px 21px rgba(0, 0, 0, 0.22);
+  }
+}
+
+#homeView .app-icon:active .app-art {
+  transform: scale(0.93);
+  filter: brightness(1.08);
+}
+
+/* Bottom dock */
+#homeView .dock {
+  flex: 0 0 auto;
+  justify-content: space-around;
+  gap: 10px;
+  margin-top: auto;
+  padding: 11px 9px;
+
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 25px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.075),
+      rgba(194, 174, 223, 0.045)
+    ),
+    rgba(25, 23, 37, 0.64);
+
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.09),
+    0 10px 26px rgba(0, 0, 0, 0.14);
+
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+  backdrop-filter: blur(28px) saturate(140%);
+}
+
+#homeView .dock .app-icon {
+  flex: 1 1 0;
+  gap: 0;
+}
+
+#homeView .dock .app-art {
+  width: 47px;
+  max-width: 100%;
+  border-radius: 15px;
+}
+
+/* Compact screens */
+@media (max-width: 360px) {
+  #homeView {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  #homeView .widget {
+    padding: 13px;
+    margin-bottom: 21px;
+  }
+
+  #homeView .app-grid {
+    column-gap: 5px;
+    row-gap: 18px;
+  }
+
+  #homeView .app-art {
+    width: 46px;
+    border-radius: 15px;
+  }
+
+  #homeView .dock .app-art {
+    width: 43px;
+  }
+}
+
+@media (max-height: 700px) {
+  #homeView {
+    padding-top: 52px;
+    padding-bottom: 22px;
+  }
+
+  #homeView .home-heading {
+    margin-bottom: 14px;
+  }
+
+  #homeView .widget {
+    padding: 12px 14px;
+    margin-bottom: 17px;
+  }
+
+  #homeView .widget-title {
+    margin-top: 9px;
+    font-size: 15px;
+  }
+
+  #homeView .app-grid {
+    row-gap: 15px;
+  }
+
+  #homeView .dock {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #homeView .app-art {
+    transition: none !important;
+  }
+}
+/* ===== END HOME SCREEN POLISH 01 ===== */
+
+/* FIX 05 — Lock screen swipe indicator */
+
+#lockView .lock-swipe-hint {
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+#lockView .lock-swipe-hint span {
+  width: 108px;
+  height: 4px;
+  margin: 0 auto 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: none;
+}
+
+/* Keep the swipe hint near the bottom of the phone screen */
+#lockView .lock-controls {
+  padding-bottom: 12px;
+}
+
+#lockView .lock-swipe-hint p {
+  margin: 0;
+}
+
+/* ===== HOME SCREEN POLISH 02 ===== */
+/* Micro-refinement only. Existing markup and app logic stay untouched. */
+
+/* More intentional visual hierarchy */
+#homeView .greeting {
+  opacity: 0.9;
+  text-transform: uppercase;
+}
+
+#homeView .home-heading {
+  text-wrap: balance;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.12);
+}
+
+/* Softer, more refined widget surface */
+#homeView .widget {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#homeView .widget::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    115deg,
+    rgba(255, 255, 255, 0.045),
+    transparent 42%,
+    rgba(203, 184, 239, 0.045)
+  );
+}
+
+#homeView .widget-top {
+  line-height: 1.4;
+}
+
+#homeView .widget-title {
+  text-wrap: balance;
+}
+
+#homeView .widget-sub {
+  max-width: 34ch;
+  text-wrap: pretty;
+}
+
+/* Keep icon interaction subtle and consistent */
+#homeView .app-icon {
+  position: relative;
+  user-select: none;
+}
+
+#homeView .app-art {
+  transform-origin: center;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#homeView .app-icon:active .app-art {
+  transform: scale(0.94);
+}
+
+/* Avoid accidental text selection on dock labels/icons */
+#homeView .dock .app-icon {
+  user-select: none;
+}
+
+/* Compact-height screens */
+@media (max-height: 700px) {
+  #homeView .widget-sub {
+    line-height: 1.4;
+  }
+}
+
+/* ===== END HOME SCREEN POLISH 02 ===== */

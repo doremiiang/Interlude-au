@@ -146,13 +146,12 @@
       background: currentColor;
     }
 
-    .view {
-      position: absolute;
-      inset: 0;
-      display: none;
-      overflow: hidden;
-      animation: appear .22s ease-out;
-    }
+.view {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+}
     .view.active { display: flex; flex-direction: column; }
     @keyframes appear {
       from { opacity: 0; transform: translateY(5px); }
@@ -952,18 +951,42 @@
 </div>
 
 
-        <section class="view lockscreen active" id="lockView">
-          <div class="lock-date" id="lockDate">MONDAY, 28 OCTOBER</div>
-          <div class="lock-clock" id="lockClock">09:41</div>
-          <div class="lock-message">
-            <strong>◉  Messages · now</strong>
-            <p>Someone left a little message for you.</p>
-          </div>
-          <div class="lock-bottom">
-            <button class="unlock" id="unlockButton">Unlock phone ↗</button>
-            <div class="lock-hint">INTERLUDE AU · PERSONAL DEVICE</div>
-          </div>
-        </section>
+
+<section class="view lockscreen active" id="lockView">
+  <div class="lock-owner">Shaqil’s phone</div>
+
+  <div class="lock-date" id="lockDate">MONDAY, 28 OCTOBER</div>
+  <div class="lock-clock" id="lockClock">09:41</div>
+
+  <div class="lock-message">
+    <strong>◉ Messages · now</strong>
+    <p>Someone left a little message for you.</p>
+  </div>
+
+  <div class="lock-controls">
+    <button class="lock-control" id="flashlightButton"
+      type="button" aria-label="Flashlight">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M9 3h6l1 5H8l1-5Z"/>
+        <path d="M8 8h8l-1 12H9L8 8Z"/>
+        <path d="M10 11h4"/>
+      </svg>
+    </button>
+
+    <button class="lock-control" id="cameraButton"
+      type="button" aria-label="Camera">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 8h4l2-3h6l2 3h4v11H3V8Z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="lock-swipe-hint">
+    <span></span>
+    <p>Swipe up to unlock</p>
+  </div>
+</section>
 
         <section class="view passcode-view" id="passcodeView" aria-label="Enter passcode">
           <div class="passcode-top">
@@ -1309,8 +1332,10 @@
         }
       }
 
-      $("unlockButton").addEventListener("click", showPasscode);
-
+const unlockButton = $("unlockButton");
+if (unlockButton) {
+  unlockButton.addEventListener("click", showPasscode);
+}
       $("passcodeCancel").addEventListener("click", cancelPasscode);
 
       $("passcodePad").addEventListener("click", event => {
