@@ -554,3 +554,15 @@ input:focus-visible {
     animation: none !important;
   }
 }
+
+/* FIX: preserve lockscreen layout */
+.lockscreen {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.lockscreen .lock-bottom {
+  flex-shrink: 0;
+  margin-top: auto;
+  padding-bottom: max(30px, env(safe-area-inset-bottom));
+}
