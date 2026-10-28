@@ -654,6 +654,82 @@
   }
 }
 
+/* ===== STORYBOARD KEYBOARD ===== */
+.story-keyboard {
+  flex: 0 0 auto;
+  padding: 9px 5px 22px;
+  background: #dedbe5;
+  color: #292530;
+  border-top: 1px solid #c8c2d2;
+  transform: translateY(110%);
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    transform .24s ease,
+    opacity .2s ease,
+    max-height .24s ease;
+}
+
+.story-keyboard.is-open {
+  transform: translateY(0);
+  opacity: 1;
+  max-height: 300px;
+}
+
+.keyboard-hint {
+  text-align: center;
+  font-size: 10px;
+  color: #716b7b;
+  margin-bottom: 8px;
+}
+
+.keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  margin: 5px 0;
+}
+
+.keyboard-key {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: #faf9fc;
+  color: #292530;
+  box-shadow: 0 2px 0 #b8b2c2;
+  font-size: 13px;
+  transition: transform .08s, background .08s;
+}
+
+.keyboard-key:active,
+.keyboard-key.pressed {
+  transform: translateY(2px);
+  background: #bba8dc;
+  box-shadow: none;
+}
+
+.keyboard-key.wide {
+  flex: 1.6;
+  font-size: 11px;
+}
+
+.keyboard-key.space {
+  flex: 4;
+}
+
+.keyboard-key.action {
+  background: #78649e;
+  color: white;
+}
+
+#chatInput {
+  cursor: text;
+}
+
   </style>
 </head>
 <body>
@@ -759,10 +835,25 @@
             <div class="bubble incoming">Don't get ahead of yourself.</div>
             <div class="bubble incoming">Just text me when you're home, okay?<time>20:43</time></div>
           </div>
-          <form class="chat-compose" id="chatForm">
-            <textarea id="chatInput" rows="1" placeholder="Message..." aria-label="Write a message"></textarea>
-            <button class="send" type="submit" aria-label="Send message">➤</button>
-          </form>
+   
+<form class="chat-compose" id="chatForm">
+  <textarea
+    id="chatInput"
+    rows="1"
+    placeholder="Message..."
+    aria-label="Write a message"
+    readonly
+  ></textarea>
+  <button class="send" type="submit" aria-label="Send message">➤</button>
+</form>
+
+<div id="storyKeyboard" class="story-keyboard hidden">
+  <div class="keyboard-hint" id="keyboardHint">
+    STORYBOARD · ketuk huruf untuk mengetik
+  </div>
+  <div id="keyboardRows"></div>
+</div>
+
         </section>
 
         <section class="view app-view" id="photosView">
