@@ -240,26 +240,20 @@
     }
   }
 
-  function typeCharacter(character) {
-    if (isTyping) return;
+  
+function typeCharacter(character) {
+  if (isTyping) return;
 
-    const trigger = character.toLowerCase();
+  const trigger = character.toLowerCase();
 
-    if (RESPONSES[trigger]) {
-      shiftOn = false;
-      updateShift();
-      typeResponse(RESPONSES[trigger]);
-      return;
-    }
+  // Hanya huruf yang punya respons yang bisa digunakan.
+  if (!RESPONSES[trigger]) return;
 
-    input.value += shiftOn
-      ? character.toUpperCase()
-      : character;
+  shiftOn = false;
+  updateShift();
 
-    shiftOn = false;
-    updateShift();
-    updateInput();
-  }
+  typeResponse(RESPONSES[trigger]);
+}
 
   const letterButtons = [];
 
@@ -327,7 +321,7 @@
   addKey(
     row4,
     "😊",
-    () => typeCharacter("♡"),
+    () => typeCharacter("P"),
     "sb-special"
   );
 
