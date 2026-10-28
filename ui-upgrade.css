@@ -1386,17 +1386,3 @@ input:focus-visible {
   fill: currentColor;
   stroke: none;
 }
-/* IPHONE LOCKSCREEN — SHAQIL'S PHONE LABEL */
-
-#lockView .lock-owner {
-  position: relative;
-  z-index: 2;
-  flex: 0 0 auto;
-  margin: -38px 0 22px;
-  color: rgba(255, 255, 255, 0.92);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.15px;
-  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.35);
-}
