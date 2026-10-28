@@ -543,13 +543,13 @@ input:focus-visible {
   }
 }
 
-/* FIX 03 — restore original lockscreen layout */
+/* FIX 03 — preserve original lockscreen layout */
 .lockscreen {
   overflow: hidden;
 }
 
 .lockscreen .lock-bottom {
-  flex-shrink: 1;
-  margin-top: initial;
+  flex-shrink: 0;
+  margin-top: auto;
   padding-bottom: 0;
 }
