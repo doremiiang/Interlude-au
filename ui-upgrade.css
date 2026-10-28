@@ -1509,3 +1509,74 @@ input:focus-visible {
     padding-bottom: 10px;
   }
 }
+
+/* INTERLUDE FIX 05 — lockscreen layout */
+#lockView {
+  box-sizing: border-box;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  padding: max(100px, calc(env(safe-area-inset-top) + 90px))
+    24px max(26px, env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
+#lockView.active {
+  display: flex;
+  animation: none;
+}
+
+#lockView .lock-owner {
+  margin-bottom: 22px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255,255,255,.78);
+}
+
+#lockView .lock-date,
+#lockView .lock-clock,
+#lockView .lock-message {
+  position: relative;
+  flex-shrink: 0;
+}
+
+#lockView .lock-clock {
+  margin-top: 5px;
+}
+
+#lockView .lock-message {
+  width: 100%;
+  margin-top: 30px;
+  animation: none;
+}
+
+#lockView .lock-controls {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+#lockView .lock-swipe-hint {
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+#lockView .lock-bottom,
+#lockView .unlock,
+#lockView .lock-hint {
+  display: none !important;
+}
+
+@media (max-height: 700px) {
+  #lockView {
+    padding-top: 78px;
+  }
+
+  #lockView .lock-owner {
+    margin-bottom: 14px;
+  }
+
+  #lockView .lock-message {
+    margin-top: 20px;
+  }
+}
