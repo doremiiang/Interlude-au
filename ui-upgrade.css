@@ -6,49 +6,26 @@
    ========================================================= */
 
 /* Lock screen base */
+
 .lockscreen {
   position: relative;
   isolation: isolate;
   overflow: hidden;
   color: rgba(255, 255, 255, 0.96);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
 
   background-color: #171320;
   background-image:
     linear-gradient(
       180deg,
-      rgba(12, 10, 20, 0.10) 0%,
-      rgba(16, 12, 27, 0.18) 42%,
-      rgba(10, 8, 18, 0.56) 72%,
-      rgba(8, 7, 15, 0.76) 100%
+      rgba(12, 10, 20, 0.08) 0%,
+      rgba(16, 12, 27, 0.12) 45%,
+      rgba(8, 7, 15, 0.58) 100%
     ),
     url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
-  background-position: center, center;
-  background-size: cover, cover;
-  background-repeat: no-repeat;
-}
 
-/* Ambient lilac glow */
-.lockscreen::before {
-  content: "";
-  position: absolute;
-  inset: -3%;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(
-      ellipse at 28% 34%,
-      rgba(192, 156, 255, 0.18),
-      transparent 48%
-    ),
-    radial-gradient(
-      ellipse at 75% 60%,
-      rgba(118, 126, 215, 0.13),
-      transparent 46%
-    );
-  filter: blur(20px);
-  animation: iu-ambient-drift 14s ease-in-out infinite alternate;
+  background-position: center center, center center;
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
 }
 
 /* Subtle floating particles */
