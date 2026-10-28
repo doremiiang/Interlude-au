@@ -1,139 +1,1660 @@
+/* INTERLUDE AU — UI UPGRADE 01
+Visual polish only. Existing app logic stays untouched.
+*/
 
-/* =========================================
-   INTERLUDE AU — iPHONE 15 LOCKSCREEN STYLE
-   Visual patch only
-   ========================================= */
-
-/* iOS-like typography */
-.lockscreen {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color: #fff;
+:root {
+--iu-lilac: #cbb8ef;
+--iu-lilac-light: #e8def7;
+--iu-glass: rgba(255, 255, 255, 0.08);
+--iu-border: rgba(255, 255, 255, 0.14);
+--iu-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
 }
 
-/* Status bar: time left, indicators right */
+html {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
+}
+
+body {
+min-height: 100vh;
+min-height: 100dvh;
+overscroll-behavior: none;
+}
+
+button {
+-webkit-appearance: none;
+appearance: none;
+touch-action: manipulation;
+}
+
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+outline: 2px solid var(--iu-lilac);
+outline-offset: 3px;
+}
+
+/* Phone frame */
+.stage {
+padding: clamp(0px, 3vw, 24px);
+}
+
+.device {
+border: 1px solid rgba(255, 255, 255, 0.16);
+box-shadow:
+0 30px 80px rgba(0, 0, 0, 0.42),
+inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.screen {
+isolation: isolate;
+overflow: hidden;
+}
+
+/* Screen transitions */
+.view {
+overscroll-behavior: contain;
+}
+
+.view.active {
+animation: iu-fade-in 0.2s ease-out;
+}
+
+@keyframes iu-fade-in {
+from {
+opacity: 0.7;
+transform: translateY(4px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* Glass surfaces */
+.lock-message,
+.widget,
+.dock {
+border-color: var(--iu-border);
+-webkit-backdrop-filter: blur(18px) saturate(125%);
+backdrop-filter: blur(18px) saturate(125%);
+}
+
+.lock-message,
+.widget {
+box-shadow: var(--iu-shadow);
+}
+
+.lock-message {
+transition: background 0.18s ease;
+}
+
+.unlock {
+min-height: 44px;
+transition: transform 0.15s ease;
+}
+
+.unlock:active {
+transform: scale(0.97);
+}
+
+/* Home screen */
+.home {
+overflow-y: auto;
+overscroll-behavior: contain;
+scrollbar-width: none;
+}
+
+.home::-webkit-scrollbar,
+.app-content::-webkit-scrollbar,
+.messages::-webkit-scrollbar {
+display: none;
+}
+
+.app-grid {
+gap: 20px 9px;
+}
+
+.app-icon {
+-webkit-tap-highlight-color: transparent;
+}
+
+.app-art {
+overflow: hidden;
+box-shadow:
+inset 0 1px 0 rgba(255, 255, 255, 0.18),
+0 6px 16px rgba(0, 0, 0, 0.14);
+transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.app-icon:active .app-art {
+transform: scale(0.94);
+filter: brightness(1.08);
+}
+
+.app-name {
+line-height: 1.3;
+text-align: center;
+}
+
+.dock {
+flex-shrink: 0;
+}
+
+/* App headers and contacts */
+.app-header {
+flex-shrink: 0;
+}
+
+.back {
+flex-shrink: 0;
+min-width: 36px;
+min-height: 36px;
+transition: transform 0.15s ease;
+}
+
+.back:active {
+transform: scale(0.92);
+}
+
+.contact-card {
+border-color: rgba(40, 30, 50, 0.07);
+transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contact-card:active {
+transform: scale(0.99);
+}
+
+.avatar {
+flex-shrink: 0;
+}
+
+/* Messages */
+.chat-view {
+min-height: 0;
+}
+
+.chat-header {
+flex-shrink: 0;
+}
+
+.messages {
+min-height: 0;
+overscroll-behavior: contain;
+scrollbar-width: none;
+scroll-behavior: smooth;
+}
+
+.bubble {
+line-height: 1.5;
+overflow-wrap: anywhere;
+}
+
+.bubble.incoming {
+border: 1px solid rgba(40, 30, 50, 0.05);
+}
+
+.bubble.outgoing {
+background-image: linear-gradient(
+135deg,
+var(--iu-lilac-light),
+#d9c9f0
+);
+}
+
+.chat-compose {
+flex-shrink: 0;
+gap: 8px;
+}
+
+.chat-compose textarea {
+min-width: 0;
+line-height: 1.4;
+}
+
+.send {
+flex-shrink: 0;
+transition: transform 0.15s ease;
+}
+
+.send:active {
+transform: scale(0.92);
+}
+
+/* Photos, notes and settings */
+.photo-tile {
+transition: transform 0.15s ease;
+}
+
+.photo-tile:active {
+transform: scale(0.98);
+}
+
+.note {
+border-color: rgba(40, 30, 50, 0.06);
+}
+
+.setting-row {
+min-height: 58px;
+}
+
+.toggle {
+flex-shrink: 0;
+}
+
+/* Toast and bottom navigation */
+.toast {
+z-index: 100;
+max-width: calc(100% - 32px);
+text-align: center;
+line-height: 1.4;
+overflow-wrap: anywhere;
+}
+
+.nav-bar {
+z-index: 90;
+touch-action: manipulation;
+}
+
+/* Small Android screens */
+
+@media (max-width: 480px) {
+.stage {
+padding: 12px;
+min-height: 100vh;
+min-height: 100dvh;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.device {
+width: min(100%, 390px);
+height: min(844px, calc(100vh - 24px));
+height: min(844px, calc(100dvh - 24px));
+min-height: 0;
+border: 1px solid rgba(255, 255, 255, 0.18);
+border-radius: 30px;
+box-shadow:
+0 24px 60px rgba(0, 0, 0, 0.38),
+inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.screen {
+height: 100%;
+border-radius: inherit;
+overflow: hidden;
+}
+}
+
+@media (max-width: 360px) {
+.app-grid {
+gap: 16px 6px;
+}
+
+.bubble {
+max-width: 88%;
+}
+}
+
+@media (prefers-reduced-motion: reduce) {
+.view.active {
+animation: none;
+}
+
+.app-art,
+.back,
+.send,
+.contact-card,
+.photo-tile,
+.unlock {
+transition: none;
+}
+}
+
+/* UI POLISH 02 — Home screen icons */
+
+.app-grid {
+column-gap: 10px;
+row-gap: 18px;
+}
+
+.app-icon {
+cursor: pointer;
+-webkit-tap-highlight-color: transparent;
+}
+
+.app-art {
+border-radius: 22%;
+transform-origin: center;
+backface-visibility: hidden;
+}
+
+.app-name {
+margin-top: 6px;
+text-wrap: balance;
+overflow-wrap: anywhere;
+}
+
+/* Respect compact Android screens */
+@media (max-width: 360px) {
+.app-grid {
+column-gap: 6px;
+row-gap: 15px;
+}
+}
+
+/* Keep motion comfortable */
+@media (prefers-reduced-motion: reduce) {
+.app-icon:active .app-art {
+transform: none;
+}
+}
+
+/* =========================================================
+   INTERLUDE AU — LOCKSCREEN FINAL
+   Single source of truth: wallpaper, clock, glass, unlock.
+   Existing app logic remains untouched.
+   ========================================================= */
+
+/* Lock screen base */
+.lockscreen {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.96);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+
+  background-color: #171320;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(12, 10, 20, 0.10) 0%,
+      rgba(16, 12, 27, 0.18) 42%,
+      rgba(10, 8, 18, 0.56) 72%,
+      rgba(8, 7, 15, 0.76) 100%
+    ),
+    url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+}
+
+/* Ambient lilac glow */
+.lockscreen::before {
+  content: "";
+  position: absolute;
+  inset: -3%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse at 28% 34%,
+      rgba(192, 156, 255, 0.18),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 75% 60%,
+      rgba(118, 126, 215, 0.13),
+      transparent 46%
+    );
+  filter: blur(20px);
+  animation: iu-ambient-drift 14s ease-in-out infinite alternate;
+}
+
+/* Subtle floating particles */
+.lockscreen::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.17;
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.85) 0 1px,
+      transparent 1.7px
+    ),
+    radial-gradient(
+      circle,
+      rgba(215, 194, 255, 0.75) 0 1px,
+      transparent 1.8px
+    );
+  background-size: 113px 151px, 173px 197px;
+  background-position: 12px 18px, 52px 76px;
+  animation: iu-particle-drift 28s linear infinite;
+}
+
+/* Keep lockscreen content above decorations */
+.lockscreen > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Date */
+.lockscreen .lock-date {
+  color: rgba(255, 255, 255, 0.94);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  line-height: 1.4;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.65);
+  animation: iu-clock-arrive 700ms ease-out both;
+}
+
+/* Main clock */
+.lockscreen .lock-clock {
+  margin-top: 5px;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: clamp(76px, 22vw, 102px);
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+  letter-spacing: -0.055em;
+  line-height: 0.98;
+  text-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.28),
+    0 8px 24px rgba(0, 0, 0, 0.24);
+  animation: iu-clock-arrive 850ms cubic-bezier(.2, .7, .2, 1) both;
+}
+
+/* Frosted-glass notification */
+.lockscreen .lock-message {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 24px;
+  background: rgba(30, 25, 42, 0.58);
+  -webkit-backdrop-filter: blur(28px) saturate(145%);
+  backdrop-filter: blur(28px) saturate(145%);
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.19),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  animation: iu-notification-arrive 800ms 100ms ease-out both;
+}
+
+/* Glass highlight */
+.lockscreen .lock-message::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.13),
+    rgba(255, 255, 255, 0.025) 48%,
+    rgba(205, 185, 240, 0.08)
+  );
+}
+
+/* Notification typography */
+.lockscreen .lock-message strong {
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.lockscreen .lock-message p {
+  color: rgba(255, 255, 255, 0.91);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
+}
+
+/* Unlock button */
+.lockscreen .unlock {
+  min-height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: rgba(27, 23, 38, 0.52);
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0;
+  -webkit-backdrop-filter: blur(20px) saturate(135%);
+  backdrop-filter: blur(20px) saturate(135%);
+  transition:
+    transform 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
+}
+
+.lockscreen .unlock:active {
+  transform: scale(0.97);
+  background-color: rgba(245, 241, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.36);
+}
+
+/* Keep unlock area at the bottom */
+.lockscreen .lock-bottom {
+  flex: 0 0 auto;
+  width: 100%;
+  margin-top: auto;
+  padding-bottom: 0;
+}
+
+/* Status bar */
 .status {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 3px 5px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #fff;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
   font-size: 12px;
   font-weight: 600;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
 }
 
 .status-icons {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 5px;
-}
-
-/* Date above the clock */
-.lockscreen .lock-date {
-  display: block;
-  text-align: center;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: -0.3px;
-  line-height: 1.3;
-}
-
-/* Personal lockscreen label */
-.lockscreen .lock-date::after {
-  content: "Shaqil's phone";
-  display: block;
-  margin-top: 5px;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: 0.1px;
-  opacity: 0.88;
-}
-
-/* Large thin iPhone-style clock */
-.lockscreen .lock-clock {
-  margin-top: 5px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(78px, 23vw, 100px);
-  font-weight: 200;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -5px;
-  line-height: 1;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.97);
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
-}
-
-/* Clean notification glass */
-.lockscreen .lock-message {
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 22px;
-  background: rgba(35, 35, 38, 0.48);
-  -webkit-backdrop-filter: blur(24px) saturate(150%);
-  backdrop-filter: blur(24px) saturate(150%);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.12);
-}
-
-/* Unlock button */
-.lockscreen .unlock {
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  border-radius: 999px;
-  background: rgba(30, 30, 32, 0.36);
   color: #fff;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 500;
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
 }
 
-/* Bottom controls inspired by iPhone */
+.status-icon {
+  display: block;
+  flex: 0 0 auto;
+  width: 17px;
+  height: 14px;
+  overflow: visible;
+}
+
+.signal-icon {
+  width: 16px;
+  fill: currentColor;
+}
+
+.wifi-icon {
+  width: 17px;
+  fill: none;
+}
+
+.wifi-icon path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.wifi-icon circle {
+  fill: currentColor;
+  stroke: none;
+}
+
+.battery-icon {
+  width: 22px;
+  height: 12px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.2;
+  stroke-linejoin: round;
+}
+
+.battery-icon .battery-level {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Motion */
+@keyframes iu-ambient-drift {
+  from { transform: scale(1); }
+  to { transform: scale(1.05); }
+}
+
+@keyframes iu-particle-drift {
+  from { background-position: 12px 18px, 52px 76px; }
+  to { background-position: -6px -10px, 34px 48px; }
+}
+
+@keyframes iu-clock-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes iu-notification-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduce motion when requested by the device */
+@media (prefers-reduced-motion: reduce) {
+  .lockscreen::before,
+  .lockscreen::after,
+  .lockscreen .lock-clock,
+  .lockscreen .lock-date,
+  .lockscreen .lock-message {
+    animation: none;
+  }
+
+  .lockscreen .unlock {
+    transition: none;
+  }
+}
+
+/* Compact screens */
+@media (max-width: 360px) {
+  .lockscreen .lock-clock {
+    font-size: clamp(70px, 21vw, 84px);
+  }
+
+  .status-icons {
+    gap: 4px;
+  }
+}
+
+
+/* ===== LOCKSCREEN UPGRADE 02 — LAYER FIX ===== */
+
+/* Keep the original lockscreen layout untouched */
+.lockscreen {
+isolation: isolate;
+background:
+linear-gradient(
+180deg,
+rgba(8, 7, 18, 0.06) 0%,
+rgba(12, 9, 24, 0.10) 35%,
+rgba(8, 7, 17, 0.72) 100%
+);
+}
+
+/* Ambient glow: behind content, above the background */
+.lockscreen::before {
+content: "";
+position: absolute;
+inset: 0;
+z-index: 0;
+pointer-events: none;
+background:
+radial-gradient(
+ellipse at 30% 35%,
+rgba(192, 156, 255, 0.20),
+transparent 48%
+),
+radial-gradient(
+ellipse at 72% 60%,
+rgba(118, 126, 215, 0.15),
+transparent 45%
+);
+filter: blur(18px);
+animation: iu-ambient-drift 12s ease-in-out infinite alternate;
+}
+
+/* Floating light particles */
+.lockscreen::after {
+content: "";
+position: absolute;
+inset: 0;
+z-index: 0;
+pointer-events: none;
+opacity: 0.24;
+background-image:
+radial-gradient(circle, rgba(255,255,255,.85) 0 1px, transparent 1.7px),
+radial-gradient(circle, rgba(215,194,255,.8) 0 1px, transparent 1.8px),
+radial-gradient(circle, rgba(255,255,255,.55) 0 .7px, transparent 1.5px);
+background-size: 113px 151px, 173px 197px, 79px 103px;
+background-position: 12px 18px, 52px 76px, 31px 9px;
+animation: iu-particle-drift 24s linear infinite;
+}
+
+/* Keep lockscreen content above decorative layers */
+.lockscreen > * {
+position: relative;
+z-index: 1;
+}
+
+/* Clock */
+.lockscreen .lock-clock {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+font-size: clamp(76px, 21vw, 92px);
+font-weight: 500;
+letter-spacing: -0.065em;
+line-height: 1.05;
+font-variant-numeric: tabular-nums;
+color: #fff;
+text-shadow: 0 2px 24px rgba(15, 8, 30, 0.25);
+animation: iu-clock-arrive 900ms cubic-bezier(.2,.7,.2,1) both;
+}
+
+/* Date */
+.lockscreen .lock-date {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 0.08em;
+line-height: 1.5;
+color: rgba(255,255,255,.9);
+animation: iu-clock-arrive 750ms ease-out both;
+}
+
+/* Glass notification */
+.lockscreen .lock-message {
+border: 1px solid rgba(255,255,255,.23);
+border-radius: 22px;
+background: linear-gradient(
+135deg,
+rgba(255,255,255,.13),
+rgba(29,23,43,.42) 65%,
+rgba(24,20,37,.52)
+);
+-webkit-backdrop-filter: blur(24px) saturate(145%);
+backdrop-filter: blur(24px) saturate(145%);
+box-shadow:
+0 16px 38px rgba(0,0,0,.17),
+inset 0 1px 0 rgba(255,255,255,.12);
+animation: iu-notification-arrive 850ms 120ms ease-out both;
+}
+
+/* Unlock interaction */
+.lockscreen .unlock {
+transition: transform .22s ease, background .22s ease;
+}
+
+.lockscreen .unlock:active {
+transform: scale(.96);
+}
+
+@keyframes iu-ambient-drift {
+from { transform: scale(1); }
+to   { transform: scale(1.06); }
+}
+
+@keyframes iu-particle-drift {
+from { background-position: 12px 18px, 52px 76px, 31px 9px; }
+to   { background-position: -6px -10px, 34px 48px, 13px -19px; }
+}
+
+@keyframes iu-clock-arrive {
+from { opacity: 0; transform: translateY(9px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes iu-notification-arrive {
+from { opacity: 0; transform: translateY(12px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.lockscreen::before,
+.lockscreen::after,
+.lockscreen .lock-clock,
+.lockscreen .lock-date,
+.lockscreen .lock-message {
+animation: none !important;
+}
+}
+
+/* FIX 03 — keep unlock section at the bottom */
+.lockscreen {
+overflow: hidden;
+}
+
 .lockscreen .lock-bottom {
-  position: relative;
-  padding-bottom: 12px;
+flex: 0 0 auto;
+width: 100%;
+margin-top: auto;
+padding-bottom: 0;
 }
 
-/* Decorative flashlight and camera controls */
-.lockscreen .lock-bottom::before,
-.lockscreen .lock-bottom::after {
-  position: absolute;
-  bottom: 8px;
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  box-sizing: border-box;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  background: rgba(30, 30, 32, 0.42);
-  color: white;
-  font-size: 20px;
-  line-height: 1;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  pointer-events: none;
+/* INTERLUDE AU — UI UPGRADE 01
+Visual polish only. Existing app logic stays untouched.
+*/
+
+:root {
+--iu-lilac: #cbb8ef;
+--iu-lilac-light: #e8def7;
+--iu-glass: rgba(255, 255, 255, 0.08);
+--iu-border: rgba(255, 255, 255, 0.14);
+--iu-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
 }
 
-.lockscreen .lock-bottom::before {
-  content: "♧";
-  left: 18px;
+html {
+-webkit-text-size-adjust: 100%;
+text-size-adjust: 100%;
 }
 
-.lockscreen .lock-bottom::after {
-  content: "◎";
-  right: 18px;
+body {
+min-height: 100vh;
+min-height: 100dvh;
+overscroll-behavior: none;
+}
+
+button {
+-webkit-appearance: none;
+appearance: none;
+touch-action: manipulation;
+}
+
+button:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+outline: 2px solid var(--iu-lilac);
+outline-offset: 3px;
+}
+
+/* Phone frame */
+.stage {
+padding: clamp(0px, 3vw, 24px);
+}
+
+.device {
+border: 1px solid rgba(255, 255, 255, 0.16);
+box-shadow:
+0 30px 80px rgba(0, 0, 0, 0.42),
+inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.screen {
+isolation: isolate;
+overflow: hidden;
+}
+
+/* Screen transitions */
+.view {
+overscroll-behavior: contain;
+}
+
+.view.active {
+animation: iu-fade-in 0.2s ease-out;
+}
+
+@keyframes iu-fade-in {
+from {
+opacity: 0.7;
+transform: translateY(4px);
+}
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* Glass surfaces */
+.lock-message,
+.widget,
+.dock {
+border-color: var(--iu-border);
+-webkit-backdrop-filter: blur(18px) saturate(125%);
+backdrop-filter: blur(18px) saturate(125%);
+}
+
+.lock-message,
+.widget {
+box-shadow: var(--iu-shadow);
+}
+
+.lock-message {
+transition: background 0.18s ease;
+}
+
+.unlock {
+min-height: 44px;
+transition: transform 0.15s ease;
+}
+
+.unlock:active {
+transform: scale(0.97);
+}
+
+/* Home screen */
+.home {
+overflow-y: auto;
+overscroll-behavior: contain;
+scrollbar-width: none;
+}
+
+.home::-webkit-scrollbar,
+.app-content::-webkit-scrollbar,
+.messages::-webkit-scrollbar {
+display: none;
+}
+
+.app-grid {
+gap: 20px 9px;
+}
+
+.app-icon {
+-webkit-tap-highlight-color: transparent;
+}
+
+.app-art {
+overflow: hidden;
+box-shadow:
+inset 0 1px 0 rgba(255, 255, 255, 0.18),
+0 6px 16px rgba(0, 0, 0, 0.14);
+transition: transform 0.16s ease, filter 0.16s ease;
+}
+
+.app-icon:active .app-art {
+transform: scale(0.94);
+filter: brightness(1.08);
+}
+
+.app-name {
+line-height: 1.3;
+text-align: center;
+}
+
+.dock {
+flex-shrink: 0;
+}
+
+/* App headers and contacts */
+.app-header {
+flex-shrink: 0;
+}
+
+.back {
+flex-shrink: 0;
+min-width: 36px;
+min-height: 36px;
+transition: transform 0.15s ease;
+}
+
+.back:active {
+transform: scale(0.92);
+}
+
+.contact-card {
+border-color: rgba(40, 30, 50, 0.07);
+transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.contact-card:active {
+transform: scale(0.99);
+}
+
+.avatar {
+flex-shrink: 0;
+}
+
+/* Messages */
+.chat-view {
+min-height: 0;
+}
+
+.chat-header {
+flex-shrink: 0;
+}
+
+.messages {
+min-height: 0;
+overscroll-behavior: contain;
+scrollbar-width: none;
+scroll-behavior: smooth;
+}
+
+.bubble {
+line-height: 1.5;
+overflow-wrap: anywhere;
+}
+
+.bubble.incoming {
+border: 1px solid rgba(40, 30, 50, 0.05);
+}
+
+.bubble.outgoing {
+background-image: linear-gradient(
+135deg,
+var(--iu-lilac-light),
+#d9c9f0
+);
+}
+
+.chat-compose {
+flex-shrink: 0;
+gap: 8px;
+}
+
+.chat-compose textarea {
+min-width: 0;
+line-height: 1.4;
+}
+
+.send {
+flex-shrink: 0;
+transition: transform 0.15s ease;
+}
+
+.send:active {
+transform: scale(0.92);
+}
+
+/* Photos, notes and settings */
+.photo-tile {
+transition: transform 0.15s ease;
+}
+
+.photo-tile:active {
+transform: scale(0.98);
+}
+
+.note {
+border-color: rgba(40, 30, 50, 0.06);
+}
+
+.setting-row {
+min-height: 58px;
+}
+
+.toggle {
+flex-shrink: 0;
+}
+
+/* Toast and bottom navigation */
+.toast {
+z-index: 100;
+max-width: calc(100% - 32px);
+text-align: center;
+line-height: 1.4;
+overflow-wrap: anywhere;
+}
+
+.nav-bar {
+z-index: 90;
+touch-action: manipulation;
+}
+
+/* Small Android screens */
+
+@media (max-width: 480px) {
+.stage {
+padding: 12px;
+min-height: 100vh;
+min-height: 100dvh;
+display: flex;
+align-items: center;
+justify-content: center;
+}
+
+.device {
+width: min(100%, 390px);
+height: min(844px, calc(100vh - 24px));
+height: min(844px, calc(100dvh - 24px));
+min-height: 0;
+border: 1px solid rgba(255, 255, 255, 0.18);
+border-radius: 30px;
+box-shadow:
+0 24px 60px rgba(0, 0, 0, 0.38),
+inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.screen {
+height: 100%;
+border-radius: inherit;
+overflow: hidden;
+}
 }
 
 @media (max-width: 360px) {
-  .lockscreen .lock-clock {
-    font-size: 76px;
-    letter-spacing: -4px;
-  }
+.app-grid {
+gap: 16px 6px;
+}
 
-  .lockscreen .lock-bottom::before {
-    left: 12px;
-  }
+.bubble {
+max-width: 88%;
+}
+}
 
-  .lockscreen .lock-bottom::after {
-    right: 12px;
-  }
+@media (prefers-reduced-motion: reduce) {
+.view.active {
+animation: none;
+}
+
+.app-art,
+.back,
+.send,
+.contact-card,
+.photo-tile,
+.unlock {
+transition: none;
+}
+}
+
+/* UI POLISH 02 — Home screen icons */
+
+.app-grid {
+column-gap: 10px;
+row-gap: 18px;
+}
+
+.app-icon {
+cursor: pointer;
+-webkit-tap-highlight-color: transparent;
+}
+
+.app-art {
+border-radius: 22%;
+transform-origin: center;
+backface-visibility: hidden;
+}
+
+.app-name {
+margin-top: 6px;
+text-wrap: balance;
+overflow-wrap: anywhere;
+}
+
+/* Respect compact Android screens */
+@media (max-width: 360px) {
+.app-grid {
+column-gap: 6px;
+row-gap: 15px;
+}
+}
+
+/* Keep motion comfortable */
+@media (prefers-reduced-motion: reduce) {
+.app-icon:active .app-art {
+transform: none;
+}
+}
+
+/* ===== LOCKSCREEN DREAMY CLOCK 01 ===== */
+
+.lockscreen {
+font-family: system-ui, -apple-system, BlinkMacSystemFont,
+"Segoe UI", sans-serif;
+}
+
+/* Date */
+.lockscreen .lock-date {
+font-family: system-ui, -apple-system, BlinkMacSystemFont,
+"Segoe UI", sans-serif;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 0.045em;
+line-height: 1.5;
+color: rgba(255, 255, 255, 0.88);
+text-shadow: 0 2px 14px rgba(0, 0, 0, 0.24);
+}
+
+/* Main clock */
+.lockscreen .lock-clock {
+margin-top: 5px;
+font-family: system-ui, -apple-system, BlinkMacSystemFont,
+"Segoe UI", sans-serif;
+font-size: clamp(76px, 21vw, 92px);
+font-weight: 600;
+font-variant-numeric: tabular-nums;
+letter-spacing: -0.065em;
+line-height: 1.05;
+color: #fff;
+text-shadow:
+0 0 12px rgba(218, 197, 255, 0.20),
+0 0 32px rgba(188, 160, 240, 0.15),
+0 4px 22px rgba(0, 0, 0, 0.20);
+}
+
+/* Soft glass notification */
+.lockscreen .lock-message {
+border-color: rgba(255, 255, 255, 0.22);
+background: rgba(24, 21, 34, 0.42);
+-webkit-backdrop-filter: blur(24px) saturate(140%);
+backdrop-filter: blur(24px) saturate(140%);
+box-shadow:
+0 12px 32px rgba(0, 0, 0, 0.13),
+inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* ===== LOCKSCREEN UPGRADE 02 — LAYER FIX ===== */
+
+/* Keep the original lockscreen layout untouched */
+.lockscreen {
+isolation: isolate;
+background:
+linear-gradient(
+180deg,
+rgba(8, 7, 18, 0.06) 0%,
+rgba(12, 9, 24, 0.10) 35%,
+rgba(8, 7, 17, 0.72) 100%
+);
+}
+
+/* Ambient glow: behind content, above the background */
+.lockscreen::before {
+content: "";
+position: absolute;
+inset: 0;
+z-index: 0;
+pointer-events: none;
+background:
+radial-gradient(
+ellipse at 30% 35%,
+rgba(192, 156, 255, 0.20),
+transparent 48%
+),
+radial-gradient(
+ellipse at 72% 60%,
+rgba(118, 126, 215, 0.15),
+transparent 45%
+);
+filter: blur(18px);
+animation: iu-ambient-drift 12s ease-in-out infinite alternate;
+}
+
+/* Floating light particles */
+.lockscreen::after {
+content: "";
+position: absolute;
+inset: 0;
+z-index: 0;
+pointer-events: none;
+opacity: 0.24;
+background-image:
+radial-gradient(circle, rgba(255,255,255,.85) 0 1px, transparent 1.7px),
+radial-gradient(circle, rgba(215,194,255,.8) 0 1px, transparent 1.8px),
+radial-gradient(circle, rgba(255,255,255,.55) 0 .7px, transparent 1.5px);
+background-size: 113px 151px, 173px 197px, 79px 103px;
+background-position: 12px 18px, 52px 76px, 31px 9px;
+animation: iu-particle-drift 24s linear infinite;
+}
+
+/* Keep lockscreen content above decorative layers */
+.lockscreen > * {
+position: relative;
+z-index: 1;
+}
+
+/* Clock */
+.lockscreen .lock-clock {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+font-size: clamp(76px, 21vw, 92px);
+font-weight: 500;
+letter-spacing: -0.065em;
+line-height: 1.05;
+font-variant-numeric: tabular-nums;
+color: #fff;
+text-shadow: 0 2px 24px rgba(15, 8, 30, 0.25);
+animation: iu-clock-arrive 900ms cubic-bezier(.2,.7,.2,1) both;
+}
+
+/* Date */
+.lockscreen .lock-date {
+font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 0.08em;
+line-height: 1.5;
+color: rgba(255,255,255,.9);
+animation: iu-clock-arrive 750ms ease-out both;
+}
+
+/* Glass notification */
+.lockscreen .lock-message {
+border: 1px solid rgba(255,255,255,.23);
+border-radius: 22px;
+background: linear-gradient(
+135deg,
+rgba(255,255,255,.13),
+rgba(29,23,43,.42) 65%,
+rgba(24,20,37,.52)
+);
+-webkit-backdrop-filter: blur(24px) saturate(145%);
+backdrop-filter: blur(24px) saturate(145%);
+box-shadow:
+0 16px 38px rgba(0,0,0,.17),
+inset 0 1px 0 rgba(255,255,255,.12);
+animation: iu-notification-arrive 850ms 120ms ease-out both;
+}
+
+/* Unlock interaction */
+.lockscreen .unlock {
+transition: transform .22s ease, background .22s ease;
+}
+
+.lockscreen .unlock:active {
+transform: scale(.96);
+}
+
+@keyframes iu-ambient-drift {
+from { transform: scale(1); }
+to   { transform: scale(1.06); }
+}
+
+@keyframes iu-particle-drift {
+from { background-position: 12px 18px, 52px 76px, 31px 9px; }
+to   { background-position: -6px -10px, 34px 48px, 13px -19px; }
+}
+
+@keyframes iu-clock-arrive {
+from { opacity: 0; transform: translateY(9px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes iu-notification-arrive {
+from { opacity: 0; transform: translateY(12px); }
+to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+.lockscreen::before,
+.lockscreen::after,
+.lockscreen .lock-clock,
+.lockscreen .lock-date,
+.lockscreen .lock-message {
+animation: none !important;
+}
+}
+
+/* FIX 03 — keep unlock section at the bottom */
+.lockscreen {
+overflow: hidden;
+}
+
+.lockscreen .lock-bottom {
+flex: 0 0 auto;
+width: 100%;
+margin-top: auto;
+padding-bottom: 0;
+}
+
+/* INTERLUDE — iOS 26 LOCKSCREEN CONCEPT */
+
+.lockscreen {
+color: rgba(255, 255, 255, 0.94);
+background-color: #15131d;
+background-image:
+linear-gradient(
+180deg,
+rgba(8, 8, 15, 0.02) 0%,
+rgba(12, 10, 20, 0.05) 45%,
+rgba(10, 8, 18, 0.38) 72%,
+rgba(8, 7, 15, 0.72) 100%
+),
+url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+background-position: center, center;
+background-size: cover, cover;
+background-repeat: no-repeat;
+}
+
+/* Apple-like system typography */
+.lockscreen {
+font-family: system-ui, -apple-system, BlinkMacSystemFont,
+"Segoe UI", sans-serif;
+}
+
+.lockscreen .lock-date {
+color: rgba(255, 255, 255, 0.88);
+font-size: 12px;
+font-weight: 600;
+letter-spacing: 0.015em;
+text-shadow: 0 1px 12px rgba(0, 0, 0, 0.18);
+}
+
+.lockscreen .lock-clock {
+font-size: clamp(84px, 23vw, 104px);
+font-weight: 400;
+letter-spacing: -0.075em;
+line-height: 0.98;
+color: rgba(255, 255, 255, 0.91);
+text-shadow:
+0 1px 2px rgba(255, 255, 255, 0.18),
+0 4px 22px rgba(0, 0, 0, 0.16);
+}
+
+/* Frosted glass notification */
+.lockscreen .lock-message {
+border: 1px solid rgba(255, 255, 255, 0.24);
+border-radius: 26px;
+background: rgba(245, 241, 255, 0.13);
+-webkit-backdrop-filter: blur(28px) saturate(155%);
+backdrop-filter: blur(28px) saturate(155%);
+box-shadow:
+0 8px 30px rgba(0, 0, 0, 0.10),
+inset 0 1px 0 rgba(255, 255, 255, 0.20);
+}
+
+.lockscreen .lock-message strong {
+color: rgba(255, 255, 255, 0.96);
+font-weight: 600;
+}
+
+.lockscreen .lock-message p {
+color: rgba(255, 255, 255, 0.78);
+line-height: 1.45;
+}
+
+/* Soft glass unlock control */
+.lockscreen .unlock {
+border: 1px solid rgba(255, 255, 255, 0.25);
+border-radius: 999px;
+background: rgba(245, 241, 255, 0.13);
+color: rgba(255, 255, 255, 0.96);
+-webkit-backdrop-filter: blur(20px) saturate(145%);
+backdrop-filter: blur(20px) saturate(145%);
+}
+
+/* LOCKSCREEN FIX 04 — readable text + smoother glass */
+
+.lockscreen {
+background-color: #171320;
+background-image:
+linear-gradient(
+180deg,
+rgba(12, 10, 20, 0.12) 0%,
+rgba(16, 12, 27, 0.22) 42%,
+rgba(10, 8, 18, 0.72) 100%
+),
+url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+background-position: center, center;
+background-size: cover, cover;
+background-repeat: no-repeat;
+}
+
+/* Keep text readable over both light and dark wallpaper areas */
+.lockscreen .lock-date {
+color: #f7f2ff;
+text-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.lockscreen .lock-clock {
+color: #fff;
+text-shadow:
+0 2px 5px rgba(0, 0, 0, 0.28),
+0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* Deeper frosted glass */
+.lockscreen .lock-message {
+position: relative;
+isolation: isolate;
+overflow: hidden;
+border: 1px solid rgba(255, 255, 255, 0.24);
+border-radius: 24px;
+background: rgba(30, 25, 42, 0.62);
+-webkit-backdrop-filter: blur(32px) saturate(135%);
+backdrop-filter: blur(32px) saturate(135%);
+box-shadow:
+0 10px 30px rgba(0, 0, 0, 0.20),
+inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Soft highlight — safer glass layering */
+.lockscreen .lock-message::before {
+content: "";
+position: absolute;
+inset: 0;
+z-index: 0;
+pointer-events: none;
+border-radius: inherit;
+background: linear-gradient(
+135deg,
+rgba(255, 255, 255, 0.14) 0%,
+rgba(255, 255, 255, 0.03) 45%,
+rgba(205, 185, 240, 0.08) 100%
+);
+}
+
+/* Keep notification text above the glass highlight */
+.lockscreen .lock-message > * {
+position: relative;
+z-index: 1;
+}
+
+.lockscreen .lock-message strong {
+color: #fff;
+text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.lockscreen .lock-message p {
+color: rgba(255, 255, 255, 0.88);
+text-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
+}
+
+/* Unlock control */
+.lockscreen .unlock {
+color: #fff;
+background: rgba(27, 23, 38, 0.56);
+border: 1px solid rgba(255, 255, 255, 0.24);
+-webkit-backdrop-filter: blur(20px) saturate(130%);
+backdrop-filter: blur(20px) saturate(130%);
+}
+
+/* INTERLUDE — iOS 26 TYPOGRAPHY */
+
+.lockscreen,
+.lockscreen .lock-date,
+.lockscreen .lock-clock,
+.lockscreen .lock-message,
+.lockscreen .unlock {
+font-family:
+-apple-system,
+BlinkMacSystemFont,
+"Helvetica Neue",
+sans-serif;
+-webkit-font-smoothing: antialiased;
+text-rendering: optimizeLegibility;
+}
+
+.lockscreen .lock-date {
+font-size: 13px;
+font-weight: 500;
+letter-spacing: 0;
+line-height: 1.35;
+}
+
+.lockscreen .lock-clock {
+font-size: clamp(84px, 23vw, 104px);
+font-weight: 300;
+letter-spacing: -0.055em;
+line-height: 0.98;
+font-variant-numeric: tabular-nums;
+font-feature-settings: "tnum";
+}
+
+.lockscreen .lock-message strong {
+font-size: 13px;
+font-weight: 600;
+letter-spacing: -0.01em;
+}
+
+.lockscreen .lock-message p {
+font-size: 14px;
+font-weight: 400;
+line-height: 1.4;
+letter-spacing: -0.01em;
+}
+
+.lockscreen .unlock {
+font-size: 14px;
+font-weight: 500;
+letter-spacing: 0;
+}
+
+/* INTERLUDE — REFINED STATUS BAR ICONS */
+
+.status {
+font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue",
+"Segoe UI", sans-serif;
+font-size: 12px;
+font-weight: 600;
+letter-spacing: -0.02em;
+color: #fff;
+}
+
+.status-icons {
+display: flex;
+align-items: center;
+justify-content: flex-end;
+gap: 5px;
+color: #fff;
+}
+
+.status-icon {
+display: block;
+flex: 0 0 auto;
+width: 17px;
+height: 14px;
+overflow: visible;
+}
+
+.signal-icon {
+width: 16px;
+fill: currentColor;
+}
+
+.wifi-icon {
+width: 17px;
+fill: currentColor;
+}
+
+.wifi-icon path {
+fill: none;
+stroke: currentColor;
+stroke-width: 1.8;
+stroke-linecap: round;
+}
+
+.battery-icon {
+width: 22px;
+height: 12px;
+fill: none;
+stroke: currentColor;
+stroke-width: 1.2;
+stroke-linejoin: round;
+}
+
+.battery-icon .battery-level {
+fill: currentColor;
+stroke: none;
+}
+
+/* FIX: unlock tetap di bawah */
+.lockscreen {
+  display: flex;
+  flex-direction: column;
+}
+
+.lockscreen .lock-bottom {
+  margin-top: auto;
+  flex-shrink: 0;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
