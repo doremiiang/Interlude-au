@@ -1189,3 +1189,84 @@ input:focus-visible {
   -webkit-backdrop-filter: blur(20px) saturate(145%);
   backdrop-filter: blur(20px) saturate(145%);
 }
+
+/* LOCKSCREEN FIX 04 — readable text + smoother glass */
+
+.lockscreen {
+  background-color: #171320;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(12, 10, 20, 0.12) 0%,
+      rgba(16, 12, 27, 0.22) 42%,
+      rgba(10, 8, 18, 0.72) 100%
+    ),
+    url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+  background-position: center, center;
+  background-size: cover, cover;
+  background-repeat: no-repeat;
+}
+
+/* Keep text readable over both light and dark wallpaper areas */
+.lockscreen .lock-date {
+  color: #f7f2ff;
+  text-shadow: 0 1px 5px rgba(0, 0, 0, 0.65);
+}
+
+.lockscreen .lock-clock {
+  color: #fff;
+  text-shadow:
+    0 2px 5px rgba(0, 0, 0, 0.28),
+    0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+/* Deeper frosted glass */
+.lockscreen .lock-message {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 24px;
+  background: rgba(30, 25, 42, 0.62);
+  -webkit-backdrop-filter: blur(32px) saturate(135%);
+  backdrop-filter: blur(32px) saturate(135%);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.20),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Soft highlight on the glass surface */
+.lockscreen .lock-message::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.10),
+    transparent 48%,
+    rgba(205, 185, 240, 0.06)
+  );
+}
+
+.lockscreen .lock-message strong {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.lockscreen .lock-message p {
+  color: rgba(255, 255, 255, 0.88);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.20);
+}
+
+/* Unlock control */
+.lockscreen .unlock {
+  color: #fff;
+  background: rgba(27, 23, 38, 0.56);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  -webkit-backdrop-filter: blur(20px) saturate(130%);
+  backdrop-filter: blur(20px) saturate(130%);
+}
+
