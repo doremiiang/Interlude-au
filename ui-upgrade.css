@@ -293,3 +293,14 @@
     gap: 4px;
   }
 }
+/* FIX: unlock tetap di bawah */
+.lockscreen {
+  display: flex;
+  flex-direction: column;
+}
+
+.lockscreen .lock-bottom {
+  margin-top: auto;
+  flex-shrink: 0;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
