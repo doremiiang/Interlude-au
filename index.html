@@ -146,13 +146,12 @@
       background: currentColor;
     }
 
-    .view {
-      position: absolute;
-      inset: 0;
-      display: none;
-      overflow: hidden;
-      animation: appear .22s ease-out;
-    }
+.view {
+  position: absolute;
+  inset: 0;
+  display: none;
+  overflow: hidden;
+}
     .view.active { display: flex; flex-direction: column; }
     @keyframes appear {
       from { opacity: 0; transform: translateY(5px); }
@@ -953,7 +952,10 @@
 
 
 
+
 <section class="view lockscreen active" id="lockView">
+  <div class="lock-owner">Shaqil’s phone</div>
+
   <div class="lock-date" id="lockDate">MONDAY, 28 OCTOBER</div>
   <div class="lock-clock" id="lockClock">09:41</div>
 
