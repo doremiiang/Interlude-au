@@ -10,7 +10,16 @@
 .lockscreen {
   position: relative;
   isolation: isolate;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
   overflow: hidden;
+
   color: rgba(255, 255, 255, 0.96);
 
   background-color: #171320;
@@ -28,34 +37,13 @@
   background-repeat: no-repeat, no-repeat;
 }
 
-/* Subtle floating particles */
-.lockscreen::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.17;
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(255, 255, 255, 0.85) 0 1px,
-      transparent 1.7px
-    ),
-    radial-gradient(
-      circle,
-      rgba(215, 194, 255, 0.75) 0 1px,
-      transparent 1.8px
-    );
-  background-size: 113px 151px, 173px 197px;
-  background-position: 12px 18px, 52px 76px;
-  animation: iu-particle-drift 28s linear infinite;
+.lockscreen::before {
+  content: none;
 }
 
-/* Keep lockscreen content above decorations */
-.lockscreen > * {
-  position: relative;
-  z-index: 1;
+.lockscreen .lock-bottom {
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 /* Date */
