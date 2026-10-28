@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -443,6 +444,216 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
+    
+/* ===== INTERLUDE PHONE · VISUAL UPGRADE 01 ===== */
+
+:root {
+  --accent: #c9b5ef;
+  --accent-dark: #78649e;
+  --line: rgba(255,255,255,.13);
+}
+
+.device {
+  border-color: #34343b;
+  box-shadow:
+    0 45px 110px rgba(0,0,0,.65),
+    0 0 0 1px rgba(255,255,255,.12),
+    inset 0 0 0 1px rgba(255,255,255,.08);
+}
+
+.screen {
+  background: #13131b;
+  isolation: isolate;
+}
+
+.wallpaper {
+  background:
+    radial-gradient(ellipse at 15% 18%,
+      rgba(191,157,222,.52), transparent 34%),
+    radial-gradient(ellipse at 90% 42%,
+      rgba(106,137,168,.36), transparent 36%),
+    radial-gradient(ellipse at 50% 100%,
+      rgba(104,76,116,.42), transparent 40%),
+    linear-gradient(155deg,#292433 0%,#151720 48%,#292431 100%);
+  transition: filter .3s ease;
+}
+
+.wallpaper::before {
+  width: 310px;
+  height: 480px;
+  right: -135px;
+  top: 15%;
+  border-color: rgba(255,255,255,.12);
+  border-radius: 48% 52% 65% 35%;
+  box-shadow:
+    0 0 0 24px rgba(255,255,255,.025),
+    0 0 0 60px rgba(255,255,255,.02),
+    0 0 80px rgba(191,157,222,.12);
+}
+
+.status {
+  font-size: 12px;
+  letter-spacing: .015em;
+  text-shadow: 0 1px 5px rgba(0,0,0,.4);
+}
+
+.device::before {
+  width: 94px;
+  height: 25px;
+  background: #050507;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.05),
+    0 1px 4px rgba(0,0,0,.4);
+}
+
+.lockscreen {
+  background:
+    linear-gradient(to bottom,
+      rgba(5,5,12,.08),
+      rgba(5,5,12,.05) 40%,
+      rgba(5,5,12,.45));
+}
+
+.lock-date {
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: .09em;
+}
+
+.lock-clock {
+  font-weight: 230;
+  letter-spacing: -.085em;
+  text-shadow: 0 3px 25px rgba(0,0,0,.12);
+}
+
+.lock-message {
+  border: 1px solid rgba(255,255,255,.2);
+  background: rgba(30,27,39,.48);
+  box-shadow: 0 12px 35px rgba(0,0,0,.12);
+  backdrop-filter: blur(24px) saturate(135%);
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+}
+
+.unlock {
+  border: 1px solid rgba(255,255,255,.3);
+  background: rgba(255,255,255,.14);
+  box-shadow: 0 8px 30px rgba(0,0,0,.12);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  transition: background .2s, transform .2s;
+}
+
+.unlock:active {
+  transform: scale(.975);
+  background: rgba(255,255,255,.24);
+}
+
+.widget,
+.dock {
+  border: 1px solid rgba(255,255,255,.19);
+  background: rgba(30,28,40,.48);
+  box-shadow: 0 12px 32px rgba(0,0,0,.08);
+  backdrop-filter: blur(25px) saturate(130%);
+  -webkit-backdrop-filter: blur(25px) saturate(130%);
+}
+
+.widget {
+  border-radius: 24px;
+}
+
+.widget-title {
+  letter-spacing: -.025em;
+}
+
+.app-art {
+  border: 1px solid rgba(255,255,255,.25);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.18),
+    0 6px 15px rgba(0,0,0,.15);
+  transition: transform .18s ease, filter .18s ease;
+}
+
+.app-icon:active .app-art {
+  transform: scale(.91);
+  filter: brightness(1.15);
+}
+
+.app-art.chat {
+  background: linear-gradient(145deg,#76c5a4,#34745e);
+}
+.app-art.photos {
+  background: linear-gradient(145deg,#e2c6f4,#8d76b7 65%,#65578c);
+}
+.app-art.notes {
+  background: linear-gradient(145deg,#f1e4b8,#c6ad70);
+}
+.app-art.phone {
+  background: linear-gradient(145deg,#94e2bb,#42966e);
+}
+.app-art.settings {
+  background: linear-gradient(145deg,#c7c7d1,#777786);
+}
+.app-art.music {
+  background: linear-gradient(145deg,#efb8d4,#a15f90);
+}
+
+.app-name {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .005em;
+}
+
+.app-header {
+  background: #f8f6fa;
+}
+
+.app-header h2 {
+  font-weight: 720;
+}
+
+.back {
+  transition: background .15s, transform .15s;
+}
+
+.back:active {
+  transform: scale(.92);
+  background: #211f2818;
+}
+
+.bubble {
+  box-shadow: 0 2px 8px rgba(30,25,40,.035);
+}
+
+.bubble.incoming {
+  border: 1px solid rgba(40,30,50,.035);
+}
+
+.bubble.outgoing {
+  background: linear-gradient(135deg,#e4d9f4,#d4c3ec);
+}
+
+.nav-bar {
+  height: 4px;
+  transition: opacity .2s;
+}
+
+@media (max-width: 480px) {
+  .device {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .screen {
+    height: 100dvh;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .view.active {
+    animation: appear .22s cubic-bezier(.2,.7,.25,1);
+  }
+}
+
   </style>
 </head>
 <body>
