@@ -924,10 +924,32 @@
 
         <div class="status">
           <span id="statusTime">09:41</span>
-          <div class="status-icons" aria-label="Sinyal, Wi-Fi, baterai">
-            <span>▮▮▮</span><span>⌁</span><span class="battery"></span>
-          </div>
-        </div>
+          
+<div class="status-icons" aria-label="Sinyal, Wi-Fi, baterai">
+  <!-- Cellular signal -->
+  <svg class="status-icon signal-icon" viewBox="0 0 18 14" aria-hidden="true">
+    <path d="M1 13V10.5H4V13Z" />
+    <path d="M5.5 13V7.5H8.5V13Z" />
+    <path d="M10 13V4.5H13V13Z" />
+    <path d="M14.5 13V1H17V13Z" />
+  </svg>
+
+  <!-- Wi-Fi -->
+  <svg class="status-icon wifi-icon" viewBox="0 0 18 14" aria-hidden="true">
+    <path d="M1.5 4.5C5.8 0.8 12.2 0.8 16.5 4.5" />
+    <path d="M4.5 7.5C7.1 5.3 10.9 5.3 13.5 7.5" />
+    <path d="M7.3 10.2C8.3 9.4 9.7 9.4 10.7 10.2" />
+    <circle cx="9" cy="12" r="1" />
+  </svg>
+
+  <!-- Battery -->
+  <svg class="status-icon battery-icon" viewBox="0 0 22 12" aria-hidden="true">
+    <rect x="1" y="1" width="17" height="10" rx="2" />
+    <path d="M20 4V8" />
+    <rect class="battery-level" x="3" y="3" width="13" height="6" rx="1" />
+  </svg>
+</div>
+
 
         <section class="view lockscreen active" id="lockView">
           <div class="lock-date" id="lockDate">MONDAY, 28 OCTOBER</div>
