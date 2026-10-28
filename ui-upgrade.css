@@ -259,7 +259,37 @@ input:focus-visible {
 }
 
 /* Small Android screens */
+
+/* Small screens — keep the phone mockup frame */
 @media (max-width: 480px) {
+  .stage {
+    padding: 12px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .device {
+    width: min(100%, 390px);
+    height: min(844px, calc(100vh - 24px));
+    height: min(844px, calc(100dvh - 24px));
+    min-height: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 34px;
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.38),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+  }
+
+  .screen {
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+  }
+}
+
   .stage {
     padding: 0;
   }
