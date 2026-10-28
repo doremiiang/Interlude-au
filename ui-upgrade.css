@@ -1647,14 +1647,43 @@ fill: currentColor;
 stroke: none;
 }
 
-/* FIX: unlock tetap di bawah */
+
 .lockscreen {
+  position: relative;
+  isolation: isolate;
+
   display: flex;
   flex-direction: column;
+
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  color: rgba(255, 255, 255, 0.96);
+
+  background-color: #171320;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(12, 10, 20, 0.08) 0%,
+      rgba(16, 12, 27, 0.12) 45%,
+      rgba(8, 7, 15, 0.58) 100%
+    ),
+    url("https://cdn.rapidfile.cc/jWPeHveFj1/wallpaper-shaqil.jpg");
+
+  background-position: center center, center center;
+  background-size: cover, cover;
+  background-repeat: no-repeat, no-repeat;
+}
+
+.lockscreen::before {
+  content: none;
 }
 
 .lockscreen .lock-bottom {
   margin-top: auto;
   flex-shrink: 0;
-  padding-bottom: max(12px, env(safe-area-inset-bottom));
 }
+
