@@ -21,39 +21,6 @@ import {
   if (window.__interludeAppInitialized) return;
   window.__interludeAppInitialized = true;
 
-  const VIEW_IDS = [
-    "lockView",
-    "passcodeView",
-    "homeView",
-    "chatView",
-    "conversationView",
-    "photosView",
-    "notesView",
-    "phoneView",
-    "musicView",
-    "settingsView"
-  ];
-
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  const $$ = (selector, root = document) =>
-    Array.from(root.querySelectorAll(selector));
-
-  const byId = (id) => document.getElementById(id);
-
-  const state = {
-    currentView: null,
-    pin: "",
-    pinCheckTimer: null,
-    activeContact: null,
-    touchStartY: null,
-    pointerStartY: null,
-    lastUnlockGesture: 0,
-    toastTimer: null,
-    clockTimer: null
-  };
-
   // Kontak ini mengikuti ID yang tersedia di HTML saat ini.
   const CONTACTS = {
     shaq: {
@@ -66,36 +33,7 @@ import {
       status: "",
       avatar: "K"
     }
-  };
-
-  function getViews() {
-    return VIEW_IDS
-      .map((id) => byId(id))
-      .filter(Boolean);
-  }
-
-  function showView(viewId) {
-    const target = byId(viewId);
-
-    if (!target || !VIEW_IDS.includes(viewId)) {
-      return false;
-    }
-
-    getViews().forEach((view) => {
-      const active = view === target;
-
-      view.classList.toggle("active", active);
-      view.setAttribute("aria-hidden", String(!active));
-    });
-
-    state.currentView = viewId;
-
-    document.dispatchEvent(
-      new CustomEvent("interlude:view-change", {
-        detail: { viewId }
-      })
-    );
-
+  
     return true;
   }
 
