@@ -1,75 +1,61 @@
 
 /* =========================================================
-   INTERLUDE AU — LOCKSCREEN
-   Redesign: iPhone / HP-Kino inspired
-   Fokus: status bar, jam, notifikasi, kontrol bawah.
-   Tidak mengubah struktur HTML atau fungsi JavaScript.
+   INTERLUDE AU — LOCKSCREEN & PASSCODE
+   Android-first • Shaqil wallpaper • Existing HTML preserved
    ========================================================= */
 
-/* ---------- 1. KERANGKA LOCKSCREEN ---------- */
-
+/* 1. LOCKSCREEN BASE */
 #lockView {
   position: absolute;
   inset: 0;
-  z-index: 10;
-  box-sizing: border-box;
-  display: none;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0;
-  overflow: hidden;
   isolation: isolate;
-
-  padding:
-    max(18px, env(safe-area-inset-top))
-    14px
-    max(10px, env(safe-area-inset-bottom));
-
+  overflow: hidden;
+  background: #100f15;
   color: #fff;
-  background: #111018;
+  padding:
+    env(safe-area-inset-top, 0px)
+    0
+    env(safe-area-inset-bottom, 0px);
 }
 
 #lockView.active {
   display: flex;
+  flex-direction: column;
 }
 
-/* ---------- 2. WALLPAPER DAN OVERLAY ---------- */
+#lockView,
+#lockView * {
+  box-sizing: border-box;
+}
 
-
-/* =========================================================
-   2. WALLPAPER — LOCKSCREEN SHAQIL
-   ========================================================= */
-
+/* 2. LOCKSCREEN WALLPAPER */
 #lockView .wallpaper,
 #lockView .lockscreen-wallpaper {
   position: absolute;
   inset: 0;
   z-index: -2;
-
   width: 100%;
   height: 100%;
-
   background-image: url("https://cdn.rapidfile.cc/4K9nRIONqE/lockscreen-shaqil.jpg");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
+  transform: scale(1.015);
 }
 
-/* Overlay untuk menjaga teks tetap terbaca */
-#lockView::before {
-  content: "";
+#lockView .lockscreen-overlay {
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-
-  background: linear-gradient(
-    180deg,
-    rgba(0, 0, 0, 0.16) 0%,
-    rgba(0, 0, 0, 0.04) 35%,
-    rgba(0, 0, 0, 0.20) 70%,
-    rgba(0, 0, 0, 0.48) 100%
-  );
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 7, 12, 0.32) 0%,
+      rgba(8, 7, 12, 0.04) 28%,
+      rgba(8, 7, 12, 0.10) 53%,
+      rgba(8, 7, 12, 0.62) 100%
+    );
 }
 
 #lockView::after {
@@ -78,96 +64,61 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-
   background: radial-gradient(
     ellipse at center,
-    transparent 38%,
-    rgba(0, 0, 0, 0.20) 100%
+    transparent 35%,
+    rgba(0, 0, 0, 0.18) 100%
   );
 }
 
-
-/* ---------- 3. STATUS BAR ---------- */
-
+/* 3. STATUS BAR */
 #lockView .status-bar {
   position: relative;
-  z-index: 25;
+  z-index: 3;
   display: flex;
-  flex: 0 0 34px;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
-  min-height: 34px;
-  padding: 0 4px;
-  color: #fff;
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 5px 25px 0;
+  color: rgba(255, 255, 255, 0.96);
 }
 
 #lockView .status-time {
-  display: block !important;
-  flex: 0 0 auto;
-  color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.3px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
   font-variant-numeric: tabular-nums;
 }
 
 #lockView .status-icons {
-  display: flex !important;
-  flex: 0 0 auto;
+  display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 4px;
-  width: auto;
-  height: 18px;
-  color: #fff;
+  gap: 5px;
+  min-width: 0;
 }
 
 #lockView .status-icons svg {
   display: block;
+  width: 15px;
+  height: 13px;
   flex: 0 0 auto;
-  width: 16px;
-  height: 14px;
 }
 
-#lockView .status-icons svg:last-child {
-  width: 23px;
-  height: 14px;
-}
+/* Dynamic Island tetap menggunakan elemen dari main.css. */
 
-/* Dynamic Island tetap memakai aturan yang sudah ada
-   di main.css. Tidak membuat island kedua di sini. */
-#lockView .status-bar::after {
-  pointer-events: none;
-}
-
-#lockView .status-bar::before,
-#lockView .status-icons::before,
-#lockView .status-icons::after {
-  content: none !important;
-  display: none !important;
-}
-
-#lockView .status-icons .dot,
-#lockView .status-icons .indicator,
-#lockView .status-icons .status-dot {
-  display: none !important;
-}
-
-/* ---------- 4. AREA JAM ---------- */
-
+/* 4. MAIN LOCK CONTENT */
 #lockView .lock-content {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex: 1 1 auto;
   flex-direction: column;
-  align-items: stretch;
-  align-self: stretch;
-  width: 100%;
-  max-width: none;
-  min-width: 0;
+  align-items: center;
+  flex: 1 1 auto;
   min-height: 0;
-  box-sizing: border-box;
+  width: 100%;
+  padding: clamp(24px, 5vh, 48px) 22px 0;
 }
 
 #lockView .lock-owner {
@@ -175,470 +126,515 @@
 }
 
 #lockView .lock-date {
-  flex: 0 0 auto;
-  width: 100%;
-  margin: clamp(28px, 5vh, 44px) 0 0;
+  margin: 0;
   color: rgba(255, 255, 255, 0.84);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 600;
-  line-height: 1.4;
-  letter-spacing: 0.025em;
+  letter-spacing: 0.19em;
+  line-height: 1.5;
   text-align: center;
   text-transform: uppercase;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
 }
 
 #lockView .lock-clock {
-  flex: 0 0 auto;
   margin: 5px 0 0;
   color: #fff;
-  font-size: clamp(72px, 22vw, 96px);
+  font-size: clamp(68px, 20vw, 88px);
   font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.065em;
+  letter-spacing: -0.075em;
+  line-height: 1.04;
   text-align: center;
-  white-space: nowrap;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.2);
+  text-shadow: 0 3px 28px rgba(0, 0, 0, 0.2);
 }
 
-/* Jangan menimpa animasi jam dari JavaScript/CSS lain.
-   Aturan ini hanya mengatur ukuran dan tata letaknya. */
-
-/* ---------- 5. WADAH NOTIFIKASI ---------- */
-
-#lockView #lockNotifications {
+/* 5. NOTIFICATION STACK */
+#lockView .lock-notifications {
   display: flex;
-  flex: 0 1 auto;
   flex-direction: column;
-  align-items: stretch;
-  align-self: stretch;
   gap: 9px;
-
-  box-sizing: border-box;
   width: 100%;
-  max-width: none;
-  min-width: 0;
-
-  margin-top: clamp(20px, 3.5vh, 30px);
-  padding: 0;
+  max-width: 340px;
+  margin: clamp(24px, 5vh, 44px) auto 0;
 }
 
-/* ---------- 6. KARTU NOTIFIKASI ---------- */
-
-#lockView #lockNotifications > .notification,
-#lockView #lockNotifications > .lock-notification {
+#lockView .lock-notification {
   display: flex;
-  flex: 0 1 auto;
   align-items: flex-start;
-  gap: 12px;
-
-  box-sizing: border-box;
+  gap: 11px;
   width: 100%;
-  max-width: none;
   min-width: 0;
-  min-height: 76px;
-  padding: 13px 14px;
-
-  border: 1px solid rgba(255, 255, 255, 0.17);
-  border-radius: 21px;
-
-  color: #fff;
-  background: rgba(30, 27, 39, 0.57);
-  box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-
-  -webkit-backdrop-filter: blur(24px) saturate(135%);
-  backdrop-filter: blur(24px) saturate(135%);
+  padding: 12px 13px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 17px;
+  background: rgba(27, 25, 34, 0.48);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 
-/* ---------- 7. ICON APLIKASI ---------- */
-
-#lockView #lockNotifications .notification-icon {
-  display: grid;
-  flex: 0 0 38px;
+#lockView .notification-icon {
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 38px;
-  height: 38px;
-  box-sizing: border-box;
-  overflow: hidden;
-
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  color: #fff;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.12);
-
-  font-size: 17px;
-  line-height: 1;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
 }
 
-/* ---------- 8. TEKS NOTIFIKASI ---------- */
-
-#lockView #lockNotifications .notification-content {
+#lockView .notification-content {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-#lockView #lockNotifications .notification-meta {
+#lockView .notification-meta {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  margin: 0 0 4px;
+}
 
-  min-width: 0;
-  margin: 1px 0 5px;
-
-  color: rgba(255, 255, 255, 0.65);
+#lockView .notification-title {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.96);
   font-size: 11px;
-  line-height: 1.3;
-}
-
-#lockView #lockNotifications .notification-title {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin: 0;
-
-  color: rgba(255, 255, 255, 0.97);
-  font-size: 13px;
-  font-weight: 650;
-  line-height: 1.3;
-
-  overflow-wrap: anywhere;
-}
-
-#lockView #lockNotifications .notification-time {
-  flex: 0 0 auto;
-  color: rgba(255, 255, 255, 0.58);
-  font-size: 10px;
+  font-weight: 700;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-#lockView #lockNotifications .notification-message {
+#lockView .notification-time {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 9px;
+}
+
+#lockView .notification-message {
   margin: 0;
-  color: rgba(255, 255, 255, 0.84);
-  font-size: 13px;
+  color: rgba(255, 255, 255, 0.91);
+  font-size: 11px;
   font-weight: 400;
-  line-height: 1.4;
+  line-height: 1.45;
   overflow-wrap: anywhere;
 }
 
-
-/* ---------- 9. AREA KONTROL BAWAH ---------- */
-
+/* 6. BOTTOM CONTROLS */
 #lockView .lock-bottom {
-  display: flex !important;
-  flex: 0 0 auto;
-  flex-direction: column;
-  align-items: stretch;
-
-  width: 100%;
-  margin-top: auto;
-  padding: 0;
-}
-
-/* Tombol flashlight dan camera. */
-#lockView .lock-controls {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 12px 22px 10px;
+}
+
+#lockView .lock-controls {
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-
   width: 100%;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 12px 4px 14px;
+  max-width: 340px;
+  margin: 0 auto 20px;
 }
 
 #lockView .lock-control {
-  display: grid;
-  flex: 0 0 48px;
+  display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 48px;
-  height: 48px;
+  width: 49px;
+  height: 49px;
   padding: 0;
-
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.19);
   border-radius: 50%;
-
+  background: rgba(28, 26, 33, 0.48);
   color: #fff;
-  background: rgba(255, 255, 255, 0.14);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
-
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.14);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-
   transition:
-    transform 180ms ease,
-    background 180ms ease;
+    transform 130ms ease,
+    background 130ms ease;
 }
 
-#lockView .lock-control > span {
-  display: grid;
-  place-items: center;
-  font-size: 21px;
-  line-height: 1;
+#lockView .lock-control svg {
+  display: block;
+  width: 21px;
+  height: 21px;
 }
 
 #lockView .lock-control:active {
   transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.24);
+  background: rgba(255, 255, 255, 0.2);
 }
 
-/* ---------- 10. HOME INDICATOR / UNLOCK ---------- */
-
-/* Tombol ini tetap menjadi pemicu unlock yang sudah ada. */
-#lockView #unlockTrigger.lock-swipe-hint {
+#lockView .lock-swipe-hint {
   display: flex;
-  flex: 0 0 auto;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-
-  width: 100%;
-  min-height: 22px;
-  box-sizing: border-box;
-
-  margin: 0;
-  padding: 0 0 2px;
-
+  justify-content: center;
+  gap: 8px;
+  min-width: 150px;
+  min-height: 42px;
+  padding: 4px 12px 0;
   border: 0;
-  border-radius: 0;
-  color: #fff;
   background: transparent;
-
-  font-size: 0;
-  line-height: 1;
+  color: rgba(255, 255, 255, 0.83);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Gunakan garis yang sudah ada di HTML. */
-#lockView #unlockTrigger .swipe-line {
+#lockView .swipe-line {
   display: block;
-  flex: 0 0 4px;
-
-  width: 108px;
+  width: 37px;
   height: 4px;
-  margin: 0;
-
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Hilangkan garis kedua dari CSS lama. */
-#lockView #unlockTrigger::after {
-  display: none !important;
-  content: none !important;
+#lockView .lock-swipe-hint:active .swipe-line {
+  transform: translateY(2px);
 }
 
-#lockView #unlockTrigger > span:not(.swipe-line) {
+/* 7. PASSCODE SCREEN BASE */
+#passcodeView {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  background: #121017;
+  color: #fff;
+}
+
+#passcodeView.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#passcodeView::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  z-index: -2;
+  background-image: url("https://cdn.rapidfile.cc/4K9nRIONqE/lockscreen-shaqil.jpg");
+  background-position: center;
+  background-size: cover;
+  filter: blur(16px);
+  transform: scale(1.06);
+}
+
+#passcodeView::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(12, 10, 17, 0.57);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+}
+
+#passcodeView,
+#passcodeView * {
+  box-sizing: border-box;
+}
+
+#passcodeView .passcode-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  overflow-y: auto;
+  padding:
+    max(28px, env(safe-area-inset-top, 0px))
+    28px
+    max(18px, env(safe-area-inset-bottom, 0px));
+  scrollbar-width: none;
+}
+
+#passcodeView .passcode-content::-webkit-scrollbar {
   display: none;
 }
 
-/* ---------- 11. PENYESUAIAN LAYAR PENDEK ---------- */
+#passcodeView .eyebrow {
+  margin: 0 0 12px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
 
-@media (max-height: 700px) {
-  #lockView {
-    padding-top: max(12px, env(safe-area-inset-top));
-    padding-bottom: max(8px, env(safe-area-inset-bottom));
-  }
+#passcodeView h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(25px, 7vw, 31px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+  text-align: center;
+}
 
-  #lockView .lock-date {
-    margin-top: 22px;
-    font-size: 11px;
+#passcodeView .muted {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 8. PASSCODE DOTS */
+#passcodeView .passcode-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+  min-height: 15px;
+  margin: 30px 0 28px;
+}
+
+#passcodeView .passcode-dots span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: transparent;
+  transition:
+    background 150ms ease,
+    transform 150ms ease,
+    border-color 150ms ease;
+}
+
+#passcodeView .passcode-dots span.filled {
+  transform: scale(1.08);
+  border-color: #fff;
+  background: #fff;
+}
+
+/* 9. PASSCODE KEYPAD */
+#passcodeView .passcode-pad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px 21px;
+  width: min(100%, 270px);
+  margin: 0 auto;
+}
+
+#passcodeView .passcode-pad button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 68px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+  font-family: inherit;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 100ms ease,
+    background 100ms ease,
+    border-color 100ms ease,
+    box-shadow 100ms ease;
+}
+
+#passcodeView .passcode-pad button:active {
+  transform: translateY(3px) scale(0.96);
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.23);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.16);
+}
+
+#passcodeView .passcode-pad button[data-passcode="clear"],
+#passcodeView .passcode-pad button[data-passcode="enter"] {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 21px;
+}
+
+#passcodeView .passcode-pad button:focus-visible,
+#passcodeView .text-button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+}
+
+/* 10. BACK BUTTON AND ERROR */
+#passcodeView .text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin: 18px 0 0;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#passcodeView .text-button:active {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+#passcodeView .passcode-error {
+  min-height: 17px;
+  margin: 4px 0 0;
+  color: #ffc1cb;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 11. SHORT SCREENS */
+@media (max-height: 740px) {
+  #lockView .lock-content {
+    padding-top: 20px;
   }
 
   #lockView .lock-clock {
-    font-size: clamp(62px, 19vw, 80px);
+    font-size: clamp(58px, 17vw, 74px);
   }
 
-  #lockView #lockNotifications {
+  #lockView .lock-notifications {
     gap: 7px;
-    margin-top: 16px;
+    margin-top: 18px;
   }
 
-  #lockView #lockNotifications > .notification,
-  #lockView #lockNotifications > .lock-notification {
-    min-height: 66px;
-    padding: 10px 12px;
-    gap: 10px;
-    border-radius: 18px;
-  }
-
-  #lockView #lockNotifications .notification-icon {
-    flex-basis: 34px;
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-  }
-
-  #lockView #lockNotifications .notification-message {
-    font-size: 12px;
+  #lockView .lock-notification {
+    padding: 9px 11px;
+    border-radius: 14px;
   }
 
   #lockView .lock-controls {
-    padding-top: 7px;
-    padding-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   #lockView .lock-control {
-    flex-basis: 44px;
-    width: 44px;
-    height: 44px;
-  }
-}
-
-/* Ponsel yang sangat pendek: prioritaskan seluruh kontrol tetap terlihat. */
-@media (max-height: 560px) {
-  #lockView .lock-date {
-    margin-top: 12px;
+    width: 43px;
+    height: 43px;
   }
 
-  #lockView .lock-clock {
-    font-size: clamp(52px, 16vw, 68px);
-  }
-
-  #lockView #lockNotifications {
-    margin-top: 10px;
-    gap: 5px;
-  }
-
-  #lockView #lockNotifications > .notification,
-  #lockView #lockNotifications > .lock-notification {
-    min-height: 54px;
-    padding: 7px 10px;
-    border-radius: 15px;
-  }
-
-  #lockView #lockNotifications .notification-icon {
-    flex-basis: 30px;
-    width: 30px;
-    height: 30px;
-  }
-
-  #lockView .lock-controls {
-    padding-top: 5px;
+  #lockView .lock-bottom {
     padding-bottom: 5px;
   }
 
-  #lockView .lock-control {
-    flex-basis: 40px;
-    width: 40px;
-    height: 40px;
+  #passcodeView .passcode-content {
+    padding-top: 18px;
+    padding-bottom: 12px;
   }
 
-  #lockView #unlockTrigger.lock-swipe-hint {
-    min-height: 16px;
+  #passcodeView .passcode-dots {
+    margin: 18px 0;
   }
 
-  #lockView #unlockTrigger .swipe-line {
-    width: 90px;
-    height: 4px;
-    flex-basis: 4px;
+  #passcodeView .passcode-pad {
+    gap: 9px 18px;
+    width: min(100%, 240px);
+  }
+
+  #passcodeView .passcode-pad button {
+    max-height: 59px;
+    font-size: 21px;
+  }
+
+  #passcodeView .text-button {
+    min-height: 34px;
+    margin-top: 10px;
   }
 }
 
-/* ---------- 12. AKSESIBILITAS ---------- */
+@media (max-height: 620px) {
+  #lockView .lock-content {
+    padding-top: 12px;
+  }
 
+  #lockView .lock-clock {
+    font-size: 54px;
+  }
+
+  #lockView .lock-notifications {
+    margin-top: 12px;
+  }
+
+  #lockView .lock-notification:nth-child(3) {
+    display: none;
+  }
+
+  #passcodeView .eyebrow {
+    margin-bottom: 7px;
+  }
+
+  #passcodeView h2 {
+    font-size: 23px;
+  }
+
+  #passcodeView .muted {
+    margin-top: 5px;
+  }
+
+  #passcodeView .passcode-dots {
+    margin: 12px 0;
+  }
+
+  #passcodeView .passcode-pad {
+    gap: 6px 15px;
+    width: min(100%, 210px);
+  }
+
+  #passcodeView .passcode-pad button {
+    max-height: 48px;
+    font-size: 19px;
+  }
+
+  #passcodeView .text-button {
+    margin-top: 6px;
+  }
+}
+
+/* 12. REDUCED MOTION */
 @media (prefers-reduced-motion: reduce) {
-  #lockView .lock-control {
-    transition: none;
+  #lockView *,
+  #passcodeView * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
-}
-
-
-/* =========================================
-   INTERLUDE FIX — LOCKSCREEN ANDROID
-   Fix posisi notifikasi + ikon kontrol bawah
-   ========================================= */
-
-/* 1. Turunkan kartu notifikasi sedikit */
-
-#lockView #lockNotifications {
-  position: relative;
-  top: 0;
-  z-index: 5;
-  margin-top: 64px !important;
-  transform: translateY(0);
-}
-
-/* 2. Pastikan area kontrol bawah tetap terlihat */
-#lockView .lock-bottom {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  position: absolute;
-  left: 0;
-  right: 0;
-bottom: max(6px, env(safe-area-inset-bottom, 0px));  width: 100%;
-  padding: 0 20px;
-  z-index: 20;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* 3. Posisi tombol flashlight dan kamera */
-#lockView .lock-controls {
-  display: flex !important;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 24px;
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* 4. Tampilan lingkaran tombol */
-#lockView .lock-control {
-  display: flex !important;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 54px;
-  width: 54px;
-  height: 54px;
-  padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.13);
-  color: #ffffff !important;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  visibility: visible !important;
-  opacity: 1 !important;
-}
-
-/* 5. Paksa ikon SVG tampil */
-#lockView .lock-control svg {
-  display: block !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  width: 24px !important;
-  height: 24px !important;
-  min-width: 24px;
-  flex-shrink: 0;
-  color: #ffffff !important;
-  stroke: currentColor !important;
-  overflow: visible;
-}
-
-/* 6. Pastikan garis swipe tetap terlihat */
-#lockView .lock-swipe-hint {
-  display: flex !important;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  color: #ffffff;
-  visibility: visible !important;
-  opacity: 1 !important;
 }
