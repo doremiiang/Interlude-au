@@ -1,20 +1,15 @@
+/* =========================================================
+   INTERLUDE AU — APP.JS
+   Bagian 1/3: Konfigurasi, utilitas, dan navigasi layar
+   ========================================================= */
 
 (() => {
   "use strict";
 
-  // Interlude AU — main app controller
-  // PIN ini hanya untuk simulasi HP fiktif.
-  const DEMO_PIN = "1201";
-
-  // Cegah inisialisasi ganda.
   if (window.__interludeAppInitialized) return;
   window.__interludeAppInitialized = true;
 
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  const $$ = (selector, root = document) =>
-    Array.from(root.querySelectorAll(selector));
+  const DEMO_PIN = "1201";
 
   const VIEW_IDS = [
     "lockView",
@@ -29,232 +24,224 @@
     "settingsView"
   ];
 
-  const views = VIEW_IDS
-    .map((id) => document.getElementById(id))
-    .filter(Boolean);
+  const $ = (selector, root = document) =>
+    root.querySelector(selector);
 
-  const lockView = $("#lockView");
-  const passcodeView = $("#passcodeView");
-  const homeView = $("#homeView");
-  const conversationView = $("#conversationView");
+  const $$ = (selector, root = document) =>
+    Array.from(root.querySelectorAll(selector));
 
-  const passcodeDots = $("#passcodeDots");
-  const passcodeError = $("#passcodeError");
-  const passcodeCancel = $("#passcodeCancel");
+  const byId = (id) => document.getElementById(id);
 
-  const conversationName = $("#conversationName");
-  const conversationAvatar = $("#conversationAvatar");
-  const conversationStatus = $("#conversationStatus");
-
-  const contactSearch = $("#contactSearch");
-  const contactList = $("#contactList");
-
-  let enteredPin = "";
-  let activeContact = null;
-  let toastTimeout = null;
-  let touchStartY = null;
+  const state = {
+    currentView: null,
+    pin: "",
+    activeContact: null,
+    touchStartY: null,
+    pointerStartY: null,
+    lastUnlockGesture: 0,
+    toastTimer: null,
+    clockTimer: null
+  };
 
   const CONTACTS = {
     shaq: {
-      id: "shaq",
       name: "Shaq",
       status: "",
       avatar: ""
     },
     kris: {
-      id: "kris",
       name: "Kris",
       status: "",
       avatar: ""
     }
   };
 
-  function getView(viewId) {
-    return document.getElementById(viewId);
+  function getViews() {
+    return VIEW_IDS
+      .map((id) => byId(id))
+      .filter(Boolean);
   }
 
   function showView(viewId) {
-    const target = getView(viewId);
+    const target = byId(viewId);
+    if (!target) return false;
 
-    if (!target || !views.includes(target)) {
-      return false;
-    }
-
-    views.forEach((view) => {
+    getViews().forEach((view) => {
       const isActive = view === target;
-
       view.classList.toggle("active", isActive);
       view.setAttribute("aria-hidden", String(!isActive));
     });
 
-    hideToast();
+    state.currentView = viewId;
+
+    document.dispatchEvent(
+      new CustomEvent("interlude:view-change", {
+        detail: { viewId }
+      })
+    );
+
     return true;
   }
 
   function showToast(message) {
-    const toast = $("#toast");
+    const toast = byId("toast");
     if (!toast) return;
 
     toast.textContent = message;
     toast.classList.add("show");
-    toast.setAttribute("aria-hidden", "false");
+    toast.setAttribute("aria-live", "polite");
 
-    if (toastTimeout) {
-      clearTimeout(toastTimeout);
+    if (state.toastTimer) {
+      clearTimeout(state.toastTimer);
     }
 
-    toastTimeout = setTimeout(() => {
-      hideToast();
+    state.toastTimer = setTimeout(() => {
+      toast.classList.remove("show");
     }, 2200);
   }
 
-  function hideToast() {
-    const toast = $("#toast");
-    if (!toast) return;
+  function goBack() {
+    switch (state.currentView) {
+      case "conversationView":
+        showView("chatView");
+        break;
 
-    toast.classList.remove("show");
-    toast.setAttribute("aria-hidden", "true");
+      case "chatView":
+      case "photosView":
+      case "notesView":
+      case "phoneView":
+      case "musicView":
+      case "settingsView":
+        showView("homeView");
+        break;
 
-    if (toastTimeout) {
-      clearTimeout(toastTimeout);
-      toastTimeout = null;
+      case "passcodeView":
+        resetPin();
+        showView("lockView");
+        break;
+
+      case "homeView":
+        showView("lockView");
+        break;
+
+      default:
+        showView("homeView");
+        break;
     }
   }
 
-  function goHome() {
-    if (showView("homeView")) return;
-    showToast("Home belum tersedia.");
-  }
+  function initializeViews() {
+    const views = getViews();
+    if (!views.length) return;
 
-  function goBack() {
-    const currentView = views.find((view) =>
+    const activeView = views.find((view) =>
       view.classList.contains("active")
     );
 
-    if (!currentView) {
-      showView("homeView");
-      return;
-    }
+    const initialView = activeView || byId("lockView") || views[0];
 
-    if (currentView.id === "conversationView") {
-      showView("chatView");
-      return;
-    }
-
-    if (currentView.id === "chatView") {
-      goHome();
-      return;
-    }
-
-    if (currentView.id === "passcodeView") {
-      showView("lockView");
-      resetPin();
-      return;
-    }
-
-    if (currentView.id !== "lockView") {
-      goHome();
-    }
-  }
-
-  
-  // ---------- PIN SCREEN ----------
-
-  function ensurePinDots() {
-    if (!passcodeDots) return;
-
-    if (passcodeDots.children.length === 4) return;
-
-    passcodeDots.replaceChildren();
-
-    for (let i = 0; i < 4; i += 1) {
-      const dot = document.createElement("span");
-      dot.className = "passcode-dot";
-      dot.setAttribute("aria-hidden", "true");
-      passcodeDots.appendChild(dot);
-    }
-  }
-
-  function updatePinDots() {
-    if (!passcodeDots) return;
-
-    Array.from(passcodeDots.children).forEach((dot, index) => {
-      const filled = index < enteredPin.length;
-
-      dot.classList.toggle("filled", filled);
-      dot.setAttribute("aria-label", filled ? "Terisi" : "Kosong");
+    views.forEach((view) => {
+      const isActive = view === initialView;
+      view.classList.toggle("active", isActive);
+      view.setAttribute("aria-hidden", String(!isActive));
     });
 
-    passcodeDots.setAttribute(
+    state.currentView = initialView.id;
+  }
+
+  /* =========================================================
+     Akhir Bagian 1/3
+     Lanjutkan dengan Bagian 2/3 tepat di bawah kode ini.
+     ========================================================= */
+    /* =========================================================
+     Bagian 2/3: PIN, lockscreen, gesture, dan jam
+     ========================================================= */
+
+  function updatePinDots() {
+    const container = byId("passcodeDots");
+    if (!container) return;
+
+    const dots = $$("span", container);
+
+    dots.forEach((dot, index) => {
+      const filled = index < state.pin.length;
+      dot.classList.toggle("filled", filled);
+      dot.setAttribute("aria-hidden", "true");
+    });
+
+    container.setAttribute(
       "aria-label",
-      `${enteredPin.length} dari 4 digit PIN`
+      `${state.pin.length} dari ${DEMO_PIN.length} angka dimasukkan`
     );
   }
 
+  function ensurePinDots() {
+    const container = byId("passcodeDots");
+    if (!container) return;
+
+    if ($$("span", container).length !== DEMO_PIN.length) {
+      container.replaceChildren();
+
+      for (let i = 0; i < DEMO_PIN.length; i += 1) {
+        const dot = document.createElement("span");
+        dot.className = "passcode-dot";
+        container.appendChild(dot);
+      }
+    }
+
+    updatePinDots();
+  }
+
   function resetPin() {
-    enteredPin = "";
+    state.pin = "";
     updatePinDots();
 
-    if (passcodeError) {
-      passcodeError.textContent = "";
-      passcodeError.classList.remove("show");
+    const error = byId("passcodeError");
+    if (error) {
+      error.textContent = "";
+      error.classList.remove("visible", "show");
     }
   }
 
-  function showPinError(message = "PIN salah. Coba lagi.") {
-    if (passcodeError) {
-      passcodeError.textContent = message;
-      passcodeError.classList.add("show");
-    }
+  function showPinError(message) {
+    const error = byId("passcodeError");
+    if (!error) return;
 
-    if (passcodeDots) {
-      passcodeDots.classList.remove("pin-shake");
-
-      // Memicu ulang animasi tanpa menambah listener.
-      void passcodeDots.offsetWidth;
-      passcodeDots.classList.add("pin-shake");
-    }
+    error.textContent = message;
+    error.classList.add("visible", "show");
   }
 
-  function openPinScreen() {
-    resetPin();
+  function enterDigit(digit) {
+    if (!/^\d$/.test(String(digit))) return;
+    if (state.pin.length >= DEMO_PIN.length) return;
 
-    if (!showView("passcodeView")) {
-      showToast("Layar PIN belum tersedia.");
+    const error = byId("passcodeError");
+    if (error) {
+      error.textContent = "";
+      error.classList.remove("visible", "show");
     }
-  }
 
-  function addPinDigit(digit) {
-    if (!/^\d$/.test(digit)) return;
-    if (!passcodeView?.classList.contains("active")) return;
-    if (enteredPin.length >= 4) return;
-
-    enteredPin += digit;
+    state.pin += String(digit);
     updatePinDots();
 
-    if (passcodeError) {
-      passcodeError.textContent = "";
-      passcodeError.classList.remove("show");
+    if (state.pin.length === DEMO_PIN.length) {
+      window.setTimeout(checkPin, 120);
     }
   }
 
   function deletePinDigit() {
-    enteredPin = enteredPin.slice(0, -1);
+    state.pin = state.pin.slice(0, -1);
     updatePinDots();
 
-    if (passcodeError) {
-      passcodeError.textContent = "";
-      passcodeError.classList.remove("show");
+    const error = byId("passcodeError");
+    if (error) {
+      error.textContent = "";
+      error.classList.remove("visible", "show");
     }
   }
 
-  function submitPin() {
-    if (enteredPin.length !== 4) {
-      showPinError("Masukkan 4 digit PIN.");
-      return;
-    }
-
-    if (enteredPin !== DEMO_PIN) {
+  function checkPin() {
+    if (state.pin !== DEMO_PIN) {
       resetPin();
       showPinError("PIN salah. Coba lagi.");
       return;
@@ -264,117 +251,146 @@
     showView("homeView");
   }
 
-  // ---------- LOCKSCREEN ----------
+  function openPasscode() {
+    resetPin();
+    showView("passcodeView");
+  }
 
-  function updateClock() {
-    const now = new Date();
+  function unlockFromGesture() {
+    const now = Date.now();
 
-    const time = now.toLocaleTimeString("id-ID", {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false
-    });
+    if (now - state.lastUnlockGesture < 700) return;
+    if (state.currentView !== "lockView") return;
 
-    const date = now.toLocaleDateString("id-ID", {
-      weekday: "long",
-      day: "numeric",
-      month: "long"
-    });
-
-    const statusTime = $("#statusTime");
-    const lockClock = $("#lockClock");
-    const lockDate = $("#lockDate");
-
-    if (statusTime) statusTime.textContent = time;
-    if (lockClock) lockClock.textContent = time;
-    if (lockDate) lockDate.textContent = date;
+    state.lastUnlockGesture = now;
+    openPasscode();
   }
 
   function bindLockscreen() {
-    $("#unlockTrigger")?.addEventListener("click", openPinScreen);
+    const unlockTrigger = byId("unlockTrigger");
+    const lockView = byId("lockView");
 
-    $("#lockFlashlight")?.addEventListener("click", () => {
-      showToast("Senter simulasi.");
+    unlockTrigger?.addEventListener("click", openPasscode);
+
+    byId("lockFlashlight")?.addEventListener("click", () => {
+      showToast("Senter belum terhubung ke kontrol perangkat.");
     });
 
-    $("#lockCamera")?.addEventListener("click", () => {
-      if (showView("photosView")) return;
-      showToast("Kamera simulasi belum tersedia.");
+    byId("lockCamera")?.addEventListener("click", () => {
+      showView("photosView");
     });
 
     if (!lockView) return;
 
-    lockView.addEventListener("touchstart", (event) => {
-      const touch = event.changedTouches[0];
-      touchStartY = touch ? touch.clientY : null;
-    }, { passive: true });
+    lockView.addEventListener(
+      "touchstart",
+      (event) => {
+        if (event.touches.length !== 1) return;
+        state.touchStartY = event.touches[0].clientY;
+      },
+      { passive: true }
+    );
 
-    lockView.addEventListener("touchend", (event) => {
-      if (touchStartY === null) return;
+    lockView.addEventListener(
+      "touchend",
+      (event) => {
+        if (state.touchStartY === null) return;
 
-      const touch = event.changedTouches[0];
-      const endY = touch ? touch.clientY : touchStartY;
-      const distance = touchStartY - endY;
+        const endY = event.changedTouches[0]?.clientY;
+        const distance = state.touchStartY - endY;
+        state.touchStartY = null;
 
-      touchStartY = null;
+        if (distance > 55) unlockFromGesture();
+      },
+      { passive: true }
+    );
 
-      if (distance > 55) {
-        openPinScreen();
-      }
-    }, { passive: true });
-
-    // Dukungan swipe dengan mouse atau pointer.
     lockView.addEventListener("pointerdown", (event) => {
       if (event.pointerType === "touch") return;
-      touchStartY = event.clientY;
+      state.pointerStartY = event.clientY;
     });
 
     lockView.addEventListener("pointerup", (event) => {
-      if (event.pointerType === "touch") return;
-      if (touchStartY === null) return;
+      if (state.pointerStartY === null) return;
 
-      const distance = touchStartY - event.clientY;
-      touchStartY = null;
+      const distance = state.pointerStartY - event.clientY;
+      state.pointerStartY = null;
 
-      if (distance > 55) {
-        openPinScreen();
-      }
+      if (distance > 55) unlockFromGesture();
     });
   }
 
   function bindPinPad() {
-    ensurePinDots();
-    updatePinDots();
+    const pad = byId("passcodePad");
+    if (!pad) return;
 
-    $("#passcodePad")?.addEventListener("click", (event) => {
+    pad.addEventListener("click", (event) => {
       const button = event.target.closest("[data-passcode]");
-      if (!button) return;
+      if (!button || !pad.contains(button)) return;
 
       const value = button.dataset.passcode;
 
       if (/^\d$/.test(value)) {
-        addPinDigit(value);
+        enterDigit(value);
       } else if (value === "clear") {
         deletePinDigit();
       } else if (value === "enter") {
-        submitPin();
+        if (state.pin.length === DEMO_PIN.length) {
+          checkPin();
+        } else {
+          showPinError("Masukkan 4 angka PIN.");
+        }
       }
     });
 
-    passcodeCancel?.addEventListener("click", () => {
+    byId("passcodeCancel")?.addEventListener("click", () => {
       resetPin();
       showView("lockView");
     });
+  }
 
+  function updateClock() {
+    const now = new Date();
+
+    const time = new Intl.DateTimeFormat("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23"
+    }).format(now);
+
+    const date = new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      day: "numeric",
+      month: "long"
+    }).format(now);
+
+    ["statusTime", "lockClock", "homeClock"].forEach((id) => {
+      const element = byId(id);
+      if (element) element.textContent = time;
+    });
+
+    ["lockDate", "homeDate"].forEach((id) => {
+      const element = byId(id);
+      if (element) element.textContent = date;
+    });
+  }
+
+  function bindKeyboardShortcuts() {
     document.addEventListener("keydown", (event) => {
-      if (!passcodeView?.classList.contains("active")) return;
+      if (state.currentView !== "passcodeView") return;
 
       if (/^\d$/.test(event.key)) {
-        addPinDigit(event.key);
+        event.preventDefault();
+        enterDigit(event.key);
       } else if (event.key === "Backspace") {
+        event.preventDefault();
         deletePinDigit();
       } else if (event.key === "Enter") {
-        submitPin();
+        event.preventDefault();
+
+        if (state.pin.length === DEMO_PIN.length) {
+          checkPin();
+        }
       } else if (event.key === "Escape") {
         resetPin();
         showView("lockView");
@@ -382,155 +398,159 @@
     });
   }
 
-  
-  // ---------- CONTACTS & CONVERSATIONS ----------
+  /* =========================================================
+     Akhir Bagian 2/3
+     Lanjutkan dengan Bagian 3/3 tepat di bawah kode ini.
+     ========================================================= */
+
+    /* =========================================================
+     Bagian 3/3: Navigasi aplikasi, kontak, dan inisialisasi
+     ========================================================= */
 
   function openConversation(contactId) {
     const contact = CONTACTS[contactId];
-    if (!contact) {
-      showToast("Kontak tidak ditemukan.");
-      return;
+    const nameElement = byId("conversationName");
+    const avatarElement = byId("conversationAvatar");
+    const statusElement = byId("conversationStatus");
+
+    state.activeContact = contactId;
+
+    if (nameElement && contact) {
+      nameElement.textContent = contact.name;
     }
 
-    activeContact = contact;
-
-    if (conversationName) {
-      conversationName.textContent = contact.name;
+    if (avatarElement && contact?.avatar) {
+      avatarElement.textContent = contact.avatar;
     }
 
-    if (conversationAvatar && contact.avatar) {
-      conversationAvatar.textContent = contact.avatar;
+    if (statusElement && contact?.status) {
+      statusElement.textContent = contact.status;
     }
 
-    if (conversationStatus && contact.status) {
-      conversationStatus.textContent = contact.status;
-    }
+    showView("conversationView");
 
-    if (!showView("conversationView")) {
-      showToast("Layar percakapan belum tersedia.");
-      return;
-    }
-
-    // storyboard.js dapat membaca kontak aktif dari event ini.
-    document.dispatchEvent(new CustomEvent(
-      "interlude:conversation-open",
-      {
+    document.dispatchEvent(
+      new CustomEvent("interlude:conversation-open", {
         detail: {
-          contactId: contact.id,
-          contactName: contact.name
+          contactId,
+          contactName: contact?.name || contactId
         }
-      }
-    ));
+      })
+    );
   }
 
   function bindContactList() {
-    contactList?.addEventListener("click", (event) => {
+    const list = byId("contactList");
+
+    list?.addEventListener("click", (event) => {
       const item = event.target.closest("[data-open-conversation]");
+      if (!item || !list.contains(item)) return;
 
-      if (!item || !contactList.contains(item)) return;
+      const contactId = item.dataset.openConversation;
+      if (!contactId) return;
 
-      openConversation(item.dataset.openConversation);
+      openConversation(contactId);
     });
 
-    contactSearch?.addEventListener("input", () => {
-      const query = contactSearch.value.trim().toLowerCase();
+    const search = byId("contactSearch");
 
-      $$("[data-contact]", contactList || document).forEach((item) => {
-        const name = item.textContent.toLowerCase();
-        const id = (item.dataset.contact || "").toLowerCase();
-        const matches = name.includes(query) || id.includes(query);
+    search?.addEventListener("input", () => {
+      const query = search.value.trim().toLocaleLowerCase("id-ID");
 
-        item.hidden = !matches;
+      $$("[data-open-conversation]", list || document).forEach((item) => {
+        const text = item.textContent.toLocaleLowerCase("id-ID");
+        item.hidden = !text.includes(query);
       });
     });
 
-    $("#backToContacts")?.addEventListener("click", () => {
+    byId("backToContacts")?.addEventListener("click", () => {
       showView("chatView");
     });
   }
 
-  // ---------- GENERAL NAVIGATION ----------
-
   function bindNavigation() {
     document.addEventListener("click", (event) => {
-      const openButton = event.target.closest("[data-open-view]");
-      const backButton = event.target.closest("[data-go-view]");
+      const target = event.target.closest(
+        "[data-open-view], [data-go-view], [data-go-home], [data-go-back]"
+      );
 
-      if (openButton) {
-        const viewId = openButton.dataset.openView;
+      if (!target) return;
 
-        if (viewId === "conversationView") return;
+      if (target.matches("[data-open-conversation]")) return;
 
-        if (!showView(viewId)) {
-          showToast("Halaman belum tersedia.");
-        }
-
+      if (target.hasAttribute("data-go-back")) {
+        event.preventDefault();
+        goBack();
         return;
       }
 
-      if (backButton) {
-        const viewId = backButton.dataset.goView;
-
-        if (!showView(viewId)) {
-          showToast("Halaman tujuan belum tersedia.");
-        }
-
+      if (target.hasAttribute("data-go-home")) {
+        event.preventDefault();
+        showView("homeView");
         return;
+      }
+
+      const viewId =
+        target.dataset.openView ||
+        target.dataset.goView;
+
+      if (viewId && byId(viewId)) {
+        event.preventDefault();
+        showView(viewId);
       }
     });
 
-    $("#navHome")?.addEventListener("click", goHome);
-
-    // Tombol kembali generik, kecuali tombol yang sudah punya fungsi khusus.
-    $$("[data-go-back]").forEach((button) => {
-      button.addEventListener("click", goBack);
+    byId("navHome")?.addEventListener("click", () => {
+      if (state.currentView === "lockView") return;
+      showView("homeView");
     });
   }
 
-  // ---------- INITIALIZATION ----------
+  function bindGlobalButtons() {
+    byId("newMessageButton")?.addEventListener("click", () => {
+      showView("chatView");
+      byId("contactSearch")?.focus();
+    });
 
-  function initializeViews() {
-    const hasActiveView = views.some((view) =>
-      view.classList.contains("active")
-    );
-
-    if (!hasActiveView) {
-      showView("lockView");
-      return;
-    }
-
-    // Pastikan hanya satu view yang aktif saat aplikasi dimulai.
-    const firstActive = views.find((view) =>
-      view.classList.contains("active")
-    );
-
-    views.forEach((view) => {
-      const isActive = view === firstActive;
-      view.classList.toggle("active", isActive);
-      view.setAttribute("aria-hidden", String(!isActive));
+    byId("profileButton")?.addEventListener("click", () => {
+      showToast("Profil belum memiliki halaman khusus.");
     });
   }
 
-  function init() {
+  function initialize() {
     initializeViews();
+    ensurePinDots();
+
     bindLockscreen();
     bindPinPad();
-    bindContactList();
+    bindKeyboardShortcuts();
     bindNavigation();
+    bindContactList();
+    bindGlobalButtons();
+
     updateClock();
 
-    // Jam diperbarui pada pergantian menit, tanpa interval tambahan.
-    const delay = 60000 - (Date.now() % 60000);
+    if (state.clockTimer) {
+      clearInterval(state.clockTimer);
+    }
 
-    setTimeout(() => {
-      updateClock();
-      setInterval(updateClock, 60000);
-    }, delay);
+    state.clockTimer = window.setInterval(updateClock, 15000);
+
+    document.dispatchEvent(
+      new CustomEvent("interlude:app-ready", {
+        detail: {
+          initialView: state.currentView
+        }
+      })
+    );
   }
 
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
+    document.addEventListener("DOMContentLoaded", initialize, {
+      once: true
+    });
   } else {
-    init();
+    initialize();
   }
+
 })();
