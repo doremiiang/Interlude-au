@@ -237,3 +237,48 @@ body {
 }
 
 /* ===== END FIX 07 ===== */
+
+/* ===== INTERLUDE FIX 08 — CLEAN MOCKUP + DYNAMIC ISLAND ===== */
+
+/* Hapus dekorasi lingkaran/garis di sekitar mockup */
+.stage::before,
+.stage::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Hilangkan tulisan Interlude di lockscreen */
+#lockOwner,
+#lockView .lock-owner {
+  display: none !important;
+}
+
+/* Dynamic Island */
+#lockView .status-bar {
+  position: relative;
+  min-height: 34px;
+}
+
+#lockView .status-bar::after {
+  content: "";
+  position: absolute;
+  z-index: 20;
+  top: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 108px;
+  height: 30px;
+  border-radius: 999px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
+  pointer-events: none;
+}
+
+/* Pastikan ikon status tetap terlihat */
+#lockView .status-icons {
+  position: relative;
+  z-index: 21;
+}
+
+/* ===== END FIX 08 ===== */
