@@ -3,6 +3,17 @@
    Bagian 1/3: Konfigurasi, utilitas, dan navigasi
    ========================================================= */
 
+import {
+  DEMO_PIN,
+  VIEW_IDS,
+  $,
+  $$,
+  byId,
+  state,
+  getViews,
+  showView
+} from "./state.js";
+
 (() => {
   "use strict";
 
@@ -10,85 +21,70 @@
   if (window.__interludeAppInitialized) return;
   window.__interludeAppInitialized = true;
 
-  const DEMO_PIN = "1201";
-
-  const VIEW_IDS = [
-    "lockView",
-    "passcodeView",
-    "homeView",
-    "chatView",
-    "conversationView",
-    "photosView",
-    "notesView",
-    "phoneView",
-    "musicView",
-    "settingsView"
-  ];
-
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  const $$ = (selector, root = document) =>
-    Array.from(root.querySelectorAll(selector));
-
-  const byId = (id) => document.getElementById(id);
-
-  const state = {
-    currentView: null,
-    pin: "",
-    pinCheckTimer: null,
-    activeContact: null,
-    touchStartY: null,
-    pointerStartY: null,
-    lastUnlockGesture: 0,
-    toastTimer: null,
-    clockTimer: null
-  };
-
   // Kontak ini mengikuti ID yang tersedia di HTML saat ini.
-  const CONTACTS = {
-    shaq: {
-      name: "Shaq",
-      status: "",
-      avatar: "S"
-    },
-    kris: {
-      name: "Kris",
-      status: "",
-      avatar: "K"
-    }
-  };
-
-  function getViews() {
-    return VIEW_IDS
-      .map((id) => byId(id))
-      .filter(Boolean);
+  
+const CONTACTS = {
+  panji: {
+    name: "Panji Tiyasa",
+    status: "Online",
+    avatar: "P"
+  },
+  elvian: {
+    name: "Bang Pian",
+    status: "Online",
+    avatar: "E"
+  },
+  esta: {
+    name: "Bang Esta",
+    status: "Online",
+    avatar: "E"
+  },
+  anta: {
+    name: "Anta",
+    status: "Online",
+    avatar: "A"
+  },
+  samara: {
+    name: "Mara",
+    status: "Online",
+    avatar: "M"
+  },
+  helio: {
+    name: "Helio",
+    status: "Online",
+    avatar: "H"
+  },
+  theo: {
+    name: "Theo",
+    status: "Online",
+    avatar: "T"
+  },
+  kenan: {
+    name: "Kenan",
+    status: "Online",
+    avatar: "K"
+  },
+  januar: {
+    name: "Januar",
+    status: "Online",
+    avatar: "J"
+  },
+  marka: {
+    name: "Marka",
+    status: "Online",
+    avatar: "M"
+  },
+  feri: {
+    name: "Papa",
+    status: "Online",
+    avatar: "F"
+  },
+  bian: {
+    name: "Papi",
+    status: "Online",
+    avatar: "B"
   }
-
-  function showView(viewId) {
-    const target = byId(viewId);
-
-    if (!target || !VIEW_IDS.includes(viewId)) {
-      return false;
-    }
-
-    getViews().forEach((view) => {
-      const active = view === target;
-
-      view.classList.toggle("active", active);
-      view.setAttribute("aria-hidden", String(!active));
-    });
-
-    state.currentView = viewId;
-
-    document.dispatchEvent(
-      new CustomEvent("interlude:view-change", {
-        detail: { viewId }
-      })
-    );
-
-    return true;
-  }
+};
 
   function showToast(message) {
     const toast = byId("toast");
@@ -109,28 +105,29 @@
     }, 2200);
   }
 
-  function initializeViews() {
-    const views = getViews();
-    if (!views.length) return;
+  
+function initializeViews() {
+  const views = getViews();
+  const lockView = byId("lockView");
 
-    const active = views.find((view) =>
-      view.classList.contains("active")
-    );
+  if (!views.length || !lockView) return;
 
-    const initial =
-      active ||
-      byId("lockView") ||
-      views[0];
+  // Setiap halaman baru harus dimulai dari lockscreen.
+  views.forEach((view) => {
+    const isLockscreen = view.id === "lockView";
 
-    views.forEach((view) => {
-      const isActive = view === initial;
+    view.classList.toggle("active", isLockscreen);
+    view.setAttribute("aria-hidden", String(!isLockscreen));
+  });
 
-      view.classList.toggle("active", isActive);
-      view.setAttribute("aria-hidden", String(!isActive));
-    });
+  state.currentView = "lockView";
+  state.pin = "";
 
-    state.currentView = initial.id;
-  }
+  clearPinCheckTimer();
+  updatePinDots();
+  clearPinError();
+}
+
 
   function goBack() {
     const destinations = {
