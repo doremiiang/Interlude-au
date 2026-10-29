@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -6,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#101014">
   <meta name="description" content="Interlude AU — a fictional interactive phone experience.">
-
   <title>Interlude — Private Space</title>
 
   <!-- Legacy stylesheet dipertahankan sementara sebagai cadangan. -->
   <link rel="stylesheet" href="./ui-upgrade.css">
 
-  <!-- Stylesheet redesign baru. Urutannya menentukan prioritas cascade. -->
+  <!-- Urutan stylesheet dipertahankan. -->
   <link rel="stylesheet" href="./css/main.css">
   <link rel="stylesheet" href="./css/lockscreen.css">
   <link rel="stylesheet" href="./css/home.css">
@@ -25,122 +23,155 @@
       <div class="screen" id="phoneScreen">
 
         <!-- LOCKSCREEN -->
-        <section class="view lockscreen active" id="lockView" aria-label="Lock screen">
+        <section class="view lockscreen active" id="lockView"
+          aria-label="Lock screen">
+
           <div class="wallpaper" aria-hidden="true"></div>
           <div class="lockscreen-overlay" aria-hidden="true"></div>
 
-          
-<div class="status-bar">
-  <span id="statusTime" class="status-time">09:41</span>
+          <div class="status-bar">
+            <span id="statusTime" class="status-time">09:41</span>
 
-  <div class="status-icons" aria-label="Phone status">
-    <!-- Ikon sinyal -->
-    <svg viewBox="0 0 18 14" aria-hidden="true">
-      <path d="M1 13V10H4V13Z M6 13V7H9V13Z M11 13V4H14V13Z M16 13V1H18V13Z"
-        fill="currentColor" />
-    </svg>
+            <div class="status-icons" aria-label="Phone status">
+              <!-- Ikon sinyal -->
+              <svg viewBox="0 0 18 14" aria-hidden="true">
+                <path
+                  d="M1 13V10H4V13Z M6 13V7H9V13Z M11 13V4H14V13Z M16 13V1H18V13Z"
+                  fill="currentColor" />
+              </svg>
 
-    
-<!-- Ikon Wi-Fi bergaya iPhone -->
-<svg viewBox="0 0 20 16" aria-hidden="true">
-  <path
-    d="M1.5 4.5C6.2 0.5 13.8 0.5 18.5 4.5"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.2"
-    stroke-linecap="round"
-  />
-  <path
-    d="M4.5 7.8C7.6 5.2 12.4 5.2 15.5 7.8"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.2"
-    stroke-linecap="round"
-  />
-  <path
-    d="M7.5 11C9 9.8 11 9.8 12.5 11"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2.2"
-    stroke-linecap="round"
-  />
-  <circle cx="10" cy="14" r="1.2" fill="currentColor" />
-</svg>
+              <!-- Ikon Wi-Fi -->
+              <svg viewBox="0 0 20 16" aria-hidden="true">
+                <path
+                  d="M1.5 4.5C6.2 0.5 13.8 0.5 18.5 4.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round" />
+                <path
+                  d="M4.5 7.8C7.6 5.2 12.4 5.2 15.5 7.8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round" />
+                <path
+                  d="M7.5 11C9 9.8 11 9.8 12.5 11"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round" />
+                <circle cx="10" cy="14" r="1.2" fill="currentColor" />
+              </svg>
 
-
-    <!-- Ikon baterai -->
-    <svg viewBox="0 0 24 14" aria-hidden="true">
-      <rect x="1" y="1" width="19" height="12" rx="3"
-        fill="none" stroke="currentColor" stroke-width="1.4" />
-      <rect x="3.2" y="3.2" width="14" height="7.6" rx="1.5"
-        fill="currentColor" />
-      <path d="M21.5 4.5V9.5"
-        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
-    </svg>
-  </div>
-</div>
-
+              <!-- Ikon baterai -->
+              <svg viewBox="0 0 24 14" aria-hidden="true">
+                <rect
+                  x="1" y="1" width="19" height="12" rx="3"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4" />
+                <rect
+                  x="3.2" y="3.2" width="14" height="7.6" rx="1.5"
+                  fill="currentColor" />
+                <path
+                  d="M21.5 4.5V9.5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
 
           <div class="lock-content">
             <p class="lock-owner" id="lockOwner">INTERLUDE</p>
             <p class="lock-date" id="lockDate">WEDNESDAY, OCTOBER 28</p>
             <h1 class="lock-clock" id="lockClock">09:41</h1>
 
-            
-<div class="lock-notifications" id="lockNotifications">
+            <div class="lock-notifications" id="lockNotifications">
 
-  <!-- POP-UP 1 -->
-  <article class="notification lock-notification">
-    <div class="notification-icon" aria-hidden="true">W</div>
-    <div class="notification-content">
-      <div class="notification-meta">
-        <span class="notification-title">WhatsApp</span>
-        <span class="notification-time">now</span>
-      </div>
-      <p class="notification-message">Shaq: udah makan belum?</p>
-    </div>
-  </article>
+              <!-- POP-UP 1 -->
+              <article class="notification lock-notification">
+                <div class="notification-icon" aria-hidden="true">W</div>
+                <div class="notification-content">
+                  <div class="notification-meta">
+                    <span class="notification-title">WhatsApp</span>
+                    <span class="notification-time">now</span>
+                  </div>
+                  <p class="notification-message">Shaq: udah makan belum?</p>
+                </div>
+              </article>
 
-  <!-- POP-UP 2 -->
-  <article class="notification lock-notification">
-    <div class="notification-icon" aria-hidden="true">✉</div>
-    <div class="notification-content">
-      <div class="notification-meta">
-        <span class="notification-title">Messages</span>
-        <span class="notification-time">2m ago</span>
-      </div>
-      <p class="notification-message">Sabinar: jangan lupa kabarin aku nanti.</p>
-    </div>
-  </article>
+              <!-- POP-UP 2 -->
+              <article class="notification lock-notification">
+                <div class="notification-icon" aria-hidden="true">✉</div>
+                <div class="notification-content">
+                  <div class="notification-meta">
+                    <span class="notification-title">Messages</span>
+                    <span class="notification-time">2m ago</span>
+                  </div>
+                  <p class="notification-message">
+                    Sabinar: jangan lupa kabarin aku nanti.
+                  </p>
+                </div>
+              </article>
 
-  <!-- POP-UP 3 -->
-  <article class="notification lock-notification">
-    <div class="notification-icon" aria-hidden="true">◈</div>
-    <div class="notification-content">
-      <div class="notification-meta">
-        <span class="notification-title">Interlude</span>
-        <span class="notification-time">5m ago</span>
-      </div>
-      <p class="notification-message">You have 3 unread notifications.</p>
-    </div>
-  </article>
+              <!-- POP-UP 3 -->
+              <article class="notification lock-notification">
+                <div class="notification-icon" aria-hidden="true">◈</div>
+                <div class="notification-content">
+                  <div class="notification-meta">
+                    <span class="notification-title">Interlude</span>
+                    <span class="notification-time">5m ago</span>
+                  </div>
+                  <p class="notification-message">
+                    You have 3 unread notifications.
+                  </p>
+                </div>
+              </article>
 
-</div>
->
+            </div><!-- Penutup lockNotifications -->
+          </div><!-- Penutup lock-content -->
 
           <div class="lock-bottom">
             <div class="lock-controls">
-              <button class="lock-control" id="lockFlashlight" type="button"
-                aria-label="Flashlight">
-                <span aria-hidden="true">🔦</span>
+
+              <!-- Flashlight icon -->
+              <button class="lock-control" id="lockFlashlight"
+                type="button" aria-label="Flashlight">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path d="M8 3h8l1 5-2 2v9a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-9L7 8l1-5Z" />
+                  <path d="M8 8h8M12 12v4" />
+                </svg>
               </button>
-              <button class="lock-control" id="lockCamera" type="button"
-                aria-label="Camera">
-                <span aria-hidden="true">📷</span>
+
+              <!-- Camera icon -->
+              <button class="lock-control" id="lockCamera"
+                type="button" aria-label="Camera">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path d="M4 8h3l1.5-2h7L17 8h3v11H4V8Z" />
+                  <circle cx="12" cy="13" r="3.2" />
+                </svg>
               </button>
+
             </div>
 
-            <button class="lock-swipe-hint" id="unlockTrigger" type="button">
+            <!-- Hanya satu unlockTrigger -->
+            <button class="lock-swipe-hint" id="unlockTrigger"
+              type="button">
               <span class="swipe-line" aria-hidden="true"></span>
               <span>Swipe up to enter</span>
             </button>
@@ -155,7 +186,8 @@
             <h2>One more step.</h2>
             <p class="muted">Enter your passcode to continue.</p>
 
-            <div class="passcode-dots" id="passcodeDots" aria-label="Passcode progress">
+            <div class="passcode-dots" id="passcodeDots"
+              aria-label="Passcode progress">
               <span></span><span></span><span></span><span></span>
             </div>
 
@@ -169,9 +201,11 @@
               <button type="button" data-passcode="7">7</button>
               <button type="button" data-passcode="8">8</button>
               <button type="button" data-passcode="9">9</button>
-              <button type="button" data-passcode="clear" aria-label="Clear passcode">⌫</button>
+              <button type="button" data-passcode="clear"
+                aria-label="Clear passcode">⌫</button>
               <button type="button" data-passcode="0">0</button>
-              <button type="button" data-passcode="enter" aria-label="Confirm passcode">↵</button>
+              <button type="button" data-passcode="enter"
+                aria-label="Confirm passcode">↵</button>
             </div>
 
             <button class="text-button" id="passcodeCancel" type="button">
@@ -189,10 +223,12 @@
           <header class="home-header">
             <div>
               <p class="eyebrow">YOUR LITTLE UNIVERSE</p>
-              <h2 class="home-greeting">Somewhere, <span>between us.</span></h2>
+              <h2 class="home-greeting">
+                Somewhere, <span>between us.</span>
+              </h2>
             </div>
-            <button class="home-profile" id="profileButton" type="button"
-              aria-label="Open profile">
+            <button class="home-profile" id="profileButton"
+              type="button" aria-label="Open profile">
               <span aria-hidden="true">✳</span>
             </button>
           </header>
@@ -208,32 +244,38 @@
           </button>
 
           <div class="app-grid" aria-label="Applications">
-            <button class="app-item" type="button" data-open-view="chatView">
+            <button class="app-item" type="button"
+              data-open-view="chatView">
               <span class="app-icon app-messages" aria-hidden="true">✉</span>
               <span class="app-label">Messages</span>
             </button>
 
-            <button class="app-item" type="button" data-open-view="photosView">
+            <button class="app-item" type="button"
+              data-open-view="photosView">
               <span class="app-icon app-photos" aria-hidden="true">▧</span>
               <span class="app-label">Photos</span>
             </button>
 
-            <button class="app-item" type="button" data-open-view="notesView">
+            <button class="app-item" type="button"
+              data-open-view="notesView">
               <span class="app-icon app-notes" aria-hidden="true">▤</span>
               <span class="app-label">Notes</span>
             </button>
 
-            <button class="app-item" type="button" data-open-view="phoneView">
+            <button class="app-item" type="button"
+              data-open-view="phoneView">
               <span class="app-icon app-phone" aria-hidden="true">⌕</span>
               <span class="app-label">Phone</span>
             </button>
 
-            <button class="app-item" type="button" data-open-view="musicView">
+            <button class="app-item" type="button"
+              data-open-view="musicView">
               <span class="app-icon app-music" aria-hidden="true">♫</span>
               <span class="app-label">Music</span>
             </button>
 
-            <button class="app-item" type="button" data-open-view="settingsView">
+            <button class="app-item" type="button"
+              data-open-view="settingsView">
               <span class="app-icon app-settings" aria-hidden="true">⚙</span>
               <span class="app-label">Settings</span>
             </button>
@@ -245,48 +287,55 @@
           </div>
 
           <nav class="home-dock glass" aria-label="Quick applications">
-            <button class="dock-item" type="button" data-open-view="chatView"
-              aria-label="Messages">✉</button>
-            <button class="dock-item" type="button" data-open-view="phoneView"
-              aria-label="Phone">⌕</button>
-            <button class="dock-item" type="button" data-open-view="photosView"
-              aria-label="Photos">▧</button>
-            <button class="dock-item" type="button" data-open-view="musicView"
-              aria-label="Music">♫</button>
+            <button class="dock-item" type="button"
+              data-open-view="chatView" aria-label="Messages">✉</button>
+            <button class="dock-item" type="button"
+              data-open-view="phoneView" aria-label="Phone">⌕</button>
+            <button class="dock-item" type="button"
+              data-open-view="photosView" aria-label="Photos">▧</button>
+            <button class="dock-item" type="button"
+              data-open-view="musicView" aria-label="Music">♫</button>
           </nav>
         </section>
 
-
-        <!-- MESSAGES: CONTACT LIST -->
+                <!-- MESSAGES: CONTACT LIST -->
         <section class="view app-view" id="chatView"
           aria-label="Messages" aria-hidden="true">
           <header class="app-header">
             <button class="icon-button" type="button" data-go-home
               aria-label="Back to home">‹</button>
+
             <div class="app-header-title">
               <p class="eyebrow">YOUR PRIVATE INBOX</p>
               <h2>Messages</h2>
             </div>
-            <button class="icon-button" id="newMessageButton" type="button"
-              aria-label="New message">＋</button>
+
+            <button class="icon-button" id="newMessageButton"
+              type="button" aria-label="New message">＋</button>
           </header>
 
           <div class="app-content">
             <div class="search-box">
               <span aria-hidden="true">⌕</span>
               <input id="contactSearch" type="search"
-                placeholder="Search conversations..." autocomplete="off"
+                placeholder="Search conversations..."
+                autocomplete="off"
                 aria-label="Search conversations">
             </div>
 
             <div class="contact-list" id="contactList">
               <button class="contact-item" type="button"
                 data-contact="shaq" data-open-conversation="shaq">
-                <span class="contact-avatar avatar-shaq" aria-hidden="true">S</span>
+                <span class="contact-avatar avatar-shaq"
+                  aria-hidden="true">S</span>
+
                 <span class="contact-info">
                   <span class="contact-name">Shaq</span>
-                  <span class="contact-preview">You have a new message.</span>
+                  <span class="contact-preview">
+                    You have a new message.
+                  </span>
                 </span>
+
                 <span class="contact-meta">
                   <span class="contact-time">now</span>
                   <span class="contact-unread" aria-label="Unread">1</span>
@@ -295,11 +344,14 @@
 
               <button class="contact-item" type="button"
                 data-contact="kris" data-open-conversation="kris">
-                <span class="contact-avatar avatar-kris" aria-hidden="true">K</span>
+                <span class="contact-avatar avatar-kris"
+                  aria-hidden="true">K</span>
+
                 <span class="contact-info">
                   <span class="contact-name">Kris</span>
                   <span class="contact-preview">No new messages.</span>
                 </span>
+
                 <span class="contact-meta">
                   <span class="contact-time">yesterday</span>
                 </span>
@@ -309,54 +361,66 @@
         </section>
 
         <!-- MESSAGES: CONVERSATION -->
-        <section class="view app-view conversation-view" id="conversationView"
+        <section class="view app-view conversation-view"
+          id="conversationView"
           aria-label="Conversation" aria-hidden="true">
+
           <header class="conversation-header">
-            <button class="icon-button" id="backToContacts" type="button"
-              data-go-view="chatView" aria-label="Back to messages">‹</button>
+            <button class="icon-button" id="backToContacts"
+              type="button" data-go-view="chatView"
+              aria-label="Back to messages">‹</button>
 
             <div class="conversation-contact">
-              <span class="contact-avatar avatar-shaq" id="conversationAvatar"
-                aria-hidden="true">S</span>
+              <span class="contact-avatar avatar-shaq"
+                id="conversationAvatar" aria-hidden="true">S</span>
+
               <div class="conversation-heading">
-                <h2 class="conversation-name" id="conversationName">Shaq</h2>
+                <h2 class="conversation-name" id="conversationName">
+                  Shaq
+                </h2>
                 <p class="conversation-status" id="conversationStatus">
                   private conversation
                 </p>
               </div>
             </div>
 
-            <button class="icon-button" id="conversationMore" type="button"
-              aria-label="Conversation options">···</button>
+            <button class="icon-button" id="conversationMore"
+              type="button" aria-label="Conversation options">···</button>
           </header>
 
           <div class="conversation-wallpaper" aria-hidden="true"></div>
 
           <div class="messages-area" id="messagesArea">
             <div id="messages" class="messages-list" aria-live="polite">
-              <p class="system-message">This is the beginning of your story.</p>
+              <p class="system-message">
+                This is the beginning of your story.
+              </p>
             </div>
           </div>
 
           <form id="chatForm" class="chat-form" autocomplete="off">
-            <button class="chat-attach-button" id="chatAttach" type="button"
-              aria-label="Attachments">＋</button>
+            <button class="chat-attach-button" id="chatAttach"
+              type="button" aria-label="Attachments">＋</button>
 
             <div class="chat-input-shell">
               <input id="chatInput" name="message" type="text"
                 placeholder="Message..." readonly
                 autocomplete="off" autocapitalize="off"
-                spellcheck="false" aria-label="Scripted message input">
-              <button class="chat-emoji-button" id="chatEmoji" type="button"
-                aria-label="Emoji">☺</button>
+                spellcheck="false"
+                aria-label="Scripted message input">
+
+              <button class="chat-emoji-button" id="chatEmoji"
+                type="button" aria-label="Emoji">☺</button>
             </div>
 
-            <button class="chat-send-button" id="chatSend" type="submit"
-              aria-label="Send message">↑</button>
+            <button class="chat-send-button" id="chatSend"
+              type="submit" aria-label="Send message">↑</button>
           </form>
 
-          <!-- Keyboard visual untuk scripted dialogue, bukan keyboard biasa. -->
-          <div id="storyKeyboard" class="story-keyboard" aria-label="Story keyboard">
+          <!-- Keyboard visual untuk scripted dialogue -->
+          <div id="storyKeyboard" class="story-keyboard"
+            aria-label="Story keyboard">
+
             <div class="keyboard-row">
               <button type="button" class="keyboard-key" data-key="q">q</button>
               <button type="button" class="keyboard-key" data-key="w">w</button>
@@ -369,6 +433,7 @@
               <button type="button" class="keyboard-key" data-key="o">o</button>
               <button type="button" class="keyboard-key" data-key="p">p</button>
             </div>
+
             <div class="keyboard-row">
               <button type="button" class="keyboard-key" data-key="a">a</button>
               <button type="button" class="keyboard-key" data-key="s">s</button>
@@ -380,6 +445,7 @@
               <button type="button" class="keyboard-key" data-key="k">k</button>
               <button type="button" class="keyboard-key" data-key="l">l</button>
             </div>
+
             <div class="keyboard-row">
               <button type="button" class="keyboard-key function-key"
                 data-key="shift" aria-label="Shift">⇧</button>
@@ -393,6 +459,7 @@
               <button type="button" class="keyboard-key function-key"
                 data-key="backspace" aria-label="Delete">⌫</button>
             </div>
+
             <div class="keyboard-row keyboard-bottom-row">
               <button type="button" class="keyboard-key function-key"
                 data-key="numbers">123</button>
@@ -414,18 +481,22 @@
           <header class="app-header">
             <button class="icon-button" type="button" data-go-home
               aria-label="Back to home">‹</button>
+
             <div class="app-header-title">
               <p class="eyebrow">LITTLE FRAGMENTS</p>
               <h2>Photos</h2>
             </div>
-            <button class="icon-button" id="photosMore" type="button"
-              aria-label="Photo options">···</button>
+
+            <button class="icon-button" id="photosMore"
+              type="button" aria-label="Photo options">···</button>
           </header>
+
           <div class="app-content">
             <div class="section-heading">
               <h3>Memories</h3>
               <span class="muted" id="photoCount">0 items</span>
             </div>
+
             <div class="photo-grid" id="photoGrid">
               <div class="empty-state">
                 <span class="empty-state-symbol" aria-hidden="true">▧</span>
@@ -442,13 +513,16 @@
           <header class="app-header">
             <button class="icon-button" type="button" data-go-home
               aria-label="Back to home">‹</button>
+
             <div class="app-header-title">
               <p class="eyebrow">UNSENT THOUGHTS</p>
               <h2>Notes</h2>
             </div>
-            <button class="icon-button" id="newNoteButton" type="button"
-              aria-label="Create note">＋</button>
+
+            <button class="icon-button" id="newNoteButton"
+              type="button" aria-label="Create note">＋</button>
           </header>
+
           <div class="app-content">
             <div class="notes-list" id="notesList">
               <article class="note-card">
@@ -466,11 +540,13 @@
           <header class="app-header">
             <button class="icon-button" type="button" data-go-home
               aria-label="Back to home">‹</button>
+
             <div class="app-header-title">
               <p class="eyebrow">CALL HISTORY</p>
               <h2>Phone</h2>
             </div>
           </header>
+
           <div class="app-content">
             <div class="call-history" id="callHistory">
               <div class="empty-state">
@@ -479,7 +555,10 @@
                 <p>Call history will appear here.</p>
               </div>
             </div>
-            <div class="dial-display" id="dialDisplay" aria-live="polite"></div>
+
+            <div class="dial-display" id="dialDisplay"
+              aria-live="polite"></div>
+
             <div class="dial-pad" id="dialPad">
               <button type="button" data-dial="1">1<small></small></button>
               <button type="button" data-dial="2">2<small>ABC</small></button>
@@ -494,8 +573,10 @@
               <button type="button" data-dial="0">0<small>+</small></button>
               <button type="button" data-dial="#">#</button>
             </div>
+
             <div class="dial-actions">
-              <button type="button" id="callButton" aria-label="Call">☎</button>
+              <button type="button" id="callButton"
+                aria-label="Call">☎</button>
               <button type="button" id="deleteDialButton"
                 aria-label="Delete last digit">⌫</button>
             </div>
@@ -508,46 +589,61 @@
           <header class="app-header">
             <button class="icon-button" type="button" data-go-home
               aria-label="Back to home">‹</button>
+
             <div class="app-header-title">
               <p class="eyebrow">SOUNDTRACK OF US</p>
               <h2>Music</h2>
             </div>
           </header>
+
           <div class="app-content music-content">
-            <div class="album-art" id="albumArt" aria-label="Album artwork">
+            <div class="album-art" id="albumArt"
+              aria-label="Album artwork">
               <span aria-hidden="true">✳</span>
             </div>
+
             <div class="music-track-info">
               <h3 id="trackTitle">A song for this moment</h3>
               <p id="trackArtist" class="muted">Interlude playlist</p>
             </div>
+
             <div class="music-progress">
               <span id="trackElapsed">0:00</span>
-              <div class="progress-track"><span id="trackProgress"></span></div>
+              <div class="progress-track">
+                <span id="trackProgress"></span>
+              </div>
               <span id="trackDuration">0:00</span>
             </div>
+
             <div class="music-controls">
-              <button type="button" id="previousTrack" aria-label="Previous track">‹</button>
-              <button type="button" id="playPauseButton" aria-label="Play or pause">▶</button>
-              <button type="button" id="nextTrack" aria-label="Next track">›</button>
+              <button type="button" id="previousTrack"
+                aria-label="Previous track">‹</button>
+              <button type="button" id="playPauseButton"
+                aria-label="Play or pause">▶</button>
+              <button type="button" id="nextTrack"
+                aria-label="Next track">›</button>
             </div>
+
             <p class="muted music-caption" id="musicCaption">
               Your soundtrack will be added here.
             </p>
           </div>
         </section>
 
-        <!-- SETTINGS -->
+                <!-- SETTINGS -->
         <section class="view app-view" id="settingsView"
           aria-label="Settings" aria-hidden="true">
+
           <header class="app-header">
             <button class="icon-button" type="button" data-go-home
               aria-label="Back to home">‹</button>
+
             <div class="app-header-title">
               <p class="eyebrow">MAKE IT YOURS</p>
               <h2>Settings</h2>
             </div>
           </header>
+
           <div class="app-content">
             <div class="settings-profile glass">
               <span class="settings-avatar" aria-hidden="true">✳</span>
@@ -559,6 +655,7 @@
 
             <section class="settings-group">
               <h3>Appearance</h3>
+
               <label class="setting-row" for="darkModeToggle">
                 <span>
                   <strong>Dark atmosphere</strong>
@@ -566,6 +663,7 @@
                 </span>
                 <input id="darkModeToggle" type="checkbox" checked>
               </label>
+
               <label class="setting-row" for="motionToggle">
                 <span>
                   <strong>Motion effects</strong>
@@ -577,10 +675,12 @@
 
             <section class="settings-group">
               <h3>About</h3>
+
               <div class="setting-static">
                 <span>Project</span>
                 <span class="muted">Interlude AU</span>
               </div>
+
               <div class="setting-static">
                 <span>Version</span>
                 <span class="muted">0.2.0 redesign</span>
@@ -591,21 +691,23 @@
 
         <!-- GLOBAL NAVIGATION AND FEEDBACK -->
         <nav class="system-navigation" aria-label="System navigation">
-          <button type="button" id="navHome" aria-label="Return to home">
+          <button type="button" id="navHome"
+            aria-label="Return to home">
             <span></span>
           </button>
         </nav>
 
-        <div class="toast" id="toast" role="status" aria-live="polite"></div>
-      </div>
-    </section>
+        <div class="toast" id="toast"
+          role="status" aria-live="polite"></div>
+
+      </div><!-- Penutup phoneScreen -->
+    </section><!-- Penutup device -->
   </main>
 
-  <!-- Navigation and interface behavior will live in app.js. -->
+  <!-- Navigation and interface behavior -->
   <script src="./js/app.js" defer></script>
 
-  <!-- Scripted dialogue and the visual keyboard. -->
+  <!-- Scripted dialogue and visual keyboard -->
   <script src="./js/storyboard.js" defer></script>
 </body>
 </html>
-
