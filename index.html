@@ -29,14 +29,38 @@
           <div class="wallpaper" aria-hidden="true"></div>
           <div class="lockscreen-overlay" aria-hidden="true"></div>
 
-          <div class="status-bar">
-            <span id="statusTime">09:41</span>
-            <div class="status-icons" aria-label="Phone status">
-              <span aria-hidden="true">●</span>
-              <span aria-hidden="true">◖</span>
-              <span aria-hidden="true">▰</span>
-            </div>
-          </div>
+          
+<div class="status-bar">
+  <span id="statusTime" class="status-time">09:41</span>
+
+  <div class="status-icons" aria-label="Phone status">
+    <!-- Ikon sinyal -->
+    <svg viewBox="0 0 18 14" aria-hidden="true">
+      <path d="M1 13V10H4V13Z M6 13V7H9V13Z M11 13V4H14V13Z M16 13V1H18V13Z"
+        fill="currentColor" />
+    </svg>
+
+    <!-- Ikon Wi-Fi -->
+    <svg viewBox="0 0 18 14" aria-hidden="true">
+      <path d="M1 4.5C5.5 0.5 12.5 0.5 17 4.5L9 13Z"
+        fill="currentColor" />
+      <path d="M4 7.5C7 5 11 5 14 7.5L9 13Z"
+        fill="#101014" />
+      <circle cx="9" cy="11.5" r="1.2" fill="currentColor" />
+    </svg>
+
+    <!-- Ikon baterai -->
+    <svg viewBox="0 0 24 14" aria-hidden="true">
+      <rect x="1" y="1" width="19" height="12" rx="3"
+        fill="none" stroke="currentColor" stroke-width="1.4" />
+      <rect x="3.2" y="3.2" width="14" height="7.6" rx="1.5"
+        fill="currentColor" />
+      <path d="M21.5 4.5V9.5"
+        stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    </svg>
+  </div>
+</div>
+
 
           <div class="lock-content">
             <p class="lock-owner" id="lockOwner">INTERLUDE</p>
