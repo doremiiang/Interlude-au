@@ -432,3 +432,75 @@
 #lockView .status-bar::after {
   pointer-events: none;
 }
+
+
+/* ===== FIX 11 — LOCKSCREEN SCALE ===== */
+
+/* Jam utama */
+#lockView .lock-clock {
+  font-size: clamp(76px, 22vw, 96px);
+  line-height: 1;
+}
+
+/* Tanggal */
+#lockView .lock-date {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Lebar area notifikasi */
+#lockView .lock-notifications {
+  width: 100%;
+  margin-top: clamp(22px, 4vh, 38px);
+  gap: 8px;
+}
+
+/* Ukuran kartu notifikasi */
+#lockView .notification,
+#lockView .lock-notification {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 14px;
+  gap: 10px;
+  border-radius: 20px;
+}
+
+/* Ikon aplikasi */
+#lockView .notification-icon {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+}
+
+/* Teks notifikasi */
+#lockView .notification-meta {
+  font-size: 11px;
+}
+
+#lockView .notification-title {
+  font-size: 13px;
+}
+
+#lockView .notification-message {
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Penyesuaian layar pendek */
+@media (max-height: 700px) {
+  #lockView .lock-clock {
+    font-size: clamp(64px, 19vw, 80px);
+  }
+
+  #lockView .lock-notifications {
+    margin-top: 18px;
+    gap: 7px;
+  }
+
+  #lockView .notification,
+  #lockView .lock-notification {
+    padding: 10px 12px;
+  }
+}
+
+/* ===== END FIX 11 ===== */
