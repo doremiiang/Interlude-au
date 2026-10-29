@@ -1927,3 +1927,226 @@ input:focus-visible {
 }
 
 /* ===== END HOME SCREEN POLISH 02 ===== */
+
+
+/* ==================================================
+   INTERLUDE — LOCKSCREEN FINAL OVERRIDE
+   Khusus lockscreen; tidak mengubah app logic.
+   ================================================== */
+
+/* Reset padding lama yang terlalu besar dan rapikan layout */
+#lockView {
+  box-sizing: border-box;
+  padding:
+    max(20px, env(safe-area-inset-top))
+    14px
+    max(10px, env(safe-area-inset-bottom));
+  display: none;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  overflow: hidden;
+}
+
+#lockView.active {
+  display: flex;
+}
+
+/* Status bar tetap di atas, tanpa mengganggu Dynamic Island */
+#lockView .status-bar {
+  flex: 0 0 34px;
+  width: 100%;
+  min-height: 34px;
+}
+
+/* Branding tetap disembunyikan */
+#lockView .lock-owner {
+  display: none !important;
+}
+
+/* Area tanggal, jam, dan notifikasi */
+#lockView .lock-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  align-self: stretch;
+}
+
+/* Tanggal */
+#lockView .lock-date {
+  flex: 0 0 auto;
+  margin-top: clamp(28px, 5vh, 44px);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Jam besar: pertahankan animasi yang sudah ada */
+#lockView .lock-clock {
+  flex: 0 0 auto;
+  margin-top: 5px;
+  font-size: clamp(72px, 21vw, 92px);
+  line-height: 1;
+}
+
+/* Notifikasi memenuhi lebar area dalam layar */
+#lockView #lockNotifications {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  margin-top: clamp(22px, 4vh, 34px);
+  gap: 10px;
+}
+
+/* Kartu notifikasi yang benar-benar dipakai HTML sekarang */
+#lockView #lockNotifications > .notification,
+#lockView #lockNotifications > .lock-notification {
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 82px;
+  padding: 16px;
+  gap: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  border-radius: 22px;
+  background: rgba(30, 25, 42, 0.60);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  -webkit-backdrop-filter: blur(26px) saturate(140%);
+  backdrop-filter: blur(26px) saturate(140%);
+}
+
+#lockView #lockNotifications .notification-icon {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+}
+
+#lockView #lockNotifications .notification-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#lockView #lockNotifications .notification-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 5px;
+  font-size: 11px;
+}
+
+#lockView #lockNotifications .notification-title {
+  font-size: 13px;
+}
+
+#lockView #lockNotifications .notification-message {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* Area bawah harus terlihat; jangan sembunyikan lock-bottom */
+#lockView .lock-bottom {
+  display: flex !important;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: auto;
+  padding: 0;
+}
+
+/* Tombol kontrol tetap bisa digunakan */
+#lockView .lock-controls {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-top: 0;
+  padding: 12px 4px 14px;
+}
+
+/* Tombol unlock tetap berupa tombol asli */
+#lockView #unlockTrigger.lock-swipe-hint {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 22px;
+  margin: 0;
+  padding: 0 0 2px;
+  border: 0;
+  background: transparent;
+  color: white;
+  font-size: 0;
+}
+
+/* Satu garis saja; gunakan span yang sudah ada di HTML */
+#lockView #unlockTrigger .swipe-line {
+  display: block;
+  flex: 0 0 4px;
+  width: 108px;
+  height: 4px;
+  margin: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.25);
+}
+
+#lockView #unlockTrigger::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Jangan tampilkan label instruksi jika masih ada di markup */
+#lockView #unlockTrigger > span:not(.swipe-line) {
+  display: none;
+}
+
+/* Tampilan pada layar pendek */
+@media (max-height: 700px) {
+  #lockView {
+    padding-top: max(14px, env(safe-area-inset-top));
+  }
+
+  #lockView .lock-date {
+    margin-top: 24px;
+  }
+
+  #lockView .lock-clock {
+    font-size: clamp(64px, 19vw, 80px);
+  }
+
+  #lockView #lockNotifications {
+    margin-top: 18px;
+    gap: 8px;
+  }
+
+  #lockView #lockNotifications > .notification,
+  #lockView #lockNotifications > .lock-notification {
+    min-height: 72px;
+    padding: 12px;
+  }
+
+  #lockView .lock-controls {
+    padding-top: 8px;
+    padding-bottom: 9px;
+  }
+}
+
