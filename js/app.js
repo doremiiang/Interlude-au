@@ -132,20 +132,6 @@ function initializeViews() {
   clearPinError();
 }
 
-    const initial =
-      active ||
-      byId("lockView") ||
-      views[0];
-
-    views.forEach((view) => {
-      const isActive = view === initial;
-
-      view.classList.toggle("active", isActive);
-      view.setAttribute("aria-hidden", String(!isActive));
-    });
-
-    state.currentView = initial.id;
-  }
 
   function goBack() {
     const destinations = {
