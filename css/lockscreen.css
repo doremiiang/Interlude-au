@@ -504,3 +504,101 @@
 }
 
 /* ===== END FIX 11 ===== */
+
+/* FIX 13 — LOCKSCREEN NOTIFICATION PROPORTIONS */
+
+/* Pastikan area konten tidak membatasi lebar kartu */
+#lockView .lock-content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  align-self: stretch;
+}
+
+/* Kartu mengisi area konten */
+#lockView #lockNotifications {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  align-self: stretch;
+  margin-top: 28px;
+  gap: 10px;
+}
+
+/* Perbesar kartu agar lebih mirip notifikasi iPhone */
+#lockView #lockNotifications > .notification,
+#lockView #lockNotifications > .lock-notification {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  min-height: 76px;
+  padding: 15px;
+  gap: 12px;
+  border-radius: 22px;
+}
+
+/* Ikon aplikasi */
+#lockView #lockNotifications .notification-icon {
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+}
+
+/* Detail notifikasi */
+#lockView #lockNotifications .notification-meta {
+  font-size: 11px;
+  margin-bottom: 5px;
+}
+
+#lockView #lockNotifications .notification-title {
+  font-size: 13px;
+}
+
+#lockView #lockNotifications .notification-message {
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+/* ===== END FIX 13 ===== */
+
+
+/* FIX 14 — LOCKSCREEN HOME INDICATOR */
+
+#lockView .lock-bottom {
+  flex-shrink: 0;
+}
+
+#lockView .lock-swipe-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  min-height: 20px;
+  margin-top: 4px;
+  padding: 0 0 2px;
+  border: 0;
+  background: transparent;
+  font-size: 0;
+}
+
+/* Gunakan garis yang sudah ada di HTML */
+#lockView .lock-swipe-hint .swipe-line {
+  display: block;
+  width: 108px;
+  height: 4px;
+  flex: 0 0 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+}
+
+/* Cegah garis kedua dari aturan lama */
+#lockView .lock-swipe-hint::after {
+  display: none;
+  content: none;
+}
+
+/* ===== END FIX 14 ===== */
+
