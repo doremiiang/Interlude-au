@@ -282,12 +282,6 @@
 
 /* ===== INTERLUDE FIX 06 — LOCKSCREEN REFINEMENT ===== */
 
-/* Sembunyikan jam kecil di status bar agar tidak terlihat double.
-   Ikon sinyal, Wi-Fi, dan baterai tetap ditampilkan. */
-#lockView .status-bar #statusTime {
-  display: none !important;
-}
-
 /* Pakai satu aturan ukuran jam yang konsisten. */
 #lockView .lock-clock {
   flex-shrink: 0;
