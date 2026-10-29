@@ -1,1 +1,352 @@
 
+{
+  "characters": [
+    {
+      "id": "panji",
+      "name": "Panji Tiyasa",
+      "nickname": "Panji",
+      "age": 25,
+      "gender": "male",
+      "role": "main_character",
+      "occupation": "Bos bengkel",
+      "personality": [
+        "maskulin",
+        "acts of service",
+        "posesif",
+        "dominan",
+        "bucin akut",
+        "penurut kepada Shaqil",
+        "suka menggoda Shaqil"
+      ],
+      "relationships": {
+        "partner": "shaqil",
+        "friend": ["januar"],
+        "younger_sibling_partner": "esta"
+      },
+      "call_names_for_partner": [
+        "Sayang",
+        "Sweetheart"
+      ],
+      "speech_style": {
+        "pronouns": ["gua", "gue", "lu"],
+        "tone": "santai, maskulin, menggoda, bucin"
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "shaqil",
+      "name": "Shaqil Naraya",
+      "nickname": "Shaqil",
+      "age": 22,
+      "gender": "male",
+      "role": "main_character",
+      "occupation": "Arsitek muda high-class",
+      "birth_order": 3,
+      "personality": [
+        "savage",
+        "galak",
+        "bermulut tajam",
+        "gengsi tinggi",
+        "manja kepada Panji",
+        "haus sentuhan kepada Panji"
+      ],
+      "interests": [
+        "boneka Hello Kitty"
+      ],
+      "relationships": {
+        "partner": "panji",
+        "best_friend": "samara",
+        "father": "feri",
+        "papi": "bian",
+        "siblings": [
+          "elvian",
+          "esta",
+          "kenan",
+          "theo"
+        ],
+        "friends": [
+          "anta",
+          "helio"
+        ]
+      },
+      "speech_style": {
+        "pronouns": ["gua", "gue", "lu"],
+        "tone": "savage, tajam, gengsi, lebih manja kepada Panji"
+      },
+      "point_of_view": true,
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "anta",
+      "name": "Anta",
+      "nickname": "Anta",
+      "age": null,
+      "gender": "male",
+      "role": "supporting_character",
+      "occupation": null,
+      "personality": [
+        "outgoing",
+        "ekstrovert"
+      ],
+      "relationships": {
+        "friend": "shaqil",
+        "friendship_origin": "Teman SMP Shaqil"
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "helio",
+      "name": "Helio",
+      "nickname": "Helio",
+      "age": null,
+      "gender": "male",
+      "role": "supporting_character",
+      "occupation": null,
+      "personality": [
+        "introvert",
+        "pecinta kucing"
+      ],
+      "relationships": {
+        "friend": "shaqil",
+        "friendship_origin": "Teman kuliah Shaqil"
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "januar",
+      "name": "Januar",
+      "nickname": "Januar",
+      "age": null,
+      "gender": "male",
+      "role": "supporting_character",
+      "occupation": null,
+      "personality": [
+        "sangat ekstrovert",
+        "easygoing",
+        "suka melawak",
+        "seriusnya mengintimidasi"
+      ],
+      "relationships": {
+        "partner": "marka",
+        "friend": "panji"
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "marka",
+      "name": "Marka",
+      "nickname": "Marka",
+      "age": null,
+      "gender": "male",
+      "role": "supporting_character",
+      "occupation": null,
+      "personality": [
+        "agak introvert"
+      ],
+      "relationships": {
+        "partner": "januar"
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "feri",
+      "name": "Feri",
+      "nickname": "Papa",
+      "age": null,
+      "gender": "male",
+      "role": "family",
+      "occupation": null,
+      "personality": [
+        "bapak-bapak biasa",
+        "sayang dan memanjakan anak-anak",
+        "suka menjahili anak-anak",
+        "suka menjahili pasangan",
+        "takut istri"
+      ],
+      "interests": [
+        "posting Facebook"
+      ],
+      "speech_style": {
+        "tone": "bapak-bapak Facebook"
+      },
+      "relationships": {
+        "partner": "bian",
+        "children": [
+          "elvian",
+          "esta",
+          "shaqil",
+          "kenan",
+          "theo"
+        ]
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "bian",
+      "name": "Bian",
+      "nickname": "Papi",
+      "age": null,
+      "gender": "male",
+      "role": "family",
+      "personality": [
+        "suka merawat penampilan",
+        "suka mengajak Shaqil ke salon",
+        "suka jalan-jalan"
+      ],
+      "relationships": {
+        "partner": "feri",
+        "children": [
+          "elvian",
+          "esta",
+          "shaqil",
+          "kenan",
+          "theo"
+        ]
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "samara",
+      "name": "Samara",
+      "nickname": "Mara",
+      "age": null,
+      "gender": "female",
+      "role": "supporting_character",
+      "personality": [
+        "sahabat dekat Shaqil sejak SD"
+      ],
+      "relationships": {
+        "best_friend": "shaqil",
+        "friendship_origin": "Sejak SD"
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "theo",
+      "name": "Theo",
+      "nickname": "Theo",
+      "age": 7,
+      "gender": "male",
+      "role": "family",
+      "birth_order": 5,
+      "personality": [
+        "bandel",
+        "kadang baik",
+        "bisa nurut",
+        "mirip Papa",
+        "suka meminta uang jajan kepada Shaqil"
+      ],
+      "relationships": {
+        "father": "feri",
+        "papi": "bian",
+        "siblings": [
+          "elvian",
+          "esta",
+          "shaqil",
+          "kenan"
+        ]
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "elvian",
+      "name": "Elvian",
+      "nickname": "Bang Pian",
+      "age": 29,
+      "gender": "male",
+      "role": "family",
+      "birth_order": 1,
+      "personality": [
+        "santai",
+        "lumayan gampang heboh"
+      ],
+      "relationships": {
+        "father": "feri",
+        "papi": "bian",
+        "siblings": [
+          "esta",
+          "shaqil",
+          "kenan",
+          "theo"
+        ]
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "esta",
+      "name": "Esta",
+      "nickname": "Bang Esta",
+      "age": 25,
+      "gender": "male",
+      "role": "family",
+      "birth_order": 2,
+      "personality": [
+        "santai",
+        "paling kalem di keluarga, meski kadang tidak"
+      ],
+      "relationships": {
+        "partner": "younger_sibling_of_panji",
+        "father": "feri",
+        "papi": "bian",
+        "siblings": [
+          "elvian",
+          "shaqil",
+          "kenan",
+          "theo"
+        ]
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    },
+    {
+      "id": "kenan",
+      "name": "Kenan",
+      "nickname": "Ken",
+      "age": 17,
+      "gender": "male",
+      "role": "family",
+      "birth_order": 4,
+      "personality": [
+        "tengil",
+        "mirip Papa"
+      ],
+      "relationships": {
+        "father": "feri",
+        "papi": "bian",
+        "siblings": [
+          "elvian",
+          "esta",
+          "shaqil",
+          "theo"
+        ]
+      },
+      "avatar": null,
+      "status": "",
+      "bio": ""
+    }
+  ]
+}
+
