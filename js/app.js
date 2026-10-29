@@ -1,11 +1,12 @@
 /* =========================================================
    INTERLUDE AU — APP.JS
-   Bagian 1/3: Konfigurasi, utilitas, dan navigasi layar
+   Bagian 1/3: Konfigurasi, utilitas, dan navigasi
    ========================================================= */
 
 (() => {
   "use strict";
 
+  // Mencegah inisialisasi dan pemasangan listener berulang.
   if (window.__interludeAppInitialized) return;
   window.__interludeAppInitialized = true;
 
@@ -35,6 +36,7 @@
   const state = {
     currentView: null,
     pin: "",
+    pinCheckTimer: null,
     activeContact: null,
     touchStartY: null,
     pointerStartY: null,
@@ -43,16 +45,17 @@
     clockTimer: null
   };
 
+  // Kontak ini mengikuti ID yang tersedia di HTML saat ini.
   const CONTACTS = {
     shaq: {
       name: "Shaq",
       status: "",
-      avatar: ""
+      avatar: "S"
     },
     kris: {
       name: "Kris",
       status: "",
-      avatar: ""
+      avatar: "K"
     }
   };
 
@@ -64,12 +67,16 @@
 
   function showView(viewId) {
     const target = byId(viewId);
-    if (!target) return false;
+
+    if (!target || !VIEW_IDS.includes(viewId)) {
+      return false;
+    }
 
     getViews().forEach((view) => {
-      const isActive = view === target;
-      view.classList.toggle("active", isActive);
-      view.setAttribute("aria-hidden", String(!isActive));
+      const active = view === target;
+
+      view.classList.toggle("active", active);
+      view.setAttribute("aria-hidden", String(!active));
     });
 
     state.currentView = viewId;
@@ -89,70 +96,66 @@
 
     toast.textContent = message;
     toast.classList.add("show");
+    toast.setAttribute("role", "status");
     toast.setAttribute("aria-live", "polite");
 
-    if (state.toastTimer) {
+    if (state.toastTimer !== null) {
       clearTimeout(state.toastTimer);
     }
 
-    state.toastTimer = setTimeout(() => {
+    state.toastTimer = window.setTimeout(() => {
       toast.classList.remove("show");
+      state.toastTimer = null;
     }, 2200);
-  }
-
-  function goBack() {
-    switch (state.currentView) {
-      case "conversationView":
-        showView("chatView");
-        break;
-
-      case "chatView":
-      case "photosView":
-      case "notesView":
-      case "phoneView":
-      case "musicView":
-      case "settingsView":
-        showView("homeView");
-        break;
-
-      case "passcodeView":
-        resetPin();
-        showView("lockView");
-        break;
-
-      case "homeView":
-        showView("lockView");
-        break;
-
-      default:
-        showView("homeView");
-        break;
-    }
   }
 
   function initializeViews() {
     const views = getViews();
     if (!views.length) return;
 
-    const activeView = views.find((view) =>
+    const active = views.find((view) =>
       view.classList.contains("active")
     );
 
-    const initialView = activeView || byId("lockView") || views[0];
+    const initial =
+      active ||
+      byId("lockView") ||
+      views[0];
 
     views.forEach((view) => {
-      const isActive = view === initialView;
+      const isActive = view === initial;
+
       view.classList.toggle("active", isActive);
       view.setAttribute("aria-hidden", String(!isActive));
     });
 
-    state.currentView = initialView.id;
+    state.currentView = initial.id;
   }
 
-  /* =========================================================
-     Akhir Bagian 1/3
-     Lanjutkan dengan Bagian 2/3 tepat di bawah kode ini.
-     ========================================================= */
+  function goBack() {
+    const destinations = {
+      conversationView: "chatView",
+      chatView: "homeView",
+      photosView: "homeView",
+      notesView: "homeView",
+      phoneView: "homeView",
+      musicView: "homeView",
+      settingsView: "homeView",
+      passcodeView: "lockView",
+      homeView: "lockView"
+    };
+
+    const destination = destinations[state.currentView] || "homeView";
+
+    if (state.currentView === "passcodeView") {
+      resetPin();
+    }
+
+    showView(destination);
+  }
+
+  /* Akhir Bagian 1/3 */
+
     /* =========================================================
      Bagian 2/3: PIN, lockscreen, gesture, dan jam
      ========================================================= */
@@ -165,6 +168,7 @@
 
     dots.forEach((dot, index) => {
       const filled = index < state.pin.length;
+
       dot.classList.toggle("filled", filled);
       dot.setAttribute("aria-hidden", "true");
     });
@@ -182,7 +186,7 @@
     if ($$("span", container).length !== DEMO_PIN.length) {
       container.replaceChildren();
 
-      for (let i = 0; i < DEMO_PIN.length; i += 1) {
+      for (let index = 0; index < DEMO_PIN.length; index += 1) {
         const dot = document.createElement("span");
         dot.className = "passcode-dot";
         container.appendChild(dot);
@@ -192,15 +196,27 @@
     updatePinDots();
   }
 
+  function clearPinCheckTimer() {
+    if (state.pinCheckTimer !== null) {
+      clearTimeout(state.pinCheckTimer);
+      state.pinCheckTimer = null;
+    }
+  }
+
+  function clearPinError() {
+    const error = byId("passcodeError");
+    if (!error) return;
+
+    error.textContent = "";
+    error.classList.remove("visible", "show");
+  }
+
   function resetPin() {
+    clearPinCheckTimer();
+
     state.pin = "";
     updatePinDots();
-
-    const error = byId("passcodeError");
-    if (error) {
-      error.textContent = "";
-      error.classList.remove("visible", "show");
-    }
+    clearPinError();
   }
 
   function showPinError(message) {
@@ -209,40 +225,18 @@
 
     error.textContent = message;
     error.classList.add("visible", "show");
-  }
-
-  function enterDigit(digit) {
-    if (!/^\d$/.test(String(digit))) return;
-    if (state.pin.length >= DEMO_PIN.length) return;
-
-    const error = byId("passcodeError");
-    if (error) {
-      error.textContent = "";
-      error.classList.remove("visible", "show");
-    }
-
-    state.pin += String(digit);
-    updatePinDots();
-
-    if (state.pin.length === DEMO_PIN.length) {
-      window.setTimeout(checkPin, 120);
-    }
-  }
-
-  function deletePinDigit() {
-    state.pin = state.pin.slice(0, -1);
-    updatePinDots();
-
-    const error = byId("passcodeError");
-    if (error) {
-      error.textContent = "";
-      error.classList.remove("visible", "show");
-    }
+    error.setAttribute("role", "alert");
   }
 
   function checkPin() {
+    clearPinCheckTimer();
+
+    if (state.currentView !== "passcodeView") return;
+    if (state.pin.length !== DEMO_PIN.length) return;
+
     if (state.pin !== DEMO_PIN) {
-      resetPin();
+      state.pin = "";
+      updatePinDots();
       showPinError("PIN salah. Coba lagi.");
       return;
     }
@@ -251,7 +245,38 @@
     showView("homeView");
   }
 
+  function enterDigit(digit) {
+    if (state.currentView !== "passcodeView") return;
+    if (!/^\d$/.test(String(digit))) return;
+    if (state.pin.length >= DEMO_PIN.length) return;
+
+    clearPinCheckTimer();
+    clearPinError();
+
+    state.pin += String(digit);
+    updatePinDots();
+
+    if (state.pin.length === DEMO_PIN.length) {
+      state.pinCheckTimer = window.setTimeout(() => {
+        state.pinCheckTimer = null;
+        checkPin();
+      }, 180);
+    }
+  }
+
+  function deletePinDigit() {
+    if (state.currentView !== "passcodeView") return;
+
+    clearPinCheckTimer();
+
+    state.pin = state.pin.slice(0, -1);
+    updatePinDots();
+    clearPinError();
+  }
+
   function openPasscode() {
+    if (state.currentView !== "lockView") return;
+
     resetPin();
     showView("passcodeView");
   }
@@ -259,7 +284,7 @@
   function unlockFromGesture() {
     const now = Date.now();
 
-    if (now - state.lastUnlockGesture < 700) return;
+    if (now - state.lastUnlockGesture < 650) return;
     if (state.currentView !== "lockView") return;
 
     state.lastUnlockGesture = now;
@@ -267,13 +292,12 @@
   }
 
   function bindLockscreen() {
-    const unlockTrigger = byId("unlockTrigger");
     const lockView = byId("lockView");
 
-    unlockTrigger?.addEventListener("click", openPasscode);
+    byId("unlockTrigger")?.addEventListener("click", openPasscode);
 
     byId("lockFlashlight")?.addEventListener("click", () => {
-      showToast("Senter belum terhubung ke kontrol perangkat.");
+      showToast("Kontrol senter perangkat belum tersedia.");
     });
 
     byId("lockCamera")?.addEventListener("click", () => {
@@ -285,7 +309,11 @@
     lockView.addEventListener(
       "touchstart",
       (event) => {
-        if (event.touches.length !== 1) return;
+        if (event.touches.length !== 1) {
+          state.touchStartY = null;
+          return;
+        }
+
         state.touchStartY = event.touches[0].clientY;
       },
       { passive: true }
@@ -298,25 +326,44 @@
 
         const endY = event.changedTouches[0]?.clientY;
         const distance = state.touchStartY - endY;
+
         state.touchStartY = null;
 
-        if (distance > 55) unlockFromGesture();
+        if (Number.isFinite(distance) && distance > 55) {
+          unlockFromGesture();
+        }
       },
       { passive: true }
     );
 
+    lockView.addEventListener(
+      "touchcancel",
+      () => {
+        state.touchStartY = null;
+      },
+      { passive: true }
+    );
+
+    // Pointer hanya untuk mouse/pen. Sentuhan ditangani touch events.
     lockView.addEventListener("pointerdown", (event) => {
       if (event.pointerType === "touch") return;
       state.pointerStartY = event.clientY;
     });
 
     lockView.addEventListener("pointerup", (event) => {
+      if (event.pointerType === "touch") return;
       if (state.pointerStartY === null) return;
 
       const distance = state.pointerStartY - event.clientY;
       state.pointerStartY = null;
 
-      if (distance > 55) unlockFromGesture();
+      if (distance > 55) {
+        unlockFromGesture();
+      }
+    });
+
+    lockView.addEventListener("pointercancel", () => {
+      state.pointerStartY = null;
     });
   }
 
@@ -332,9 +379,17 @@
 
       if (/^\d$/.test(value)) {
         enterDigit(value);
-      } else if (value === "clear") {
+        return;
+      }
+
+      if (value === "clear") {
         deletePinDigit();
-      } else if (value === "enter") {
+        return;
+      }
+
+      if (value === "enter") {
+        clearPinCheckTimer();
+
         if (state.pin.length === DEMO_PIN.length) {
           checkPin();
         } else {
@@ -346,6 +401,32 @@
     byId("passcodeCancel")?.addEventListener("click", () => {
       resetPin();
       showView("lockView");
+    });
+  }
+
+  function bindKeyboardShortcuts() {
+    document.addEventListener("keydown", (event) => {
+      if (state.currentView !== "passcodeView") return;
+
+      if (/^\d$/.test(event.key)) {
+        event.preventDefault();
+        enterDigit(event.key);
+      } else if (event.key === "Backspace") {
+        event.preventDefault();
+        deletePinDigit();
+      } else if (event.key === "Enter") {
+        event.preventDefault();
+        clearPinCheckTimer();
+
+        if (state.pin.length === DEMO_PIN.length) {
+          checkPin();
+        } else {
+          showPinError("Masukkan 4 angka PIN.");
+        }
+      } else if (event.key === "Escape") {
+        resetPin();
+        showView("lockView");
+      }
     });
   }
 
@@ -375,65 +456,44 @@
     });
   }
 
-  function bindKeyboardShortcuts() {
-    document.addEventListener("keydown", (event) => {
-      if (state.currentView !== "passcodeView") return;
-
-      if (/^\d$/.test(event.key)) {
-        event.preventDefault();
-        enterDigit(event.key);
-      } else if (event.key === "Backspace") {
-        event.preventDefault();
-        deletePinDigit();
-      } else if (event.key === "Enter") {
-        event.preventDefault();
-
-        if (state.pin.length === DEMO_PIN.length) {
-          checkPin();
-        }
-      } else if (event.key === "Escape") {
-        resetPin();
-        showView("lockView");
-      }
-    });
-  }
-
-  /* =========================================================
-     Akhir Bagian 2/3
-     Lanjutkan dengan Bagian 3/3 tepat di bawah kode ini.
-     ========================================================= */
+  /* Akhir Bagian 2/3 */
 
     /* =========================================================
-     Bagian 3/3: Navigasi aplikasi, kontak, dan inisialisasi
+     Bagian 3/3: Kontak, navigasi, dan inisialisasi
      ========================================================= */
 
   function openConversation(contactId) {
     const contact = CONTACTS[contactId];
+    if (!contact) {
+      showToast("Kontak belum terdaftar.");
+      return;
+    }
+
+    state.activeContact = contactId;
+
     const nameElement = byId("conversationName");
     const avatarElement = byId("conversationAvatar");
     const statusElement = byId("conversationStatus");
 
-    state.activeContact = contactId;
-
-    if (nameElement && contact) {
+    if (nameElement) {
       nameElement.textContent = contact.name;
     }
 
-    if (avatarElement && contact?.avatar) {
+    if (avatarElement) {
       avatarElement.textContent = contact.avatar;
     }
 
-    if (statusElement && contact?.status) {
+    if (statusElement) {
       statusElement.textContent = contact.status;
     }
 
-    showView("conversationView");
+    if (!showView("conversationView")) return;
 
     document.dispatchEvent(
       new CustomEvent("interlude:conversation-open", {
         detail: {
           contactId,
-          contactName: contact?.name || contactId
+          contactName: contact.name
         }
       })
     );
@@ -441,30 +501,25 @@
 
   function bindContactList() {
     const list = byId("contactList");
+    if (!list) return;
 
-    list?.addEventListener("click", (event) => {
+    list.addEventListener("click", (event) => {
       const item = event.target.closest("[data-open-conversation]");
       if (!item || !list.contains(item)) return;
 
-      const contactId = item.dataset.openConversation;
-      if (!contactId) return;
-
-      openConversation(contactId);
+      openConversation(item.dataset.openConversation);
     });
 
     const search = byId("contactSearch");
+    if (!search) return;
 
-    search?.addEventListener("input", () => {
+    search.addEventListener("input", () => {
       const query = search.value.trim().toLocaleLowerCase("id-ID");
 
-      $$("[data-open-conversation]", list || document).forEach((item) => {
+      $$("[data-open-conversation]", list).forEach((item) => {
         const text = item.textContent.toLocaleLowerCase("id-ID");
         item.hidden = !text.includes(query);
       });
-    });
-
-    byId("backToContacts")?.addEventListener("click", () => {
-      showView("chatView");
     });
   }
 
@@ -476,7 +531,8 @@
 
       if (!target) return;
 
-      if (target.matches("[data-open-conversation]")) return;
+      // Navigasi kontak ditangani oleh bindContactList().
+      if (target.hasAttribute("data-open-conversation")) return;
 
       if (target.hasAttribute("data-go-back")) {
         event.preventDefault();
@@ -490,19 +546,20 @@
         return;
       }
 
-      const viewId =
+      const destination =
         target.dataset.openView ||
         target.dataset.goView;
 
-      if (viewId && byId(viewId)) {
+      if (destination && byId(destination)) {
         event.preventDefault();
-        showView(viewId);
+        showView(destination);
       }
     });
 
     byId("navHome")?.addEventListener("click", () => {
-      if (state.currentView === "lockView") return;
-      showView("homeView");
+      if (state.currentView !== "lockView") {
+        showView("homeView");
+      }
     });
   }
 
@@ -513,7 +570,7 @@
     });
 
     byId("profileButton")?.addEventListener("click", () => {
-      showToast("Profil belum memiliki halaman khusus.");
+      showToast("Halaman profil belum diimplementasikan.");
     });
   }
 
@@ -524,15 +581,11 @@
     bindLockscreen();
     bindPinPad();
     bindKeyboardShortcuts();
-    bindNavigation();
     bindContactList();
+    bindNavigation();
     bindGlobalButtons();
 
     updateClock();
-
-    if (state.clockTimer) {
-      clearInterval(state.clockTimer);
-    }
 
     state.clockTimer = window.setInterval(updateClock, 15000);
 
@@ -552,5 +605,4 @@
   } else {
     initialize();
   }
-
 })();
