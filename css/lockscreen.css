@@ -585,8 +585,7 @@
   position: absolute;
   left: 0;
   right: 0;
-  bottom: max(24px, env(safe-area-inset-bottom));
-  width: 100%;
+bottom: max(6px, env(safe-area-inset-bottom, 0px));  width: 100%;
   padding: 0 20px;
   z-index: 20;
   visibility: visible !important;
