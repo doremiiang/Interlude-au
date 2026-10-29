@@ -242,3 +242,150 @@
   background-color: rgba(199, 181, 232, 0.12);
 }
 
+
+/* INTERLUDE AU — HOME SCREEN
+   Bagian 2: dock, indikator halaman, dan responsivitas. */
+
+/* Menempatkan dock di bawah grid aplikasi dengan jarak yang konsisten. */
+#homeView .home-dock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: center;
+  justify-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 82px;
+  margin-top: auto;
+  padding: 10px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  background: rgba(35, 32, 45, 0.65);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+}
+
+/* Membuat ikon dock sedikit lebih besar daripada ikon aplikasi biasa. */
+#homeView .dock-item .app-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+}
+
+/* Menghilangkan label agar dock terlihat ringkas seperti layar ponsel. */
+#homeView .dock-item .app-label {
+  display: none;
+}
+
+/* Menambahkan jarak sebelum indikator halaman home. */
+#homeView .home-page-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 20px;
+  margin-top: 13px;
+}
+
+/* Membuat titik indikator berukuran kecil dan tidak mencolok. */
+#homeView .home-page-indicator span {
+  display: block;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Menandai halaman yang sedang aktif dengan titik memanjang. */
+#homeView .home-page-indicator span.active {
+  width: 17px;
+  background: rgba(255, 255, 255, 0.82);
+}
+
+/* Menjaga widget dan grid tetap rapi di layar yang relatif pendek. */
+@media (max-height: 760px) {
+  #homeView {
+    padding-top: max(22px, env(safe-area-inset-top));
+  }
+
+  #homeView .home-header {
+    margin-top: 4px;
+    margin-bottom: 18px;
+  }
+
+  #homeView .home-widget {
+    min-height: 145px;
+    gap: 11px;
+    margin-bottom: 23px;
+    padding: 18px;
+  }
+
+  #homeView .widget-clock {
+    font-size: clamp(35px, 10vw, 45px);
+  }
+
+  #homeView .app-grid {
+    gap: 17px 10px;
+    margin-bottom: 20px;
+  }
+
+  #homeView .home-dock {
+    min-height: 72px;
+  }
+
+  #homeView .dock-item .app-icon {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Mengurangi ukuran ikon dan jarak pada layar yang sangat sempit. */
+@media (max-width: 340px) {
+  #homeView {
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  #homeView .app-grid {
+    column-gap: 7px;
+  }
+
+  #homeView .app-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+  }
+
+  #homeView .app-label {
+    font-size: 9px;
+  }
+
+  #homeView .home-widget {
+    padding: 17px;
+  }
+
+  #homeView .home-dock {
+    gap: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+  }
+}
+
+/* Menggunakan ukuran ikon yang lebih besar pada layar lebar. */
+@media (min-width: 420px) {
+  #homeView {
+    padding-right: 25px;
+    padding-left: 25px;
+  }
+
+  #homeView .app-grid {
+    column-gap: 16px;
+  }
+}
+
+/* Menonaktifkan animasi tekan jika pengguna mengurangi gerakan. */
+@media (prefers-reduced-motion: reduce) {
+  #homeView .app-icon {
+    transition: none;
+  }
+}
