@@ -1,31 +1,40 @@
 
-/* INTERLUDE AU — LOCKSCREEN
-   Mengatur komposisi layar kunci, jam, notifikasi, dan kontrol bawah.
-   Wallpaper final akan memakai URL media RapidFile milik pengguna.
-*/
+/* =========================================================
+   INTERLUDE AU — LOCKSCREEN
+   Redesign: iPhone / HP-Kino inspired
+   Fokus: status bar, jam, notifikasi, kontrol bawah.
+   Tidak mengubah struktur HTML atau fungsi JavaScript.
+   ========================================================= */
+
+/* ---------- 1. KERANGKA LOCKSCREEN ---------- */
 
 #lockView {
   position: absolute;
   inset: 0;
   z-index: 10;
+  box-sizing: border-box;
   display: none;
   flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   overflow: hidden;
   isolation: isolate;
+
   padding:
-    max(24px, env(safe-area-inset-top))
-    22px
-    max(22px, env(safe-area-inset-bottom));
+    max(18px, env(safe-area-inset-top))
+    14px
+    max(10px, env(safe-area-inset-bottom));
+
   color: #fff;
   background: #111018;
 }
 
-/* Menampilkan lockscreen hanya saat tampilan ini aktif. */
 #lockView.active {
   display: flex;
 }
 
-/* Menempatkan wallpaper di belakang seluruh konten lockscreen. */
+/* ---------- 2. WALLPAPER DAN OVERLAY ---------- */
+
 #lockView .wallpaper,
 #lockView .lockscreen-wallpaper {
   position: absolute;
@@ -49,24 +58,21 @@
   background-size: cover;
 }
 
-/* Menggelapkan wallpaper agar jam dan tanggal tetap terbaca. */
 #lockView::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      rgba(8, 7, 13, 0.18) 0%,
-      rgba(8, 7, 13, 0.03) 28%,
-      rgba(8, 7, 13, 0.22) 54%,
-      rgba(8, 7, 13, 0.76) 100%
-    );
+  background: linear-gradient(
+    180deg,
+    rgba(8, 7, 13, 0.18) 0%,
+    rgba(8, 7, 13, 0.03) 28%,
+    rgba(8, 7, 13, 0.22) 54%,
+    rgba(8, 7, 13, 0.76) 100%
+  );
 }
 
-/* Membuat cahaya lembut agar layar terasa dreamy, bukan datar. */
 #lockView::after {
   content: "";
   position: absolute;
@@ -80,315 +86,19 @@
   );
 }
 
-/* Memastikan elemen lockscreen berada di atas lapisan wallpaper. */
+/* Konten berada di atas wallpaper. */
 #lockView > :not(.wallpaper):not(.lockscreen-wallpaper) {
   position: relative;
   z-index: 1;
 }
 
-/* Mengatur informasi pemilik dan status di bagian atas layar. */
-#lockView .lock-owner {
-  margin-top: 12px;
-  color: rgba(255, 255, 255, 0.78);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-align: center;
-  text-transform: uppercase;
-}
-
-/* Menampilkan tanggal tepat di atas jam besar. */
-
-/* Tanggal: lebih dekat ke jam, tetap proporsional di layar kecil */
-#lockView .lock-date {
-  margin-top: clamp(32px, 6vh, 58px);
-  color: rgba(255, 255, 255, 0.82);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.025em;
-  text-align: center;
-}
-
-/* Jam utama: ukuran lebih terkendali */
-#lockView .lock-clock {
-  margin-top: 4px;
-  color: #fff;
-  font-size: clamp(54px, 15vw, 76px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.065em;
-  text-align: center;
-  font-variant-numeric: tabular-nums;
-  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.16);
-}
-
-/* Memberi ruang fleksibel antara jam dan notifikasi. */
-#lockView .lock-notifications {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-  margin-top: clamp(34px, 7vh, 66px);
-}
-
-/* Membuat setiap notifikasi menyerupai kartu kaca transparan. */
-#lockView .notification,
-#lockView .lock-notification {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  background: rgba(27, 25, 35, 0.56);
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.12);
-  -webkit-backdrop-filter: blur(22px);
-  backdrop-filter: blur(22px);
-}
-
-/* Membuat ikon aplikasi notifikasi tetap proporsional. */
-#lockView .notification-icon {
-  display: grid;
-  flex: 0 0 34px;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  overflow: hidden;
-  border-radius: 11px;
-  background: rgba(255, 255, 255, 0.12);
-}
-
-/* Membatasi teks agar isi notifikasi mudah dipindai. */
-#lockView .notification-content {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Menampilkan nama aplikasi dan waktu dalam satu baris. */
-#lockView .notification-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 5px;
-  color: rgba(255, 255, 255, 0.62);
-  font-size: 10px;
-}
-
-/* Menegaskan nama pengirim tanpa mendominasi isi pesan. */
-#lockView .notification-title {
-  margin: 0 0 3px;
-  color: rgba(255, 255, 255, 0.96);
-  font-size: 12px;
-  font-weight: 650;
-}
-
-/* Menjaga isi pesan tetap terbaca pada layar ponsel kecil. */
-#lockView .notification-message {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.79);
-  font-size: 12px;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
-
-/* Mendorong kontrol kamera dan senter ke bagian bawah layar. */
-#lockView .lock-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  margin-top: auto;
-  padding: 26px 4px 12px;
-}
-
-/* Membuat tombol kontrol berbentuk lingkaran kaca. */
-#lockView .lock-control {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  place-items: center;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 50%;
-  color: #fff;
-  background: rgba(255, 255, 255, 0.13);
-  -webkit-backdrop-filter: blur(18px);
-  backdrop-filter: blur(18px);
-  cursor: pointer;
-  transition:
-    transform 180ms ease,
-    background 180ms ease;
-}
-
-/* Memberi respons sentuhan tanpa menggeser tata letak. */
-#lockView .lock-control:active {
-  transform: scale(0.92);
-  background: rgba(255, 255, 255, 0.23);
-}
-
-/* Menampilkan petunjuk swipe secara halus di bawah kontrol. */
-#lockView .lock-swipe-hint {
-  align-self: center;
-  margin-top: 8px;
-  color: rgba(255, 255, 255, 0.65);
-  font-size: 10px;
-  letter-spacing: 0.045em;
-  text-align: center;
-}
-
-/* Menambahkan garis gesture tipis seperti pada ponsel modern. */
-#lockView .lock-swipe-hint::after {
-  content: "";
-  display: block;
-  width: 92px;
-  height: 4px;
-  margin: 13px auto 0;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.78);
-}
-
-/* Mengurangi jarak pada layar pendek agar kontrol tidak terpotong. */
-@media (max-height: 700px) {
-  #lockView .lock-date {
-    margin-top: 28px;
-  }
-
-  #lockView .lock-clock {
-    font-size: clamp(58px, 17vw, 78px);
-  }
-
-  #lockView .lock-notifications {
-    margin-top: 24px;
-    gap: 7px;
-  }
-
-  #lockView .notification,
-  #lockView .lock-notification {
-    padding: 10px 12px;
-  }
-
-  #lockView .lock-controls {
-    padding-top: 16px;
-  }
-}
-
-/* Menonaktifkan transisi panjang bagi pengguna yang mengurangi animasi. */
-@media (prefers-reduced-motion: reduce) {
-  #lockView .lock-control {
-    transition: none;
-  }
-}
-
-/* ===== INTERLUDE FIX 06 — LOCKSCREEN REFINEMENT ===== */
-
-/* Pakai satu aturan ukuran jam yang konsisten. */
-#lockView .lock-clock {
-  flex-shrink: 0;
-  margin-top: 4px;
-  font-size: clamp(64px, 18vw, 82px);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.065em;
-  font-variant-numeric: tabular-nums;
-  text-align: center;
-  white-space: nowrap;
-  text-shadow: 0 3px 24px rgba(0, 0, 0, 0.22);
-}
-
-/* Rapikan posisi tanggal dan pemilik HP. */
-#lockView .lock-owner {
-  margin-top: 8px;
-  margin-bottom: 0;
-}
-
-#lockView .lock-date {
-  margin-top: clamp(34px, 7vh, 56px);
-  font-size: 12px;
-  line-height: 1.4;
-}
-
-/* Jarak notifikasi dibuat lebih dekat dengan jam. */
-#lockView .lock-notifications {
-  margin-top: clamp(24px, 5vh, 42px);
-  gap: 9px;
-}
-
-/* Kontrol bawah tetap berada di dalam layar. */
-#lockView .lock-controls {
-  flex-shrink: 0;
-  margin-top: auto;
-  padding: 18px 4px 10px;
-}
-
-#lockView .lock-control {
-  width: 48px;
-  height: 48px;
-}
-
-#lockView .lock-swipe-hint {
-  flex-shrink: 0;
-  margin-top: 0;
-  padding-bottom: 2px;
-}
-
-/* Jangan biarkan konten terdorong keluar pada layar pendek. */
-@media (max-height: 700px) {
-  #lockView {
-    padding-top: max(24px, env(safe-area-inset-top));
-  }
-
-  #lockView .lock-owner {
-    margin-top: 4px;
-    margin-bottom: 0;
-  }
-
-  #lockView .lock-date {
-    margin-top: 24px;
-  }
-
-  #lockView .lock-clock {
-    font-size: clamp(56px, 16vw, 70px);
-  }
-
-  #lockView .lock-notifications {
-    margin-top: 20px;
-    gap: 7px;
-  }
-
-  #lockView .lock-controls {
-    padding-top: 12px;
-    padding-bottom: 8px;
-  }
-}
-
-/* ===== END FIX 06 ===== */
-
-
-/* FIX 09 — REMOVE TINY CLOCK DECORATIONS */
-
-/* Hilangkan dekorasi pseudo-element di area status bar */
-#lockView .status-bar::before,
-#lockView .status-icons::before,
-#lockView .status-icons::after {
-  content: none !important;
-  display: none !important;
-}
-
-/* Hilangkan elemen dekoratif kecil di sekitar jam */
-#lockView .status-icons .dot,
-#lockView .status-icons .indicator,
-#lockView .status-icons .status-dot {
-  display: none !important;
-}
-
-
-/* FIX 10 — IPHONE-STYLE STATUS BAR */
+/* ---------- 3. STATUS BAR ---------- */
 
 #lockView .status-bar {
   position: relative;
   z-index: 25;
   display: flex;
+  flex: 0 0 34px;
   align-items: center;
   justify-content: space-between;
   width: 100%;
@@ -399,15 +109,18 @@
 
 #lockView .status-time {
   display: block !important;
+  flex: 0 0 auto;
+  color: #fff;
   font-size: 15px;
   font-weight: 600;
   line-height: 1;
+  letter-spacing: -0.3px;
   font-variant-numeric: tabular-nums;
-  letter-spacing: -.3px;
 }
 
 #lockView .status-icons {
   display: flex !important;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: flex-end;
   gap: 4px;
@@ -418,9 +131,9 @@
 
 #lockView .status-icons svg {
   display: block;
+  flex: 0 0 auto;
   width: 16px;
   height: 14px;
-  flex: 0 0 auto;
 }
 
 #lockView .status-icons svg:last-child {
@@ -428,177 +141,421 @@
   height: 14px;
 }
 
-/* Dynamic Island yang sudah ada tetap dipertahankan */
+/* Dynamic Island tetap memakai aturan yang sudah ada
+   di main.css. Tidak membuat island kedua di sini. */
 #lockView .status-bar::after {
   pointer-events: none;
 }
 
-
-/* ===== FIX 11 — LOCKSCREEN SCALE ===== */
-
-/* Jam utama */
-#lockView .lock-clock {
-  font-size: clamp(76px, 22vw, 96px);
-  line-height: 1;
+#lockView .status-bar::before,
+#lockView .status-icons::before,
+#lockView .status-icons::after {
+  content: none !important;
+  display: none !important;
 }
 
-/* Tanggal */
-#lockView .lock-date {
-  font-size: 13px;
-  font-weight: 600;
+#lockView .status-icons .dot,
+#lockView .status-icons .indicator,
+#lockView .status-icons .status-dot {
+  display: none !important;
 }
 
-/* Lebar area notifikasi */
-#lockView .lock-notifications {
-  width: 100%;
-  margin-top: clamp(22px, 4vh, 38px);
-  gap: 8px;
-}
+/* ---------- 4. AREA JAM ---------- */
 
-/* Ukuran kartu notifikasi */
-#lockView .notification,
-#lockView .lock-notification {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 14px;
-  gap: 10px;
-  border-radius: 20px;
-}
-
-/* Ikon aplikasi */
-#lockView .notification-icon {
-  flex: 0 0 36px;
-  width: 36px;
-  height: 36px;
-}
-
-/* Teks notifikasi */
-#lockView .notification-meta {
-  font-size: 11px;
-}
-
-#lockView .notification-title {
-  font-size: 13px;
-}
-
-#lockView .notification-message {
-  font-size: 13px;
-  line-height: 1.4;
-}
-
-/* Penyesuaian layar pendek */
-@media (max-height: 700px) {
-  #lockView .lock-clock {
-    font-size: clamp(64px, 19vw, 80px);
-  }
-
-  #lockView .lock-notifications {
-    margin-top: 18px;
-    gap: 7px;
-  }
-
-  #lockView .notification,
-  #lockView .lock-notification {
-    padding: 10px 12px;
-  }
-}
-
-/* ===== END FIX 11 ===== */
-
-/* FIX 13 — LOCKSCREEN NOTIFICATION PROPORTIONS */
-
-/* Pastikan area konten tidak membatasi lebar kartu */
 #lockView .lock-content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+#lockView .lock-owner {
+  display: none !important;
+}
+
+#lockView .lock-date {
+  flex: 0 0 auto;
+  width: 100%;
+  margin: clamp(28px, 5vh, 44px) 0 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.025em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+#lockView .lock-clock {
+  flex: 0 0 auto;
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: clamp(72px, 22vw, 96px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.065em;
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 4px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Jangan menimpa animasi jam dari JavaScript/CSS lain.
+   Aturan ini hanya mengatur ukuran dan tata letaknya. */
+
+/* ---------- 5. WADAH NOTIFIKASI ---------- */
+
+#lockView #lockNotifications {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  align-items: stretch;
+  align-self: stretch;
+  gap: 9px;
+
   box-sizing: border-box;
   width: 100%;
   max-width: none;
   min-width: 0;
-  align-self: stretch;
+
+  margin-top: clamp(20px, 3.5vh, 30px);
+  padding: 0;
 }
 
-/* Kartu mengisi area konten */
-#lockView #lockNotifications {
-  box-sizing: border-box;
-  width: 100%;
-  max-width: none;
-  align-self: stretch;
-  margin-top: 28px;
-  gap: 10px;
-}
+/* ---------- 6. KARTU NOTIFIKASI ---------- */
 
-/* Perbesar kartu agar lebih mirip notifikasi iPhone */
 #lockView #lockNotifications > .notification,
 #lockView #lockNotifications > .lock-notification {
+  display: flex;
+  flex: 0 1 auto;
+  align-items: flex-start;
+  gap: 12px;
+
   box-sizing: border-box;
   width: 100%;
   max-width: none;
+  min-width: 0;
   min-height: 76px;
-  padding: 15px;
-  gap: 12px;
-  border-radius: 22px;
+  padding: 13px 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.17);
+  border-radius: 21px;
+
+  color: #fff;
+  background: rgba(30, 27, 39, 0.57);
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  -webkit-backdrop-filter: blur(24px) saturate(135%);
+  backdrop-filter: blur(24px) saturate(135%);
 }
 
-/* Ikon aplikasi */
+/* ---------- 7. ICON APLIKASI ---------- */
+
 #lockView #lockNotifications .notification-icon {
+  display: grid;
   flex: 0 0 38px;
+  align-items: center;
+  justify-content: center;
+
   width: 38px;
   height: 38px;
+  box-sizing: border-box;
+  overflow: hidden;
+
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.12);
+
+  font-size: 17px;
+  line-height: 1;
 }
 
-/* Detail notifikasi */
+/* ---------- 8. TEKS NOTIFIKASI ---------- */
+
+#lockView #lockNotifications .notification-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 #lockView #lockNotifications .notification-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+
+  min-width: 0;
+  margin: 1px 0 5px;
+
+  color: rgba(255, 255, 255, 0.65);
   font-size: 11px;
-  margin-bottom: 5px;
+  line-height: 1.3;
 }
 
 #lockView #lockNotifications .notification-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0;
+
+  color: rgba(255, 255, 255, 0.97);
   font-size: 13px;
+  font-weight: 650;
+  line-height: 1.3;
+
+  overflow-wrap: anywhere;
+}
+
+#lockView #lockNotifications .notification-time {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 10px;
+  white-space: nowrap;
 }
 
 #lockView #lockNotifications .notification-message {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
   font-size: 13px;
-  line-height: 1.45;
+  font-weight: 400;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
-/* ===== END FIX 13 ===== */
 
-
-/* FIX 14 — LOCKSCREEN HOME INDICATOR */
+/* ---------- 9. AREA KONTROL BAWAH ---------- */
 
 #lockView .lock-bottom {
-  flex-shrink: 0;
+  display: flex !important;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: stretch;
+
+  width: 100%;
+  margin-top: auto;
+  padding: 0;
 }
 
-#lockView .lock-swipe-hint {
+/* Tombol flashlight dan camera. */
+#lockView .lock-controls {
   display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 12px 4px 14px;
+}
+
+#lockView .lock-control {
+  display: grid;
+  flex: 0 0 48px;
+  align-items: center;
+  justify-content: center;
+
+  width: 48px;
+  height: 48px;
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  transition:
+    transform 180ms ease,
+    background 180ms ease;
+}
+
+#lockView .lock-control > span {
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  line-height: 1;
+}
+
+#lockView .lock-control:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.24);
+}
+
+/* ---------- 10. HOME INDICATOR / UNLOCK ---------- */
+
+/* Tombol ini tetap menjadi pemicu unlock yang sudah ada. */
+#lockView #unlockTrigger.lock-swipe-hint {
+  display: flex;
+  flex: 0 0 auto;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+
   width: 100%;
-  min-height: 20px;
-  margin-top: 4px;
+  min-height: 22px;
+  box-sizing: border-box;
+
+  margin: 0;
   padding: 0 0 2px;
+
   border: 0;
+  border-radius: 0;
+  color: #fff;
   background: transparent;
+
   font-size: 0;
+  line-height: 1;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
-/* Gunakan garis yang sudah ada di HTML */
-#lockView .lock-swipe-hint .swipe-line {
+/* Gunakan garis yang sudah ada di HTML. */
+#lockView #unlockTrigger .swipe-line {
   display: block;
+  flex: 0 0 4px;
+
   width: 108px;
   height: 4px;
-  flex: 0 0 4px;
+  margin: 0;
+
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.22);
 }
 
-/* Cegah garis kedua dari aturan lama */
-#lockView .lock-swipe-hint::after {
+/* Hilangkan garis kedua dari CSS lama. */
+#lockView #unlockTrigger::after {
+  display: none !important;
+  content: none !important;
+}
+
+#lockView #unlockTrigger > span:not(.swipe-line) {
   display: none;
-  content: none;
 }
 
-/* ===== END FIX 14 ===== */
+/* ---------- 11. PENYESUAIAN LAYAR PENDEK ---------- */
 
+@media (max-height: 700px) {
+  #lockView {
+    padding-top: max(12px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+
+  #lockView .lock-date {
+    margin-top: 22px;
+    font-size: 11px;
+  }
+
+  #lockView .lock-clock {
+    font-size: clamp(62px, 19vw, 80px);
+  }
+
+  #lockView #lockNotifications {
+    gap: 7px;
+    margin-top: 16px;
+  }
+
+  #lockView #lockNotifications > .notification,
+  #lockView #lockNotifications > .lock-notification {
+    min-height: 66px;
+    padding: 10px 12px;
+    gap: 10px;
+    border-radius: 18px;
+  }
+
+  #lockView #lockNotifications .notification-icon {
+    flex-basis: 34px;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+  }
+
+  #lockView #lockNotifications .notification-message {
+    font-size: 12px;
+  }
+
+  #lockView .lock-controls {
+    padding-top: 7px;
+    padding-bottom: 8px;
+  }
+
+  #lockView .lock-control {
+    flex-basis: 44px;
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Ponsel yang sangat pendek: prioritaskan seluruh kontrol tetap terlihat. */
+@media (max-height: 560px) {
+  #lockView .lock-date {
+    margin-top: 12px;
+  }
+
+  #lockView .lock-clock {
+    font-size: clamp(52px, 16vw, 68px);
+  }
+
+  #lockView #lockNotifications {
+    margin-top: 10px;
+    gap: 5px;
+  }
+
+  #lockView #lockNotifications > .notification,
+  #lockView #lockNotifications > .lock-notification {
+    min-height: 54px;
+    padding: 7px 10px;
+    border-radius: 15px;
+  }
+
+  #lockView #lockNotifications .notification-icon {
+    flex-basis: 30px;
+    width: 30px;
+    height: 30px;
+  }
+
+  #lockView .lock-controls {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+
+  #lockView .lock-control {
+    flex-basis: 40px;
+    width: 40px;
+    height: 40px;
+  }
+
+  #lockView #unlockTrigger.lock-swipe-hint {
+    min-height: 16px;
+  }
+
+  #lockView #unlockTrigger .swipe-line {
+    width: 90px;
+    height: 4px;
+    flex-basis: 4px;
+  }
+}
+
+/* ---------- 12. AKSESIBILITAS ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  #lockView .lock-control {
+    transition: none;
+  }
+}
