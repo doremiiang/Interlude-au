@@ -109,13 +109,28 @@
     }, 2200);
   }
 
-  function initializeViews() {
-    const views = getViews();
-    if (!views.length) return;
+  
+function initializeViews() {
+  const views = getViews();
+  const lockView = byId("lockView");
 
-    const active = views.find((view) =>
-      view.classList.contains("active")
-    );
+  if (!views.length || !lockView) return;
+
+  // Setiap halaman baru harus dimulai dari lockscreen.
+  views.forEach((view) => {
+    const isLockscreen = view.id === "lockView";
+
+    view.classList.toggle("active", isLockscreen);
+    view.setAttribute("aria-hidden", String(!isLockscreen));
+  });
+
+  state.currentView = "lockView";
+  state.pin = "";
+
+  clearPinCheckTimer();
+  updatePinDots();
+  clearPinError();
+}
 
     const initial =
       active ||
