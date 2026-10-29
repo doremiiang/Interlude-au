@@ -387,3 +387,54 @@
 #lockView .status-icons .status-dot {
   display: none !important;
 }
+
+
+/* FIX 10 — IPHONE-STYLE STATUS BAR */
+
+#lockView .status-bar {
+  position: relative;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 34px;
+  padding: 0 4px;
+  color: #fff;
+}
+
+#lockView .status-time {
+  display: block !important;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.3px;
+}
+
+#lockView .status-icons {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  width: auto;
+  height: 18px;
+  color: #fff;
+}
+
+#lockView .status-icons svg {
+  display: block;
+  width: 16px;
+  height: 14px;
+  flex: 0 0 auto;
+}
+
+#lockView .status-icons svg:last-child {
+  width: 23px;
+  height: 14px;
+}
+
+/* Dynamic Island yang sudah ada tetap dipertahankan */
+#lockView .status-bar::after {
+  pointer-events: none;
+}
