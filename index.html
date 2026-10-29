@@ -1,1500 +1,713 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#101014">
-  <meta name="description" content="Interlude Phone — a fictional interactive phone for Interlude AU.">
-  <title>Interlude Phone</title>
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b0b10;
-      --panel: #17171e;
-      --panel-2: #22222c;
-      --text: #f7f4f2;
-      --muted: #a5a2b0;
-      --accent: #c6b4ee;
-      --accent-dark: #78659f;
-      --line: #ffffff16;
-      --green: #8ad9ad;
-    }
-
-    * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; }
-    body {
-      background:
-        radial-gradient(ellipse at 20% 15%, #39304f 0, transparent 38%),
-        radial-gradient(ellipse at 80% 90%, #222e38 0, transparent 35%),
-        #09090d;
-      color: var(--text);
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      -webkit-tap-highlight-color: transparent;
-    }
-    button, input, textarea { font: inherit; }
-    button { color: inherit; cursor: pointer; }
-    button:focus-visible, input:focus-visible, textarea:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 3px;
-    }
-
-    .stage {
-      min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
-    }
-    .device {
-      position: relative;
-      width: min(100%, 390px);
-      height: min(820px, calc(100dvh - 48px));
-      min-height: 580px;
-      overflow: hidden;
-      isolation: isolate;
-      border: 7px solid #29292e;
-      border-radius: 48px;
-      background: #111116;
-      box-shadow: 0 35px 100px #0009, 0 0 0 1px #ffffff1b;
-    }
-    .device::before {
-      content: "";
-      position: absolute;
-      z-index: 50;
-      top: 9px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 88px;
-      height: 23px;
-      border-radius: 20px;
-      background: #050507;
-      box-shadow: inset 0 0 0 1px #ffffff0b;
-      pointer-events: none;
-    }
-    .screen {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      background: #14131a;
-    }
-
-    .wallpaper {
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      background:
-        radial-gradient(ellipse at 18% 28%, #bba8d44f 0, transparent 32%),
-        radial-gradient(ellipse at 82% 70%, #7195a345 0, transparent 38%),
-        linear-gradient(145deg, #292536, #12151d 53%, #30293b);
-    }
-    .wallpaper::before {
-      content: "";
-      position: absolute;
-      width: 270px;
-      height: 430px;
-      right: -100px;
-      top: 18%;
-      border: 1px solid #ffffff16;
-      border-radius: 48% 52% 39% 61%;
-      transform: rotate(31deg);
-      box-shadow: 0 0 0 22px #ffffff05, 0 0 0 55px #ffffff04;
-    }
-    .wallpaper::after {
-      content: "INTERLUDE";
-      position: absolute;
-      left: -7px;
-      bottom: 13%;
-      font-size: clamp(40px, 13vw, 64px);
-      letter-spacing: .15em;
-      font-weight: 800;
-      color: #ffffff0b;
-      transform: rotate(-90deg) translateX(-8%);
-      transform-origin: left bottom;
-      pointer-events: none;
-    }
-
-    .status {
-      position: absolute;
-      z-index: 30;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 43px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 9px 20px 0;
-      font-size: 11px;
-      font-weight: 700;
-      pointer-events: none;
-    }
-    .status-icons { display: flex; gap: 6px; align-items: center; }
-    .battery {
-      width: 17px; height: 9px;
-      border: 1px solid currentColor;
-      border-radius: 3px;
-      position: relative;
-    }
-    .battery::before {
-      content: ""; position: absolute; inset: 2px;
-      border-radius: 1px; background: currentColor;
-    }
-    .battery::after {
-      content: ""; position: absolute; right: -3px; top: 2px;
-      height: 3px; width: 2px; border-radius: 0 2px 2px 0;
-      background: currentColor;
-    }
-
-.view {
-  position: absolute;
-  inset: 0;
-  display: none;
-  overflow: hidden;
-}
-    .view.active { display: flex; flex-direction: column; }
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .lockscreen {
-      align-items: center;
-      text-align: center;
-      padding: 100px 24px 30px;
-      background: linear-gradient(#0909110b, #09091124 65%, #0909117a);
-    }
-    .lock-date { font-size: 13px; color: #ffffffd2; letter-spacing: .04em; }
-    .lock-clock {
-      margin-top: 7px;
-      font-size: clamp(68px, 20vw, 88px);
-      font-weight: 250;
-      letter-spacing: -.075em;
-      line-height: 1.1;
-      font-variant-numeric: tabular-nums;
-    }
-    .lock-message {
-      margin-top: 40px;
-      padding: 15px;
-      width: 100%;
-      border: 1px solid #ffffff25;
-      background: #14141b6b;
-      backdrop-filter: blur(18px);
-      border-radius: 20px;
-      text-align: left;
-    }
-    .lock-message strong { font-size: 12px; }
-    .lock-message p { margin: 5px 0 0; font-size: 13px; color: #eeeaf4; }
-    .lock-bottom { margin-top: auto; width: 100%; }
-    .unlock {
-      width: 100%;
-      padding: 15px;
-      border: 1px solid #ffffff40;
-      border-radius: 24px;
-      background: #ffffff18;
-      backdrop-filter: blur(15px);
-      font-weight: 650;
-    }
-    .unlock:active { transform: scale(.98); }
-    .lock-hint { margin-top: 14px; font-size: 11px; color: #ffffffb4; }
-
-    .home {
-      padding: 57px 19px 25px;
-      background: #12121b30;
-    }
-    .greeting { font-size: 12px; color: #ffffffa8; }
-    .home-heading {
-      margin: 5px 0 18px;
-      font-size: 25px;
-      font-weight: 650;
-      letter-spacing: -.04em;
-    }
-    .widget {
-      border: 1px solid #ffffff1c;
-      border-radius: 22px;
-      padding: 15px;
-      background: #11111b72;
-      backdrop-filter: blur(20px);
-      margin-bottom: 25px;
-    }
-    .widget-top { display: flex; justify-content: space-between; font-size: 11px; color: #e2dce9b8; }
-    .widget-title { margin-top: 12px; font-size: 17px; font-weight: 650; }
-    .widget-sub { margin-top: 5px; font-size: 12px; color: #c3bfcd; }
-    .app-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 23px 9px;
-    }
-    .app-icon {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 7px;
-      min-width: 0;
-      padding: 0;
-      border: 0;
-      background: transparent;
-    }
-    .app-art {
-      width: clamp(48px, 14vw, 57px);
-      aspect-ratio: 1;
-      display: grid;
-      place-items: center;
-      border: 1px solid #ffffff25;
-      border-radius: 17px;
-      background: linear-gradient(145deg, #ffffff26, #ffffff09);
-      box-shadow: 0 5px 15px #0002;
-      font-size: 24px;
-      backdrop-filter: blur(12px);
-      transition: transform .15s;
-    }
-    .app-icon:active .app-art { transform: scale(.91); }
-    .app-name { font-size: 10px; color: #fff; text-shadow: 0 1px 5px #0009; }
-    .app-art.chat { background: linear-gradient(145deg, #5da98a, #2e6556); }
-    .app-art.photos { background: linear-gradient(145deg, #bca2ef, #6c609b); }
-    .app-art.notes { background: linear-gradient(145deg, #e5d6a0, #a58a55); }
-    .app-art.phone { background: linear-gradient(145deg, #72c9a1, #3e8569); }
-    .app-art.settings { background: linear-gradient(145deg, #a5a5b2, #555562); }
-    .app-art.music { background: linear-gradient(145deg, #d49cb7, #8a537e); }
-    .dock {
-      display: flex;
-      justify-content: space-around;
-      gap: 12px;
-      margin-top: auto;
-      padding: 12px 8px;
-      border: 1px solid #ffffff1c;
-      border-radius: 25px;
-      background: #ffffff16;
-      backdrop-filter: blur(24px);
-    }
-    .dock .app-art { width: 48px; border-radius: 15px; }
-
-    .app-view {
-      background: #f5f3f8;
-      color: #211f28;
-    }
-    .app-header {
-      flex: 0 0 auto;
-      padding: 53px 18px 14px;
-      background: #f5f3f8;
-      border-bottom: 1px solid #211f280e;
-    }
-    .app-header-row { display: flex; align-items: center; gap: 12px; }
-    .back {
-      flex: 0 0 36px;
-      width: 36px; height: 36px;
-      border: 0; border-radius: 50%;
-      background: #211f280b;
-      color: #27232e;
-      font-size: 22px;
-    }
-    .app-header h2 { margin: 0; font-size: 22px; letter-spacing: -.04em; }
-    .app-subtitle { margin-top: 4px; color: #77727f; font-size: 11px; }
-    .app-content { flex: 1; overflow: auto; padding: 16px; overscroll-behavior: contain; }
-    .app-content::-webkit-scrollbar, .messages::-webkit-scrollbar { display: none; }
-
-    .contact-card {
-      display: flex; align-items: center; gap: 12px;
-      width: 100%; padding: 14px; margin-bottom: 10px;
-      border: 1px solid #211f280c; border-radius: 17px;
-      background: white; text-align: left; color: #211f28;
-    }
-    .avatar {
-      display: grid; place-items: center;
-      flex: 0 0 44px; height: 44px;
-      border-radius: 50%;
-      background: linear-gradient(145deg, #cdbce9, #8f7aa9);
-      color: #30283c; font-weight: 750;
-    }
-    .contact-info { flex: 1; min-width: 0; }
-    .contact-info strong { display: block; font-size: 13px; }
-    .contact-info small { display: block; margin-top: 5px; color: #77727f; font-size: 11px; }
-    .online { color: #39976b !important; }
-    .section-label { margin: 4px 0 12px; color: #797481; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-
-    .chat-view { background: #eeeaf1; }
-    .chat-header { background: #f8f6fa; }
-    .chat-header .app-header-row { align-items: center; }
-    .chat-person { flex: 1; }
-    .chat-person strong { display: block; font-size: 14px; }
-    .chat-person small { display: block; margin-top: 3px; color: #77727f; font-size: 10px; }
-    .messages {
-      flex: 1; overflow: auto; display: flex; flex-direction: column;
-      gap: 10px; padding: 17px 13px;
-    }
-    .day-divider {
-      align-self: center; padding: 6px 10px; margin-bottom: 4px;
-      border-radius: 12px; background: #ffffffad; color: #817a89;
-      font-size: 10px;
-    }
-    .bubble {
-      max-width: 83%; padding: 10px 12px;
-      border-radius: 16px; font-size: 13px; line-height: 1.45;
-      overflow-wrap: anywhere; box-shadow: 0 2px 5px #211f2807;
-    }
-    .bubble.incoming {
-      align-self: flex-start; background: white;
-      border-bottom-left-radius: 5px;
-    }
-    .bubble.outgoing {
-      align-self: flex-end; background: #dcd0f0;
-      border-bottom-right-radius: 5px;
-    }
-    .bubble time { display: block; margin-top: 5px; font-size: 9px; color: #7b7484; text-align: right; }
-    .chat-compose {
-      display: flex; gap: 8px; align-items: end;
-      padding: 10px; padding-bottom: max(12px, env(safe-area-inset-bottom));
-      background: #f8f6fa; border-top: 1px solid #211f280c;
-    }
-    .chat-compose textarea {
-      flex: 1; resize: none; max-height: 90px; min-height: 40px;
-      border: 0; outline: none; border-radius: 18px; padding: 12px;
-      color: #211f28; background: white; font-size: 13px;
-    }
-    .send {
-      width: 40px; height: 40px; border: 0; border-radius: 50%;
-      background: #77638f; color: white; font-size: 17px;
-    }
-
-    .photo-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; }
-    .photo-tile {
-      min-height: 140px; aspect-ratio: 4 / 5; padding: 12px;
-      display: flex; flex-direction: column; justify-content: end;
-      border: 0; border-radius: 16px; text-align: left; color: white;
-      background: linear-gradient(155deg, #5f596d, #222530);
-      overflow: hidden; position: relative;
-    }
-    .photo-tile:nth-child(2) { background: linear-gradient(155deg, #9c8298, #4e415e); }
-    .photo-tile:nth-child(3) { background: linear-gradient(155deg, #7c958e, #354e4c); }
-    .photo-tile:nth-child(4) { background: linear-gradient(155deg, #ad9878, #594d48); }
-    .photo-tile:nth-child(5) { background: linear-gradient(155deg, #8c9ab7, #45465c); }
-    .photo-tile:nth-child(6) { background: linear-gradient(155deg, #ab8d9a, #5e3f54); }
-    .photo-symbol { position: absolute; top: 20px; left: 15px; font-size: 30px; opacity: .8; }
-    .photo-tile strong { font-size: 12px; }
-    .photo-tile small { margin-top: 4px; font-size: 10px; color: #ffffffc4; }
-
-    .note {
-      padding: 16px; margin-bottom: 12px; border-radius: 16px;
-      background: white; box-shadow: 0 4px 15px #211f2805;
-    }
-    .note strong { font-size: 14px; }
-    .note p { margin: 8px 0 0; color: #696472; font-size: 12px; line-height: 1.6; }
-    .setting-row {
-      display: flex; justify-content: space-between; align-items: center; gap: 12px;
-      padding: 15px 0; border-bottom: 1px solid #211f280d; font-size: 13px;
-    }
-    .setting-row small { display: block; margin-top: 4px; color: #77727f; font-size: 10px; }
-    .toggle {
-      width: 40px; height: 23px; border: 0; border-radius: 20px;
-      background: #c5c1cc; padding: 3px; transition: background .15s;
-    }
-    .toggle::before {
-      content: ""; display: block; width: 17px; height: 17px;
-      border-radius: 50%; background: white; transition: transform .15s;
-    }
-    .toggle.on { background: #806b9e; }
-    .toggle.on::before { transform: translateX(17px); }
-    .dial {
-      min-height: 100%; display: flex; flex-direction: column;
-      align-items: center; justify-content: center; text-align: center;
-    }
-    .dial-number { margin: 20px 0; font-size: 30px; letter-spacing: .08em; }
-    .dial-pad { display: grid; grid-template-columns: repeat(3, 64px); gap: 12px; }
-    .dial-pad button {
-      height: 60px; border: 0; border-radius: 50%;
-      background: #e7e2ec; color: #332d3a; font-size: 22px;
-    }
-    .dial-call { margin-top: 20px; border: 0; border-radius: 25px; padding: 13px 28px; background: #469a71; color: white; }
-    .toast {
-      position: absolute; z-index: 60; left: 50%; bottom: 40px;
-      transform: translate(-50%, 10px); opacity: 0; pointer-events: none;
-      padding: 10px 15px; border: 1px solid #ffffff20;
-      border-radius: 18px; background: #24232c; color: white;
-      font-size: 11px; white-space: nowrap; transition: .2s;
-    }
-    .toast.show { opacity: 1; transform: translate(-50%, 0); }
-    .nav-bar {
-      position: absolute; z-index: 40; bottom: 5px; left: 50%;
-      transform: translateX(-50%); width: 105px; height: 4px;
-      border: 0; border-radius: 5px; background: #ffffffb8;
-      padding: 0;
-    }
-    .app-view ~ .nav-bar { background: #3b3544a0; }
-    .hidden { display: none !important; }
-
-    @media (max-width: 480px) {
-      .stage { padding: 0; }
-      .device {
-        width: 100%; height: 100dvh; min-height: 0;
-        border: 0; border-radius: 0;
-      }
-      .device::before { top: 9px; }
-      .screen { height: 100dvh; }
-    }
-    @media (max-height: 650px) and (min-width: 481px) {
-      .stage { padding: 10px; }
-      .device { height: calc(100dvh - 20px); min-height: 0; border-radius: 36px; }
-      .home { padding-top: 45px; }
-      .widget { margin-bottom: 14px; padding: 11px; }
-      .app-grid { gap: 13px 8px; }
-      .lockscreen { padding-top: 65px; }
-      .lock-clock { font-size: 65px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
-    
-/* ===== INTERLUDE PHONE · VISUAL UPGRADE 01 ===== */
-
-:root {
-  --accent: #c9b5ef;
-  --accent-dark: #78649e;
-  --line: rgba(255,255,255,.13);
-}
-
-.device {
-  border-color: #34343b;
-  box-shadow:
-    0 45px 110px rgba(0,0,0,.65),
-    0 0 0 1px rgba(255,255,255,.12),
-    inset 0 0 0 1px rgba(255,255,255,.08);
-}
-
-.screen {
-  background: #13131b;
-  isolation: isolate;
-}
-
-.wallpaper {
-  background:
-    radial-gradient(ellipse at 15% 18%,
-      rgba(191,157,222,.52), transparent 34%),
-    radial-gradient(ellipse at 90% 42%,
-      rgba(106,137,168,.36), transparent 36%),
-    radial-gradient(ellipse at 50% 100%,
-      rgba(104,76,116,.42), transparent 40%),
-    linear-gradient(155deg,#292433 0%,#151720 48%,#292431 100%);
-  transition: filter .3s ease;
-}
-
-.wallpaper::before {
-  width: 310px;
-  height: 480px;
-  right: -135px;
-  top: 15%;
-  border-color: rgba(255,255,255,.12);
-  border-radius: 48% 52% 65% 35%;
-  box-shadow:
-    0 0 0 24px rgba(255,255,255,.025),
-    0 0 0 60px rgba(255,255,255,.02),
-    0 0 80px rgba(191,157,222,.12);
-}
-
-.status {
-  font-size: 12px;
-  letter-spacing: .015em;
-  text-shadow: 0 1px 5px rgba(0,0,0,.4);
-}
-
-.device::before {
-  width: 94px;
-  height: 25px;
-  background: #050507;
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.05),
-    0 1px 4px rgba(0,0,0,.4);
-}
-
-.lockscreen {
-  background:
-    linear-gradient(to bottom,
-      rgba(5,5,12,.08),
-      rgba(5,5,12,.05) 40%,
-      rgba(5,5,12,.45));
-}
-
-.lock-date {
-  font-size: 12px;
-  font-weight: 550;
-  letter-spacing: .09em;
-}
-
-.lock-clock {
-  font-weight: 230;
-  letter-spacing: -.085em;
-  text-shadow: 0 3px 25px rgba(0,0,0,.12);
-}
-
-.lock-message {
-  border: 1px solid rgba(255,255,255,.2);
-  background: rgba(30,27,39,.48);
-  box-shadow: 0 12px 35px rgba(0,0,0,.12);
-  backdrop-filter: blur(24px) saturate(135%);
-  -webkit-backdrop-filter: blur(24px) saturate(135%);
-}
-
-.unlock {
-  border: 1px solid rgba(255,255,255,.3);
-  background: rgba(255,255,255,.14);
-  box-shadow: 0 8px 30px rgba(0,0,0,.12);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  transition: background .2s, transform .2s;
-}
-
-.unlock:active {
-  transform: scale(.975);
-  background: rgba(255,255,255,.24);
-}
-
-.widget,
-.dock {
-  border: 1px solid rgba(255,255,255,.19);
-  background: rgba(30,28,40,.48);
-  box-shadow: 0 12px 32px rgba(0,0,0,.08);
-  backdrop-filter: blur(25px) saturate(130%);
-  -webkit-backdrop-filter: blur(25px) saturate(130%);
-}
-
-.widget {
-  border-radius: 24px;
-}
-
-.widget-title {
-  letter-spacing: -.025em;
-}
-
-.app-art {
-  border: 1px solid rgba(255,255,255,.25);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.18),
-    0 6px 15px rgba(0,0,0,.15);
-  transition: transform .18s ease, filter .18s ease;
-}
-
-.app-icon:active .app-art {
-  transform: scale(.91);
-  filter: brightness(1.15);
-}
-
-.app-art.chat {
-  background: linear-gradient(145deg,#76c5a4,#34745e);
-}
-.app-art.photos {
-  background: linear-gradient(145deg,#e2c6f4,#8d76b7 65%,#65578c);
-}
-.app-art.notes {
-  background: linear-gradient(145deg,#f1e4b8,#c6ad70);
-}
-.app-art.phone {
-  background: linear-gradient(145deg,#94e2bb,#42966e);
-}
-.app-art.settings {
-  background: linear-gradient(145deg,#c7c7d1,#777786);
-}
-.app-art.music {
-  background: linear-gradient(145deg,#efb8d4,#a15f90);
-}
-
-.app-name {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: .005em;
-}
-
-.app-header {
-  background: #f8f6fa;
-}
-
-.app-header h2 {
-  font-weight: 720;
-}
-
-.back {
-  transition: background .15s, transform .15s;
-}
-
-.back:active {
-  transform: scale(.92);
-  background: #211f2818;
-}
-
-.bubble {
-  box-shadow: 0 2px 8px rgba(30,25,40,.035);
-}
-
-.bubble.incoming {
-  border: 1px solid rgba(40,30,50,.035);
-}
-
-.bubble.outgoing {
-  background: linear-gradient(135deg,#e4d9f4,#d4c3ec);
-}
-
-.nav-bar {
-  height: 4px;
-  transition: opacity .2s;
-}
-
-@media (max-width: 480px) {
-  .device {
-    border: 0;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .screen {
-    height: 100dvh;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .view.active {
-    animation: appear .22s cubic-bezier(.2,.7,.25,1);
-  }
-}
-
-/* ===== STORYBOARD KEYBOARD ===== */
-.story-keyboard {
-  flex: 0 0 auto;
-  padding: 9px 5px 22px;
-  background: #dedbe5;
-  color: #292530;
-  border-top: 1px solid #c8c2d2;
-  transform: translateY(110%);
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition:
-    transform .24s ease,
-    opacity .2s ease,
-    max-height .24s ease;
-}
-
-.story-keyboard.is-open {
-  transform: translateY(0);
-  opacity: 1;
-  max-height: 300px;
-}
-
-.keyboard-hint {
-  text-align: center;
-  font-size: 10px;
-  color: #716b7b;
-  margin-bottom: 8px;
-}
-
-.keyboard-row {
-  display: flex;
-  justify-content: center;
-  gap: 4px;
-  margin: 5px 0;
-}
-
-.keyboard-key {
-  flex: 1;
-  min-width: 0;
-  height: 36px;
-  padding: 0;
-  border: 0;
-  border-radius: 5px;
-  background: #faf9fc;
-  color: #292530;
-  box-shadow: 0 2px 0 #b8b2c2;
-  font-size: 13px;
-  transition: transform .08s, background .08s;
-}
-
-.keyboard-key:active,
-.keyboard-key.pressed {
-  transform: translateY(2px);
-  background: #bba8dc;
-  box-shadow: none;
-}
-
-.keyboard-key.wide {
-  flex: 1.6;
-  font-size: 11px;
-}
-
-.keyboard-key.space {
-  flex: 4;
-}
-
-.keyboard-key.action {
-  background: #78649e;
-  color: white;
-}
-
-#chatInput {
-  cursor: text;
-}
-
-/* ===== INTERLUDE PASSCODE SCREEN ===== */
-
-.passcode-view {
-  z-index: 25;
-  color: #fff;
-  background:
-    radial-gradient(ellipse at 50% 20%, rgba(174,151,211,.16), transparent 55%),
-    linear-gradient(180deg, #17151f, #0c0c12);
-  padding: max(40px, env(safe-area-inset-top)) 24px
-    max(24px, env(safe-area-inset-bottom));
-}
-
-.passcode-top {
-  display: flex;
-  justify-content: flex-end;
-  min-height: 36px;
-}
-
-.passcode-cancel {
-  border: 0;
-  background: transparent;
-  color: rgba(255,255,255,.8);
-  font-size: 14px;
-  padding: 8px 0 8px 12px;
-}
-
-.passcode-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-bottom: 12px;
-}
-
-.passcode-title {
-  font-size: 25px;
-  font-weight: 600;
-  letter-spacing: -.04em;
-  text-align: center;
-}
-
-.passcode-subtitle {
-  margin-top: 10px;
-  max-width: 260px;
-  color: rgba(255,255,255,.62);
-  font-size: 12px;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.passcode-dots {
-  display: flex;
-  gap: 17px;
-  margin: 28px 0 8px;
-}
-
-.passcode-dots span {
-  width: 11px;
-  height: 11px;
-  border: 1px solid rgba(255,255,255,.85);
-  border-radius: 50%;
-  background: transparent;
-  transition: background .15s, transform .15s;
-}
-
-.passcode-dots span.filled {
-  background: #fff;
-  transform: scale(1.06);
-}
-
-.passcode-error {
-  min-height: 20px;
-  margin: 3px 0 12px;
-  color: #f1b9c5;
-  font-size: 11px;
-  text-align: center;
-}
-
-.passcode-hint {
-  margin: 0 0 14px;
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 10px;
-  text-align: center;
-  letter-spacing: 0.2px;
-}
-
-.passcode-pad {
-  display: grid;
-  grid-template-columns: repeat(3, 68px);
-  gap: 13px 18px;
-  justify-content: center;
-}
-
-.passcode-pad button {
-  width: 68px;
-  height: 68px;
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 50%;
-  background: rgba(255,255,255,.09);
-  color: #fff;
-  font-size: 25px;
-  font-weight: 400;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  transition: background .12s, transform .12s;
-}
-
-.passcode-pad button:active {
-  background: rgba(203,184,239,.35);
-  transform: scale(.94);
-}
-
-.passcode-pad #passcodeDelete {
-  border-color: transparent;
-  background: transparent;
-  font-size: 23px;
-}
-
-.passcode-empty {
-  width: 68px;
-  height: 68px;
-}
-
-.passcode-bottom {
-  padding-top: 12px;
-  color: rgba(255,255,255,.36);
-  font-size: 9px;
-  letter-spacing: .14em;
-  text-align: center;
-}
-
-.passcode-view.active {
-  animation: passcode-fade-up .36s cubic-bezier(.2,.7,.25,1) both;
-}
-
-@keyframes passcode-fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.lockscreen.is-leaving {
-  animation: lockscreen-exit-up .28s cubic-bezier(.4,0,.2,1) forwards;
-  pointer-events: none;
-}
-
-@keyframes lockscreen-exit-up {
-  to { opacity: 0; transform: translateY(-32px); }
-}
-
-.passcode-dots.shake {
-  animation: passcode-shake .3s ease;
-}
-
-@keyframes passcode-shake {
-  25% { transform: translateX(-7px); }
-  50% { transform: translateX(7px); }
-  75% { transform: translateX(-4px); }
-}
-
-@media (max-width: 360px) {
-  .passcode-pad {
-    grid-template-columns: repeat(3, 62px);
-    gap: 10px 15px;
-  }
-
-  .passcode-pad button,
-  .passcode-empty {
-    width: 62px;
-    height: 62px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .passcode-view.active,
-  .lockscreen.is-leaving,
-  .passcode-dots.shake {
-    animation: none !important;
-  }
-}
-
-  </style>
-  
-<link rel="stylesheet" href="./ui-upgrade.css">
-
+  <meta name="description" content="Interlude AU — a fictional interactive phone experience.">
+  <title>Interlude — Private Space</title>
+
+  <!-- Legacy stylesheet dipertahankan sementara sebagai cadangan. -->
+  <link rel="stylesheet" href="./ui-upgrade.css">
+
+  <!-- Urutan stylesheet dipertahankan. -->
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/lockscreen.css">
+  <link rel="stylesheet" href="./css/home.css">
+  <link rel="stylesheet" href="./css/apps.css">
 </head>
+
 <body>
-  <main class="stage">
+  <main class="stage" id="app">
     <section class="device" aria-label="Interlude virtual phone">
-      <div class="screen" id="screen">
-        <div class="wallpaper"></div>
+      <div class="screen" id="phoneScreen">
 
-        <div class="status">
-          <span id="statusTime">09:41</span>
-          
-<div class="status-icons" aria-label="Sinyal, Wi-Fi, baterai">
-  <!-- Cellular signal -->
-  <svg class="status-icon signal-icon" viewBox="0 0 18 14" aria-hidden="true">
-    <path d="M1 13V10.5H4V13Z" />
-    <path d="M5.5 13V7.5H8.5V13Z" />
-    <path d="M10 13V4.5H13V13Z" />
-    <path d="M14.5 13V1H17V13Z" />
-  </svg>
+        <!-- LOCKSCREEN -->
+        <section class="view lockscreen active" id="lockView"
+          aria-label="Lock screen">
 
-  <!-- Wi-Fi -->
-  <svg class="status-icon wifi-icon" viewBox="0 0 18 14" aria-hidden="true">
-    <path d="M1.5 4.5C5.8 0.8 12.2 0.8 16.5 4.5" />
-    <path d="M4.5 7.5C7.1 5.3 10.9 5.3 13.5 7.5" />
-    <path d="M7.3 10.2C8.3 9.4 9.7 9.4 10.7 10.2" />
-    <circle cx="9" cy="12" r="1" />
-  </svg>
+          <div class="wallpaper" aria-hidden="true"></div>
+          <div class="lockscreen-overlay" aria-hidden="true"></div>
 
-  <!-- Battery -->
-  <svg class="status-icon battery-icon" viewBox="0 0 22 12" aria-hidden="true">
-    <rect x="1" y="1" width="17" height="10" rx="2" />
-    <path d="M20 4V8" />
-    <rect class="battery-level" x="3" y="3" width="13" height="6" rx="1" />
-  </svg>
-</div>
-</div>
+          <div class="status-bar">
+            <span id="statusTime" class="status-time">09:41</span>
 
+            <div class="status-icons" aria-label="Phone status">
+              <!-- Ikon sinyal -->
+              <svg viewBox="0 0 18 14" aria-hidden="true">
+                <path
+                  d="M1 13V10H4V13Z M6 13V7H9V13Z M11 13V4H14V13Z M16 13V1H18V13Z"
+                  fill="currentColor" />
+              </svg>
 
+              <!-- Ikon Wi-Fi -->
+              <svg viewBox="0 0 20 16" aria-hidden="true">
+                <path
+                  d="M1.5 4.5C6.2 0.5 13.8 0.5 18.5 4.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round" />
+                <path
+                  d="M4.5 7.8C7.6 5.2 12.4 5.2 15.5 7.8"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round" />
+                <path
+                  d="M7.5 11C9 9.8 11 9.8 12.5 11"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2.2"
+                  stroke-linecap="round" />
+                <circle cx="10" cy="14" r="1.2" fill="currentColor" />
+              </svg>
 
-<section class="view lockscreen active" id="lockView">
-  <div class="lock-owner">Shaqil’s phone</div>
-
-  <div class="lock-date" id="lockDate">MONDAY, 28 OCTOBER</div>
-  <div class="lock-clock" id="lockClock">09:41</div>
-
-  <div class="lock-message">
-    <strong>◉ Messages · now</strong>
-    <p>Someone left a little message for you.</p>
-  </div>
-
-  <div class="lock-controls">
-    <button class="lock-control" id="flashlightButton"
-      type="button" aria-label="Flashlight">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M9 3h6l1 5H8l1-5Z"/>
-        <path d="M8 8h8l-1 12H9L8 8Z"/>
-        <path d="M10 11h4"/>
-      </svg>
-    </button>
-
-    <button class="lock-control" id="cameraButton"
-      type="button" aria-label="Camera">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M3 8h4l2-3h6l2 3h4v11H3V8Z"/>
-        <circle cx="12" cy="13" r="4"/>
-      </svg>
-    </button>
-  </div>
-
-  <div class="lock-swipe-hint">
-    <span></span>
-    <p>Swipe up to unlock</p>
-  </div>
-</section>
-
-        <section class="view passcode-view" id="passcodeView" aria-label="Enter passcode">
-          <div class="passcode-top">
-            <button class="passcode-cancel" id="passcodeCancel" type="button">Cancel</button>
+              <!-- Ikon baterai -->
+              <svg viewBox="0 0 24 14" aria-hidden="true">
+                <rect
+                  x="1" y="1" width="19" height="12" rx="3"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.4" />
+                <rect
+                  x="3.2" y="3.2" width="14" height="7.6" rx="1.5"
+                  fill="currentColor" />
+                <path
+                  d="M21.5 4.5V9.5"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round" />
+              </svg>
+            </div>
           </div>
 
-          <div class="passcode-content">
-            <div class="passcode-title">Enter Passcode</div>
-            <div class="passcode-subtitle">Enter your passcode to unlock Interlude Phone.</div>
+          <div class="lock-content">
+            <p class="lock-owner" id="lockOwner">INTERLUDE</p>
+            <p class="lock-date" id="lockDate">WEDNESDAY, OCTOBER 28</p>
+            <h1 class="lock-clock" id="lockClock">09:41</h1>
 
-            <div class="passcode-dots" id="passcodeDots" aria-label="4-digit passcode">
+            <div class="lock-notifications" id="lockNotifications">
+
+              <!-- POP-UP 1 -->
+              <article class="notification lock-notification">
+                <div class="notification-icon" aria-hidden="true">W</div>
+                <div class="notification-content">
+                  <div class="notification-meta">
+                    <span class="notification-title">WhatsApp</span>
+                    <span class="notification-time">now</span>
+                  </div>
+                  <p class="notification-message">Shaq: udah makan belum?</p>
+                </div>
+              </article>
+
+              <!-- POP-UP 2 -->
+              <article class="notification lock-notification">
+                <div class="notification-icon" aria-hidden="true">✉</div>
+                <div class="notification-content">
+                  <div class="notification-meta">
+                    <span class="notification-title">Messages</span>
+                    <span class="notification-time">2m ago</span>
+                  </div>
+                  <p class="notification-message">
+                    Sabinar: jangan lupa kabarin aku nanti.
+                  </p>
+                </div>
+              </article>
+
+              <!-- POP-UP 3 -->
+              <article class="notification lock-notification">
+                <div class="notification-icon" aria-hidden="true">◈</div>
+                <div class="notification-content">
+                  <div class="notification-meta">
+                    <span class="notification-title">Interlude</span>
+                    <span class="notification-time">5m ago</span>
+                  </div>
+                  <p class="notification-message">
+                    You have 3 unread notifications.
+                  </p>
+                </div>
+              </article>
+
+            </div><!-- Penutup lockNotifications -->
+          </div><!-- Penutup lock-content -->
+
+          <div class="lock-bottom">
+            <div class="lock-controls">
+
+              <!-- Flashlight icon -->
+              <button class="lock-control" id="lockFlashlight"
+                type="button" aria-label="Flashlight">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path d="M8 3h8l1 5-2 2v9a2 2 0 0 1-2 2h-2a2 2 0 0 1-2-2v-9L7 8l1-5Z" />
+                  <path d="M8 8h8M12 12v4" />
+                </svg>
+              </button>
+
+              <!-- Camera icon -->
+              <button class="lock-control" id="lockCamera"
+                type="button" aria-label="Camera">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true">
+                  <path d="M4 8h3l1.5-2h7L17 8h3v11H4V8Z" />
+                  <circle cx="12" cy="13" r="3.2" />
+                </svg>
+              </button>
+
+            </div>
+
+            <!-- Hanya satu unlockTrigger -->
+            <button class="lock-swipe-hint" id="unlockTrigger"
+              type="button">
+              <span class="swipe-line" aria-hidden="true"></span>
+              <span>Swipe up to enter</span>
+            </button>
+          </div>
+        </section>
+
+        <!-- PASSCODE SCREEN -->
+        <section class="view passcode-view" id="passcodeView"
+          aria-label="Enter passcode" aria-hidden="true">
+          <div class="passcode-content">
+            <p class="eyebrow">INTERLUDE SECURITY</p>
+            <h2>One more step.</h2>
+            <p class="muted">Enter your passcode to continue.</p>
+
+            <div class="passcode-dots" id="passcodeDots"
+              aria-label="Passcode progress">
               <span></span><span></span><span></span><span></span>
             </div>
 
-            <div class="passcode-error" id="passcodeError" aria-live="polite"></div>
-
-<p class="passcode-hint">Hint: ulang tahun anggota keluarga PSD</p>
-
             <div class="passcode-pad" id="passcodePad">
-              <button type="button" data-pin="1">1</button>
-              <button type="button" data-pin="2">2</button>
-              <button type="button" data-pin="3">3</button>
-              <button type="button" data-pin="4">4</button>
-              <button type="button" data-pin="5">5</button>
-              <button type="button" data-pin="6">6</button>
-              <button type="button" data-pin="7">7</button>
-              <button type="button" data-pin="8">8</button>
-              <button type="button" data-pin="9">9</button>
-              <span class="passcode-empty"></span>
-              <button type="button" data-pin="0">0</button>
-              <button type="button" id="passcodeDelete" aria-label="Delete last digit">⌫</button>
+              <button type="button" data-passcode="1">1</button>
+              <button type="button" data-passcode="2">2</button>
+              <button type="button" data-passcode="3">3</button>
+              <button type="button" data-passcode="4">4</button>
+              <button type="button" data-passcode="5">5</button>
+              <button type="button" data-passcode="6">6</button>
+              <button type="button" data-passcode="7">7</button>
+              <button type="button" data-passcode="8">8</button>
+              <button type="button" data-passcode="9">9</button>
+              <button type="button" data-passcode="clear"
+                aria-label="Clear passcode">⌫</button>
+              <button type="button" data-passcode="0">0</button>
+              <button type="button" data-passcode="enter"
+                aria-label="Confirm passcode">↵</button>
             </div>
-          </div>
 
-          <div class="passcode-bottom">INTERLUDE AU · PERSONAL DEVICE</div>
-        </section>
-
-        <section class="view home" id="homeView">
-          <div class="greeting" id="homeDate">YOUR PERSONAL SPACE</div>
-          <h1 class="home-heading">Good to see you.</h1>
-
-          <div class="widget">
-            <div class="widget-top"><span>INTERLUDE · TODAY</span><span>✦</span></div>
-            <div class="widget-title">A little world of your own.</div>
-            <div class="widget-sub">Your messages, memories and moments live here.</div>
-          </div>
-
-          <div class="app-grid">
-            <button class="app-icon" data-app="chat">
-              <span class="app-art chat">▰</span><span class="app-name">Messages</span>
+            <button class="text-button" id="passcodeCancel" type="button">
+              Back to lock screen
             </button>
-            <button class="app-icon" data-app="photos">
-              <span class="app-art photos">✿</span><span class="app-name">Photos</span>
-            </button>
-            <button class="app-icon" data-app="notes">
-              <span class="app-art notes">▤</span><span class="app-name">Notes</span>
-            </button>
-            <button class="app-icon" data-app="phone">
-              <span class="app-art phone">☎</span><span class="app-name">Phone</span>
-            </button>
-            <button class="app-icon" data-app="music">
-              <span class="app-art music">♫</span><span class="app-name">Music</span>
-            </button>
-            <button class="app-icon" data-app="settings">
-              <span class="app-art settings">⚙</span><span class="app-name">Settings</span>
-            </button>
-          </div>
-
-          <div class="dock">
-            <button class="app-icon" data-app="phone" aria-label="Phone"><span class="app-art phone">☎</span></button>
-            <button class="app-icon" data-app="chat" aria-label="Messages"><span class="app-art chat">▰</span></button>
-            <button class="app-icon" data-app="photos" aria-label="Photos"><span class="app-art photos">✿</span></button>
-            <button class="app-icon" data-app="settings" aria-label="Settings"><span class="app-art settings">⚙</span></button>
+            <p class="passcode-error" id="passcodeError" role="status"></p>
           </div>
         </section>
 
-        <section class="view app-view" id="chatView">
-          <header class="app-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <div><h2>Messages</h2><div class="app-subtitle">Your conversations</div></div>
-            </div>
-          </header>
-          <div class="app-content">
-            <div class="section-label">Pinned</div>
-            <button class="contact-card" id="openChat">
-              <span class="avatar">S</span>
-              <span class="contact-info"><strong>Shaq</strong><small>Don't forget to text me when you're home.</small></span>
-              <span style="color:#8a8292;font-size:10px">now</span>
-            </button>
-            <button class="contact-card" id="openChat2">
-              <span class="avatar" style="background:linear-gradient(145deg,#a8c5bc,#688c80)">K</span>
-              <span class="contact-info"><strong>Kris</strong><small>See you tomorrow.</small></span>
-            </button>
-          </div>
-        </section>
+        <!-- HOME SCREEN -->
+        <section class="view home-view" id="homeView"
+          aria-label="Home screen" aria-hidden="true">
+          <div class="home-wallpaper" aria-hidden="true"></div>
 
-        <section class="view app-view chat-view" id="conversationView">
-          <header class="app-header chat-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <span class="avatar" id="chatAvatar">S</span>
-              <div class="chat-person"><strong id="chatName">Shaq</strong><small>fictional conversation</small></div>
-              <button class="back" id="chatInfo" aria-label="Contact info">ⓘ</button>
-            </div>
-          </header>
-          <div class="messages" id="messages">
-            <div class="day-divider">Today</div>
-            <div class="bubble incoming">You're home yet?<time>20:41</time></div>
-            <div class="bubble outgoing">Almost. Why?</div>
-            <div class="bubble outgoing">miss me already? 😭<time>20:42</time></div>
-            <div class="bubble incoming">Don't get ahead of yourself.</div>
-            <div class="bubble incoming">Just text me when you're home, okay?<time>20:43</time></div>
-          </div>
-   
-<form class="chat-compose" id="chatForm">
-  <textarea
-    id="chatInput"
-    rows="1"
-    placeholder="Message..."
-    aria-label="Write a message"
-    readonly
-  ></textarea>
-  <button class="send" type="submit" aria-label="Send message">➤</button>
-</form>
-
-<div id="storyKeyboard" class="story-keyboard hidden">
-  <div class="keyboard-hint" id="keyboardHint">
-    STORYBOARD · ketuk huruf untuk mengetik
-  </div>
-  <div id="keyboardRows"></div>
-</div>
-
-        </section>
-
-        <section class="view app-view" id="photosView">
-          <header class="app-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <div><h2>Photos</h2><div class="app-subtitle">Little things worth keeping</div></div>
-            </div>
-          </header>
-          <div class="app-content">
-            <div class="section-label">Memories · Demo collection</div>
-            <div class="photo-grid">
-              <button class="photo-tile" data-photo="Late afternoon"><span class="photo-symbol">☼</span><strong>Late afternoon</strong><small>28 October</small></button>
-              <button class="photo-tile" data-photo="A blurry moment"><span class="photo-symbol">◌</span><strong>A blurry moment</strong><small>Somewhere</small></button>
-              <button class="photo-tile" data-photo="Quiet days"><span class="photo-symbol">⌁</span><strong>Quiet days</strong><small>Camera roll</small></button>
-              <button class="photo-tile" data-photo="On the way home"><span class="photo-symbol">↗</span><strong>On the way home</strong><small>Recent</small></button>
-              <button class="photo-tile" data-photo="Saved for later"><span class="photo-symbol">✦</span><strong>Saved for later</strong><small>Favorites</small></button>
-              <button class="photo-tile" data-photo="Us, maybe"><span class="photo-symbol">♡</span><strong>Us, maybe</strong><small>Private album</small></button>
-            </div>
-          </div>
-        </section>
-
-        <section class="view app-view" id="notesView">
-          <header class="app-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <div><h2>Notes</h2><div class="app-subtitle">Saved on this device</div></div>
-            </div>
-          </header>
-          <div class="app-content">
-            <div class="note"><strong>Things to remember</strong><p>Text them when you get home.<br>Buy something to drink tomorrow.<br>Don't forget the little details.</p></div>
-            <div class="note"><strong>Draft — Interlude</strong><p>Some conversations don't end when the screen goes dark. Sometimes they stay with you.</p></div>
-            <div class="note"><strong>Private</strong><p>This is a demo note. Later, we can connect notes to your own AU data.</p></div>
-          </div>
-        </section>
-
-        <section class="view app-view" id="phoneView">
-          <header class="app-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <div><h2>Phone</h2><div class="app-subtitle">Dial pad demo</div></div>
-            </div>
-          </header>
-          <div class="app-content">
-            <div class="dial">
-              <div style="color:#77727f;font-size:11px">Enter a number</div>
-              <div class="dial-number" id="dialNumber">&nbsp;</div>
-              <div class="dial-pad" id="dialPad"></div>
-              <button class="dial-call" id="callButton">Call</button>
-            </div>
-          </div>
-        </section>
-
-        <section class="view app-view" id="settingsView">
-          <header class="app-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <div><h2>Settings</h2><div class="app-subtitle">Make it feel like yours</div></div>
-            </div>
-          </header>
-          <div class="app-content">
-            <div class="contact-card">
-              <span class="avatar">I</span>
-              <span class="contact-info"><strong>Interlude Phone</strong><small>Personal device · Preview build</small></span>
-            </div>
-            <div class="setting-row"><span>Dark appearance<small>Current interface theme</small></span><button class="toggle on" id="darkToggle" aria-label="Toggle dark appearance" aria-pressed="true"></button></div>
-            <div class="setting-row"><span>Show lockscreen notification<small>Demo notification</small></span><button class="toggle on" id="notifToggle" aria-label="Toggle notification" aria-pressed="true"></button></div>
-            <div class="setting-row"><span>Device name<small>Interlude Phone</small></span><span>✎</span></div>
-            <div class="note" style="margin-top:18px"><strong>About</strong><p>This is the first working prototype. The demo messages are not connected to a server and will reset when the page is refreshed.</p></div>
-          </div>
-        </section>
-
-        <section class="view app-view" id="musicView">
-          <header class="app-header">
-            <div class="app-header-row">
-              <button class="back" data-back aria-label="Back">‹</button>
-              <div><h2>Music</h2><div class="app-subtitle">Your listening corner</div></div>
-            </div>
-          </header>
-          <div class="app-content" style="display:grid;place-items:center;text-align:center">
+          <header class="home-header">
             <div>
-              <div style="width:180px;height:180px;border-radius:28px;background:radial-gradient(circle at 30% 25%,#d9b9d8,#645b7d 55%,#242634);display:grid;place-items:center;font-size:60px;margin:0 auto 25px">♫</div>
-              <div style="font-size:19px;font-weight:700">A song for later</div>
-              <p style="color:#77727f;font-size:12px;line-height:1.6">Your fictional music player.<br>We'll add playlists and album art later.</p>
-              <button class="contact-card" id="musicNotice" style="justify-content:center">♡ &nbsp; Save this mood</button>
+              <p class="eyebrow">YOUR LITTLE UNIVERSE</p>
+              <h2 class="home-greeting">
+                Somewhere, <span>between us.</span>
+              </h2>
+            </div>
+            <button class="home-profile" id="profileButton"
+              type="button" aria-label="Open profile">
+              <span aria-hidden="true">✳</span>
+            </button>
+          </header>
+
+          <button class="home-widget glass" id="homeWidget" type="button">
+            <div class="widget-topline">
+              <span class="widget-label">A MOMENT IN TIME</span>
+              <span class="widget-symbol" aria-hidden="true">◌</span>
+            </div>
+            <p class="widget-clock" id="homeClock">09:41</p>
+            <p class="widget-date" id="homeDate">Wednesday, October 28</p>
+            <p class="widget-caption">The world can wait a little.</p>
+          </button>
+
+          <div class="app-grid" aria-label="Applications">
+            <button class="app-item" type="button"
+              data-open-view="chatView">
+              <span class="app-icon app-messages" aria-hidden="true">✉</span>
+              <span class="app-label">Messages</span>
+            </button>
+
+            <button class="app-item" type="button"
+              data-open-view="photosView">
+              <span class="app-icon app-photos" aria-hidden="true">▧</span>
+              <span class="app-label">Photos</span>
+            </button>
+
+            <button class="app-item" type="button"
+              data-open-view="notesView">
+              <span class="app-icon app-notes" aria-hidden="true">▤</span>
+              <span class="app-label">Notes</span>
+            </button>
+
+            <button class="app-item" type="button"
+              data-open-view="phoneView">
+              <span class="app-icon app-phone" aria-hidden="true">⌕</span>
+              <span class="app-label">Phone</span>
+            </button>
+
+            <button class="app-item" type="button"
+              data-open-view="musicView">
+              <span class="app-icon app-music" aria-hidden="true">♫</span>
+              <span class="app-label">Music</span>
+            </button>
+
+            <button class="app-item" type="button"
+              data-open-view="settingsView">
+              <span class="app-icon app-settings" aria-hidden="true">⚙</span>
+              <span class="app-label">Settings</span>
+            </button>
+          </div>
+
+          <div class="home-page-indicator" aria-hidden="true">
+            <span class="page-dot active"></span>
+            <span class="page-dot"></span>
+          </div>
+
+          <nav class="home-dock glass" aria-label="Quick applications">
+            <button class="dock-item" type="button"
+              data-open-view="chatView" aria-label="Messages">✉</button>
+            <button class="dock-item" type="button"
+              data-open-view="phoneView" aria-label="Phone">⌕</button>
+            <button class="dock-item" type="button"
+              data-open-view="photosView" aria-label="Photos">▧</button>
+            <button class="dock-item" type="button"
+              data-open-view="musicView" aria-label="Music">♫</button>
+          </nav>
+        </section>
+
+                <!-- MESSAGES: CONTACT LIST -->
+        <section class="view app-view" id="chatView"
+          aria-label="Messages" aria-hidden="true">
+          <header class="app-header">
+            <button class="icon-button" type="button" data-go-home
+              aria-label="Back to home">‹</button>
+
+            <div class="app-header-title">
+              <p class="eyebrow">YOUR PRIVATE INBOX</p>
+              <h2>Messages</h2>
+            </div>
+
+            <button class="icon-button" id="newMessageButton"
+              type="button" aria-label="New message">＋</button>
+          </header>
+
+          <div class="app-content">
+            <div class="search-box">
+              <span aria-hidden="true">⌕</span>
+              <input id="contactSearch" type="search"
+                placeholder="Search conversations..."
+                autocomplete="off"
+                aria-label="Search conversations">
+            </div>
+
+            <div class="contact-list" id="contactList">
+              <button class="contact-item" type="button"
+                data-contact="shaq" data-open-conversation="shaq">
+                <span class="contact-avatar avatar-shaq"
+                  aria-hidden="true">S</span>
+
+                <span class="contact-info">
+                  <span class="contact-name">Shaq</span>
+                  <span class="contact-preview">
+                    You have a new message.
+                  </span>
+                </span>
+
+                <span class="contact-meta">
+                  <span class="contact-time">now</span>
+                  <span class="contact-unread" aria-label="Unread">1</span>
+                </span>
+              </button>
+
+              <button class="contact-item" type="button"
+                data-contact="kris" data-open-conversation="kris">
+                <span class="contact-avatar avatar-kris"
+                  aria-hidden="true">K</span>
+
+                <span class="contact-info">
+                  <span class="contact-name">Kris</span>
+                  <span class="contact-preview">No new messages.</span>
+                </span>
+
+                <span class="contact-meta">
+                  <span class="contact-time">yesterday</span>
+                </span>
+              </button>
             </div>
           </div>
         </section>
 
-        <button class="nav-bar" id="navHome" aria-label="Go to home"></button>
-        <div class="toast" id="toast" role="status" aria-live="polite"></div>
-      </div>
-    </section>
+        <!-- MESSAGES: CONVERSATION -->
+        <section class="view app-view conversation-view"
+          id="conversationView"
+          aria-label="Conversation" aria-hidden="true">
+
+          <header class="conversation-header">
+            <button class="icon-button" id="backToContacts"
+              type="button" data-go-view="chatView"
+              aria-label="Back to messages">‹</button>
+
+            <div class="conversation-contact">
+              <span class="contact-avatar avatar-shaq"
+                id="conversationAvatar" aria-hidden="true">S</span>
+
+              <div class="conversation-heading">
+                <h2 class="conversation-name" id="conversationName">
+                  Shaq
+                </h2>
+                <p class="conversation-status" id="conversationStatus">
+                  private conversation
+                </p>
+              </div>
+            </div>
+
+            <button class="icon-button" id="conversationMore"
+              type="button" aria-label="Conversation options">···</button>
+          </header>
+
+          <div class="conversation-wallpaper" aria-hidden="true"></div>
+
+          <div class="messages-area" id="messagesArea">
+            <div id="messages" class="messages-list" aria-live="polite">
+              <p class="system-message">
+                This is the beginning of your story.
+              </p>
+            </div>
+          </div>
+
+          <form id="chatForm" class="chat-form" autocomplete="off">
+            <button class="chat-attach-button" id="chatAttach"
+              type="button" aria-label="Attachments">＋</button>
+
+            <div class="chat-input-shell">
+              <input id="chatInput" name="message" type="text"
+                placeholder="Message..." readonly
+                autocomplete="off" autocapitalize="off"
+                spellcheck="false"
+                aria-label="Scripted message input">
+
+              <button class="chat-emoji-button" id="chatEmoji"
+                type="button" aria-label="Emoji">☺</button>
+            </div>
+
+            <button class="chat-send-button" id="chatSend"
+              type="submit" aria-label="Send message">↑</button>
+          </form>
+
+          <!-- Keyboard visual untuk scripted dialogue -->
+          <div id="storyKeyboard" class="story-keyboard"
+            aria-label="Story keyboard">
+
+            <div class="keyboard-row">
+              <button type="button" class="keyboard-key" data-key="q">q</button>
+              <button type="button" class="keyboard-key" data-key="w">w</button>
+              <button type="button" class="keyboard-key" data-key="e">e</button>
+              <button type="button" class="keyboard-key" data-key="r">r</button>
+              <button type="button" class="keyboard-key" data-key="t">t</button>
+              <button type="button" class="keyboard-key" data-key="y">y</button>
+              <button type="button" class="keyboard-key" data-key="u">u</button>
+              <button type="button" class="keyboard-key" data-key="i">i</button>
+              <button type="button" class="keyboard-key" data-key="o">o</button>
+              <button type="button" class="keyboard-key" data-key="p">p</button>
+            </div>
+
+            <div class="keyboard-row">
+              <button type="button" class="keyboard-key" data-key="a">a</button>
+              <button type="button" class="keyboard-key" data-key="s">s</button>
+              <button type="button" class="keyboard-key" data-key="d">d</button>
+              <button type="button" class="keyboard-key" data-key="f">f</button>
+              <button type="button" class="keyboard-key" data-key="g">g</button>
+              <button type="button" class="keyboard-key" data-key="h">h</button>
+              <button type="button" class="keyboard-key" data-key="j">j</button>
+              <button type="button" class="keyboard-key" data-key="k">k</button>
+              <button type="button" class="keyboard-key" data-key="l">l</button>
+            </div>
+
+            <div class="keyboard-row">
+              <button type="button" class="keyboard-key function-key"
+                data-key="shift" aria-label="Shift">⇧</button>
+              <button type="button" class="keyboard-key" data-key="z">z</button>
+              <button type="button" class="keyboard-key" data-key="x">x</button>
+              <button type="button" class="keyboard-key" data-key="c">c</button>
+              <button type="button" class="keyboard-key" data-key="v">v</button>
+              <button type="button" class="keyboard-key" data-key="b">b</button>
+              <button type="button" class="keyboard-key" data-key="n">n</button>
+              <button type="button" class="keyboard-key" data-key="m">m</button>
+              <button type="button" class="keyboard-key function-key"
+                data-key="backspace" aria-label="Delete">⌫</button>
+            </div>
+
+            <div class="keyboard-row keyboard-bottom-row">
+              <button type="button" class="keyboard-key function-key"
+                data-key="numbers">123</button>
+              <button type="button" class="keyboard-key function-key"
+                data-key="emoji" aria-label="Emoji">☺</button>
+              <button type="button" class="keyboard-key space-key"
+                data-key="space">English (US)</button>
+              <button type="button" class="keyboard-key function-key"
+                data-key="period">.</button>
+              <button type="button" class="keyboard-key function-key"
+                data-key="enter" aria-label="Return">↵</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- PHOTOS -->
+        <section class="view app-view" id="photosView"
+          aria-label="Photos" aria-hidden="true">
+          <header class="app-header">
+            <button class="icon-button" type="button" data-go-home
+              aria-label="Back to home">‹</button>
+
+            <div class="app-header-title">
+              <p class="eyebrow">LITTLE FRAGMENTS</p>
+              <h2>Photos</h2>
+            </div>
+
+            <button class="icon-button" id="photosMore"
+              type="button" aria-label="Photo options">···</button>
+          </header>
+
+          <div class="app-content">
+            <div class="section-heading">
+              <h3>Memories</h3>
+              <span class="muted" id="photoCount">0 items</span>
+            </div>
+
+            <div class="photo-grid" id="photoGrid">
+              <div class="empty-state">
+                <span class="empty-state-symbol" aria-hidden="true">▧</span>
+                <h3>Nothing here yet</h3>
+                <p>Your shared memories will appear here.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- NOTES -->
+        <section class="view app-view" id="notesView"
+          aria-label="Notes" aria-hidden="true">
+          <header class="app-header">
+            <button class="icon-button" type="button" data-go-home
+              aria-label="Back to home">‹</button>
+
+            <div class="app-header-title">
+              <p class="eyebrow">UNSENT THOUGHTS</p>
+              <h2>Notes</h2>
+            </div>
+
+            <button class="icon-button" id="newNoteButton"
+              type="button" aria-label="Create note">＋</button>
+          </header>
+
+          <div class="app-content">
+            <div class="notes-list" id="notesList">
+              <article class="note-card">
+                <p class="note-date">A quiet corner</p>
+                <h3>Things left unsaid</h3>
+                <p>Some words need a little more time.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- PHONE -->
+        <section class="view app-view" id="phoneView"
+          aria-label="Phone" aria-hidden="true">
+          <header class="app-header">
+            <button class="icon-button" type="button" data-go-home
+              aria-label="Back to home">‹</button>
+
+            <div class="app-header-title">
+              <p class="eyebrow">CALL HISTORY</p>
+              <h2>Phone</h2>
+            </div>
+          </header>
+
+          <div class="app-content">
+            <div class="call-history" id="callHistory">
+              <div class="empty-state">
+                <span class="empty-state-symbol" aria-hidden="true">⌕</span>
+                <h3>No recent calls</h3>
+                <p>Call history will appear here.</p>
+              </div>
+            </div>
+
+            <div class="dial-display" id="dialDisplay"
+              aria-live="polite"></div>
+
+            <div class="dial-pad" id="dialPad">
+              <button type="button" data-dial="1">1<small></small></button>
+              <button type="button" data-dial="2">2<small>ABC</small></button>
+              <button type="button" data-dial="3">3<small>DEF</small></button>
+              <button type="button" data-dial="4">4<small>GHI</small></button>
+              <button type="button" data-dial="5">5<small>JKL</small></button>
+              <button type="button" data-dial="6">6<small>MNO</small></button>
+              <button type="button" data-dial="7">7<small>PQRS</small></button>
+              <button type="button" data-dial="8">8<small>TUV</small></button>
+              <button type="button" data-dial="9">9<small>WXYZ</small></button>
+              <button type="button" data-dial="*">*</button>
+              <button type="button" data-dial="0">0<small>+</small></button>
+              <button type="button" data-dial="#">#</button>
+            </div>
+
+            <div class="dial-actions">
+              <button type="button" id="callButton"
+                aria-label="Call">☎</button>
+              <button type="button" id="deleteDialButton"
+                aria-label="Delete last digit">⌫</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- MUSIC -->
+        <section class="view app-view" id="musicView"
+          aria-label="Music" aria-hidden="true">
+          <header class="app-header">
+            <button class="icon-button" type="button" data-go-home
+              aria-label="Back to home">‹</button>
+
+            <div class="app-header-title">
+              <p class="eyebrow">SOUNDTRACK OF US</p>
+              <h2>Music</h2>
+            </div>
+          </header>
+
+          <div class="app-content music-content">
+            <div class="album-art" id="albumArt"
+              aria-label="Album artwork">
+              <span aria-hidden="true">✳</span>
+            </div>
+
+            <div class="music-track-info">
+              <h3 id="trackTitle">A song for this moment</h3>
+              <p id="trackArtist" class="muted">Interlude playlist</p>
+            </div>
+
+            <div class="music-progress">
+              <span id="trackElapsed">0:00</span>
+              <div class="progress-track">
+                <span id="trackProgress"></span>
+              </div>
+              <span id="trackDuration">0:00</span>
+            </div>
+
+            <div class="music-controls">
+              <button type="button" id="previousTrack"
+                aria-label="Previous track">‹</button>
+              <button type="button" id="playPauseButton"
+                aria-label="Play or pause">▶</button>
+              <button type="button" id="nextTrack"
+                aria-label="Next track">›</button>
+            </div>
+
+            <p class="muted music-caption" id="musicCaption">
+              Your soundtrack will be added here.
+            </p>
+          </div>
+        </section>
+
+                <!-- SETTINGS -->
+        <section class="view app-view" id="settingsView"
+          aria-label="Settings" aria-hidden="true">
+
+          <header class="app-header">
+            <button class="icon-button" type="button" data-go-home
+              aria-label="Back to home">‹</button>
+
+            <div class="app-header-title">
+              <p class="eyebrow">MAKE IT YOURS</p>
+              <h2>Settings</h2>
+            </div>
+          </header>
+
+          <div class="app-content">
+            <div class="settings-profile glass">
+              <span class="settings-avatar" aria-hidden="true">✳</span>
+              <div>
+                <h3>Interlude</h3>
+                <p class="muted">Your private little universe</p>
+              </div>
+            </div>
+
+            <section class="settings-group">
+              <h3>Appearance</h3>
+
+              <label class="setting-row" for="darkModeToggle">
+                <span>
+                  <strong>Dark atmosphere</strong>
+                  <small>Keep the interface dark and quiet.</small>
+                </span>
+                <input id="darkModeToggle" type="checkbox" checked>
+              </label>
+
+              <label class="setting-row" for="motionToggle">
+                <span>
+                  <strong>Motion effects</strong>
+                  <small>Allow subtle transitions and animations.</small>
+                </span>
+                <input id="motionToggle" type="checkbox" checked>
+              </label>
+            </section>
+
+            <section class="settings-group">
+              <h3>About</h3>
+
+              <div class="setting-static">
+                <span>Project</span>
+                <span class="muted">Interlude AU</span>
+              </div>
+
+              <div class="setting-static">
+                <span>Version</span>
+                <span class="muted">0.2.0 redesign</span>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- GLOBAL NAVIGATION AND FEEDBACK -->
+        <nav class="system-navigation" aria-label="System navigation">
+          <button type="button" id="navHome"
+            aria-label="Return to home">
+            <span></span>
+          </button>
+        </nav>
+
+        <div class="toast" id="toast"
+          role="status" aria-live="polite"></div>
+
+      </div><!-- Penutup phoneScreen -->
+    </section><!-- Penutup device -->
   </main>
 
-  <script>
-    (() => {
-      const $ = (id) => document.getElementById(id);
-      const views = [...document.querySelectorAll(".view")];
-      let currentView = "lockView";
-      let previousView = "homeView";
-      let activeContact = "Shaq";
-      let dialValue = "";
-      let toastTimer;
+  <!-- Navigation and interface behavior -->
+  <script src="./js/app.js" defer></script>
 
-      function showToast(message) {
-        const el = $("toast");
-        el.textContent = message;
-        el.classList.add("show");
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => el.classList.remove("show"), 2200);
-      }
-
-      function openView(id) {
-        if (!$ (id)) return;
-        if (id !== "conversationView") previousView = id === "lockView" ? "homeView" : id;
-        views.forEach(view => view.classList.toggle("active", view.id === id));
-        currentView = id;
-        $("navHome").style.background = id === "lockView" ? "#ffffffb8" : "#3b3544a0";
-        if (id === "conversationView") {
-          $("messages").scrollTop = $("messages").scrollHeight;
-          setTimeout(() => $("chatInput").focus({ preventScroll: true }), 100);
-        }
-      }
-
-      function updateClock() {
-        const now = new Date();
-        const time = now.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false });
-        const date = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" });
-        $("statusTime").textContent = time;
-        $("lockClock").textContent = time;
-        $("lockDate").textContent = date.toUpperCase();
-        $("homeDate").textContent = now.toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long" }).toUpperCase();
-      }
-
-      
-      let enteredPin = "";
-      let pinBusy = false;
-
-      function updatePinDots() {
-        document.querySelectorAll("#passcodeDots span").forEach((dot, index) => {
-          dot.classList.toggle("filled", index < enteredPin.length);
-        });
-      }
-
-      function showPasscode() {
-        if (currentView !== "lockView") return;
-
-        enteredPin = "";
-        pinBusy = false;
-        updatePinDots();
-        $("passcodeError").textContent = "";
-
-        $("lockView").classList.add("is-leaving");
-
-        setTimeout(() => {
-          $("lockView").classList.remove("is-leaving");
-          openView("passcodeView");
-        }, 240);
-      }
-
-      function cancelPasscode() {
-        enteredPin = "";
-        pinBusy = false;
-        updatePinDots();
-        $("passcodeError").textContent = "";
-        openView("lockView");
-      }
-
-      function enterPinDigit(digit) {
-        if (pinBusy || currentView !== "passcodeView") return;
-        if (enteredPin.length >= 4) return;
-
-        enteredPin += digit;
-        updatePinDots();
-
-        if (enteredPin.length === 4) {
-          pinBusy = true;
-
-          setTimeout(() => {
-  if (currentView !== "passcodeView") {
-    pinBusy = false;
-    return;
-  }
-
-  if (enteredPin === "1201") {
-              openView("homeView");
-              enteredPin = "";
-              pinBusy = false;
-              updatePinDots();
-            } else {
-              $("passcodeError").textContent = "Incorrect passcode. Try again.";
-              $("passcodeDots").classList.remove("shake");
-
-              // Restart the shake animation.
-              void $("passcodeDots").offsetWidth;
-              $("passcodeDots").classList.add("shake");
-
-              setTimeout(() => {
-  if (currentView !== "passcodeView") return;
-
-  enteredPin = "";
-  pinBusy = false;
-  updatePinDots();
-  $("passcodeDots").classList.remove("shake");
-  $("passcodeError").textContent = "";
-}, 650);
-            }
-          }, 220);
-        }
-      }
-
-const unlockButton = $("unlockButton");
-if (unlockButton) {
-  unlockButton.addEventListener("click", showPasscode);
-}
-      $("passcodeCancel").addEventListener("click", cancelPasscode);
-
-      $("passcodePad").addEventListener("click", event => {
-        const button = event.target.closest("[data-pin]");
-        if (button) enterPinDigit(button.dataset.pin);
-      });
-
-      $("passcodeDelete").addEventListener("click", () => {
-        if (pinBusy || currentView !== "passcodeView") return;
-
-        enteredPin = enteredPin.slice(0, -1);
-        updatePinDots();
-        $("passcodeError").textContent = "";
-      });
-
-      document.querySelectorAll("[data-app]").forEach(button => {
-        button.addEventListener("click", () => {
-          const id = button.dataset.app + "View";
-          if ($(id)) openView(id);
-        });
-      });
-      document.querySelectorAll("[data-back]").forEach(button => {
-        button.addEventListener("click", () => {
-          if (currentView === "conversationView") openView("chatView");
-          else openView("homeView");
-        });
-      });
-      
-      $("navHome").addEventListener("click", () => {
-        if (currentView === "lockView") showPasscode();
-        else if (currentView === "passcodeView") cancelPasscode();
-        else openView("homeView");
-      });
-
-
-      function openConversation(name) {
-        activeContact = name;
-        $("chatName").textContent = name;
-        $("chatAvatar").textContent = name.charAt(0).toUpperCase();
-        const messages = $("messages");
-        messages.innerHTML = '<div class="day-divider">Today</div>';
-        const sample = name === "Shaq"
-          ? [["in","You're home yet?","20:41"],["out","Almost. Why?","20:42"],["out","miss me already? 😭","20:42"],["in","Don't get ahead of yourself.","20:43"],["in","Just text me when you're home, okay?","20:43"]]
-          : [["in","Hey, got a minute?","18:12"],["out","For you? Maybe.","18:13"],["in","Very funny. See you tomorrow.","18:14"]];
-        sample.forEach(([type, text, time]) => addBubble(text, type, time));
-        openView("conversationView");
-      }
-      $("openChat").addEventListener("click", () => openConversation("Shaq"));
-      $("openChat2").addEventListener("click", () => openConversation("Kris"));
-      $("chatInfo").addEventListener("click", () => showToast(activeContact + " · Interlude contact"));
-
-      function addBubble(text, type, time) {
-        const bubble = document.createElement("div");
-        bubble.className = "bubble " + (type === "out" ? "outgoing" : "incoming");
-        bubble.append(document.createTextNode(text));
-        const stamp = document.createElement("time");
-        stamp.textContent = time || new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit", hour12: false });
-        bubble.append(stamp);
-        $("messages").append(bubble);
-      }
-
-      $("chatForm").addEventListener("submit", event => {
-        event.preventDefault();
-        const input = $("chatInput");
-        const text = input.value.trim();
-        if (!text) return;
-        addBubble(text, "out");
-        input.value = "";
-        input.style.height = "auto";
-        $("messages").scrollTop = $("messages").scrollHeight;
-      });
-      $("chatInput").addEventListener("input", () => {
-        const input = $("chatInput");
-        input.style.height = "auto";
-        input.style.height = Math.min(input.scrollHeight, 90) + "px";
-      });
-
-      document.querySelectorAll("[data-photo]").forEach(tile => {
-        tile.addEventListener("click", () => showToast(tile.dataset.photo + " · Demo album"));
-      });
-
-      $("darkToggle").addEventListener("click", event => {
-        const button = event.currentTarget;
-        const on = button.classList.toggle("on");
-        button.setAttribute("aria-pressed", String(on));
-        document.documentElement.style.setProperty("--bg", on ? "#0b0b10" : "#f5f3f8");
-        showToast(on ? "Dark appearance enabled" : "Dark appearance selected off");
-      });
-      $("notifToggle").addEventListener("click", event => {
-        const button = event.currentTarget;
-        const on = button.classList.toggle("on");
-        button.setAttribute("aria-pressed", String(on));
-        $("lockView").querySelector(".lock-message").classList.toggle("hidden", !on);
-        showToast(on ? "Notification enabled" : "Notification hidden");
-      });
-      $("musicNotice").addEventListener("click", () => showToast("Mood saved ♡"));
-
-      const dialPad = $("dialPad");
-      ["1","2","3","4","5","6","7","8","9","⌫","0","+"].forEach(key => {
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = key;
-        button.addEventListener("click", () => {
-          if (key === "⌫") dialValue = dialValue.slice(0, -1);
-          else if (dialValue.length < 18) dialValue += key;
-          $("dialNumber").textContent = dialValue || "\u00a0";
-        });
-        dialPad.append(button);
-      });
-      $("callButton").addEventListener("click", () => showToast(dialValue ? "Calling is a visual demo only" : "Enter a number first"));
-
-      updateClock();
-      setInterval(updateClock, 15000);
-
-            document.addEventListener("keydown", event => {
-        if (currentView === "passcodeView" && event.key === "Escape") {
-          cancelPasscode();
-          return;
-        }
-
-        if (currentView === "passcodeView" && /^[0-9]$/.test(event.key)) {
-          enterPinDigit(event.key);
-          return;
-        }
-
-        if (currentView === "passcodeView" && event.key === "Backspace") {
-          event.preventDefault();
-          $("passcodeDelete").click();
-          return;
-        }
-
-        if (event.key === "Escape" || event.key === "Backspace") {
-          if (currentView === "conversationView") {
-            openView("chatView");
-          } else if (
-            currentView !== "lockView" &&
-            currentView !== "passcodeView"
-          ) {
-            openView("homeView");
-          }
-        }
-      });
-      
-      let touchStartY = 0;
-
-      $("screen").addEventListener("touchstart", event => {
-        touchStartY = event.changedTouches[0].screenY;
-      }, { passive: true });
-
-      $("screen").addEventListener("touchend", event => {
-        const endY = event.changedTouches[0].screenY;
-
-        if (currentView === "lockView" && touchStartY - endY > 45) {
-          showPasscode();
-        }
-      }, { passive: true });
-
-    })();
-  </script>
-  <script src="./js/storyboard.js"></script>
+  <!-- Scripted dialogue and visual keyboard -->
+  <script src="./js/storyboard.js" defer></script>
 </body>
 </html>

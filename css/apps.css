@@ -1,0 +1,559 @@
+
+/* INTERLUDE AU — APP INTERFACES
+   Bagian 1: kerangka aplikasi, daftar kontak, dan percakapan DM. */
+
+/* Menyamakan posisi dasar semua layar aplikasi di dalam perangkat. */
+#chatView,
+#conversationView,
+#photosView,
+#notesView,
+#phoneView,
+#settingsView,
+#musicView {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  color: var(--text, #f4f0f8);
+  background: #0c0b12;
+}
+
+/* Menampilkan hanya aplikasi yang sedang aktif. */
+#chatView.active,
+#conversationView.active,
+#photosView.active,
+#notesView.active,
+#phoneView.active,
+#settingsView.active,
+#musicView.active {
+  display: flex;
+}
+
+/* Menata header aplikasi dengan judul dan tombol navigasi. */
+#chatView .app-header,
+#conversationView .app-header,
+#photosView .app-header,
+#notesView .app-header,
+#phoneView .app-header,
+#settingsView .app-header,
+#musicView .app-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 62px;
+  padding: 12px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(17, 16, 24, 0.9);
+}
+
+/* Membuat judul header mudah dibaca tanpa memenuhi seluruh baris. */
+#chatView .app-header h1,
+#conversationView .app-header h1,
+#photosView .app-header h1,
+#notesView .app-header h1,
+#phoneView .app-header h1,
+#settingsView .app-header h1,
+#musicView .app-header h1 {
+  min-width: 0;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+/* Menyediakan area konten yang bisa digulir pada aplikasi biasa. */
+#photosView .app-content,
+#notesView .app-content,
+#phoneView .app-content,
+#settingsView .app-content,
+#musicView .app-content {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 18px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Menyembunyikan scrollbar dekoratif tanpa mematikan scroll. */
+#photosView .app-content::-webkit-scrollbar,
+#notesView .app-content::-webkit-scrollbar,
+#phoneView .app-content::-webkit-scrollbar,
+#settingsView .app-content::-webkit-scrollbar,
+#musicView .app-content::-webkit-scrollbar {
+  display: none;
+}
+
+/* Menyediakan warna dan batas untuk tombol navigasi aplikasi. */
+#chatView button,
+#conversationView button,
+#photosView button,
+#notesView button,
+#phoneView button,
+#settingsView button,
+#musicView button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Mengatur daftar kontak agar dapat digulir tanpa menggeser header. */
+#chatView .contact-list,
+#chatView #contactList {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 14px 20px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Menyembunyikan scrollbar pada daftar kontak. */
+#chatView .contact-list::-webkit-scrollbar,
+#chatView #contactList::-webkit-scrollbar {
+  display: none;
+}
+
+/* Menata satu baris kontak dengan avatar dan informasi pesan terakhir. */
+#chatView .contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  padding: 13px 5px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+  background: transparent;
+  cursor: pointer;
+  transition: background 160ms ease;
+}
+
+/* Memberikan respons visual ketika baris kontak disentuh. */
+#chatView .contact-item:active {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+/* Membuat avatar kontak berbentuk lingkaran. */
+#chatView .contact-avatar,
+#conversationView .contact-avatar {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  background: #24212e;
+}
+
+/* Memastikan foto avatar tidak melebar atau gepeng. */
+#chatView .contact-avatar img,
+#conversationView .contact-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Membiarkan informasi kontak menggunakan ruang yang tersedia. */
+#chatView .contact-info {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Menonjolkan nama kontak di daftar percakapan. */
+#chatView .contact-name {
+  margin: 0 0 5px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 13px;
+  font-weight: 650;
+}
+
+/* Membatasi pesan terakhir menjadi satu baris ringkas. */
+#chatView .contact-preview {
+  overflow: hidden;
+  margin: 0;
+  color: var(--text-muted, #a5a1b2);
+  font-size: 11px;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mengatur area utama percakapan sebagai kolom vertikal. */
+#conversationView {
+  background:
+    radial-gradient(
+      ellipse at 50% 35%,
+      rgba(84, 70, 111, 0.09),
+      transparent 58%
+    ),
+    #0d0c13;
+}
+
+/* Menata header DM dengan avatar, nama, dan status kontak. */
+#conversationView .conversation-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 11px;
+  min-height: 66px;
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  background: rgba(17, 16, 24, 0.88);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+}
+
+/* Menjaga informasi nama dan status tidak mendorong tombol keluar layar. */
+#conversationView .conversation-contact {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Menampilkan nama lawan bicara dengan bobot yang tegas. */
+#conversationView .conversation-name {
+  overflow: hidden;
+  margin: 0;
+  color: #f7f3fb;
+  font-size: 14px;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Menampilkan status kontak dalam teks kecil yang redup. */
+#conversationView .conversation-status {
+  margin: 4px 0 0;
+  color: #a6a0b3;
+  font-size: 10px;
+}
+
+/* Menjadikan area pesan satu-satunya bagian DM yang menggulir. */
+#conversationView #messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 7px;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 18px 13px 22px;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Menyembunyikan scrollbar percakapan tanpa mengganggu navigasi. */
+#conversationView #messages::-webkit-scrollbar {
+  display: none;
+}
+
+/* Membuat bubble pesan masuk dan keluar mengikuti lebar konten. */
+#conversationView .message,
+#conversationView .message-bubble {
+  position: relative;
+  max-width: 82%;
+  min-width: 0;
+  padding: 10px 12px 7px;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 17px;
+  overflow-wrap: anywhere;
+  animation: message-appear 180ms ease both;
+}
+
+/* Menempatkan pesan masuk di sisi kiri layar. */
+#conversationView .message.incoming,
+#conversationView .message.received,
+#conversationView .message-bubble.incoming {
+  align-self: flex-start;
+  border-bottom-left-radius: 5px;
+  background: #24212e;
+  color: #f0edf6;
+}
+
+/* Menempatkan pesan keluar di sisi kanan layar. */
+#conversationView .message.outgoing,
+#conversationView .message.sent,
+#conversationView .message-bubble.outgoing {
+  align-self: flex-end;
+  border-bottom-right-radius: 5px;
+  background: #514363;
+  color: #fff;
+}
+
+/* Mengatur isi teks pesan agar nyaman dibaca di layar kecil. */
+#conversationView .message-text {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* Menempatkan waktu kecil di bawah isi bubble. */
+#conversationView .message-time {
+  display: block;
+  margin-top: 4px;
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 9px;
+  line-height: 1.2;
+  text-align: right;
+}
+
+/* Membuat pemisah tanggal berada di tengah percakapan. */
+#conversationView .date-divider {
+  align-self: center;
+  margin: 12px 0;
+  padding: 6px 11px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.56);
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 9px;
+  letter-spacing: 0.025em;
+}
+
+/* Menampilkan animasi singkat saat bubble baru masuk ke percakapan. */
+@keyframes message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* INTERLUDE AU — APP INTERFACES
+   Bagian 2: input chat, keyboard scripted, media, dan responsivitas. */
+
+/* Menempatkan area input di bawah percakapan tanpa ikut tergulir. */
+#conversationView #chatForm {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 10px 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(17, 16, 24, 0.96);
+}
+
+/* Membuat kolom pesan memenuhi ruang di antara tombol. */
+#conversationView #chatInput {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 10px 13px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  outline: none;
+  color: #f4f0f8;
+  background: rgba(255, 255, 255, 0.055);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Menyamakan warna placeholder dengan hierarki teks redup. */
+#conversationView #chatInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Memastikan tombol kirim tidak menyusut pada layar sempit. */
+#conversationView #chatForm button {
+  flex: 0 0 auto;
+  min-width: 40px;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid rgba(199, 181, 232, 0.18);
+  border-radius: 50%;
+  color: #f7f1ff;
+  background: rgba(151, 124, 193, 0.24);
+  cursor: pointer;
+}
+
+/* Menata keyboard scripted yang dibuat oleh storyboard.js. */
+#conversationView #storyboardKeyboard,
+#conversationView #storyKeyboard {
+  flex: 0 0 auto;
+  width: 100%;
+  padding: 8px 5px max(10px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: #17161e;
+}
+
+/* Menyusun baris keyboard secara horizontal dengan jarak seragam. */
+#conversationView .keyboard-row {
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  margin: 4px 0;
+}
+
+/* Membuat setiap tombol keyboard menyerupai tombol ponsel. */
+#conversationView .keyboard-key {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  min-height: 36px;
+  padding: 5px 0;
+  border: 1px solid rgba(255, 255, 255, 0.055);
+  border-radius: 7px;
+  color: #f2eff7;
+  background: #34313e;
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.24);
+  font-size: 12px;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    transform 90ms ease,
+    background 90ms ease;
+}
+
+/* Menampilkan respons tombol ketika animasi mengetik menekannya. */
+#conversationView .keyboard-key:active,
+#conversationView .keyboard-key.pressed {
+  transform: translateY(1px);
+  background: #665579;
+}
+
+/* Memberi tombol fungsi ukuran lebih lebar daripada tombol huruf. */
+#conversationView .keyboard-key.function-key {
+  flex-grow: 1.45;
+  background: #25232d;
+  color: #d5cce3;
+}
+
+/* Menonjolkan tombol spasi tanpa mengubah lebar seluruh keyboard. */
+#conversationView .keyboard-key.space-key {
+  flex-grow: 4;
+}
+
+/* Membuat area media pesan tetap berada di dalam lebar bubble. */
+#conversationView .message-media {
+  display: block;
+  width: 100%;
+  max-width: 240px;
+  margin-top: 4px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Menampilkan foto dengan proporsi alami dan sudut membulat. */
+#conversationView .message-media img {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+}
+
+/* Menampilkan video pesan dalam bingkai yang sama dengan foto. */
+#conversationView .message-media video {
+  display: block;
+  width: 100%;
+  max-height: 300px;
+  background: #08080b;
+}
+
+/* Menyusun stiker tanpa menambahkan latar bubble yang berat. */
+#conversationView .message-sticker {
+  display: block;
+  width: auto;
+  max-width: 150px;
+  max-height: 150px;
+  margin: 2px 0;
+  object-fit: contain;
+}
+
+/* Menghilangkan batas bubble pada pesan yang hanya berisi stiker. */
+#conversationView .message.sticker-only,
+#conversationView .message-bubble.sticker-only {
+  padding: 2px;
+  border-color: transparent;
+  background: transparent;
+}
+
+/* Menampilkan pesan sistem seperti panggilan atau pesan terhapus. */
+#conversationView .system-message {
+  align-self: center;
+  max-width: 90%;
+  margin: 8px 0;
+  padding: 7px 11px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.52);
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 10px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Menampilkan indikator mengetik sebagai teks kecil di sisi kiri. */
+#conversationView .typing-indicator {
+  align-self: flex-start;
+  margin: 2px 0 7px;
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 10px;
+  font-style: italic;
+}
+
+/* Mengurangi tinggi tombol keyboard pada perangkat dengan layar pendek. */
+@media (max-height: 720px) {
+  #conversationView #messages {
+    padding-top: 12px;
+    padding-bottom: 14px;
+  }
+
+  #conversationView .keyboard-key {
+    min-height: 31px;
+    font-size: 11px;
+  }
+
+  #conversationView #storyboardKeyboard,
+  #conversationView #storyKeyboard {
+    padding-top: 5px;
+  }
+}
+
+/* Mempersempit padding bubble agar teks tidak terlalu terdesak di layar kecil. */
+@media (max-width: 340px) {
+  #conversationView #messages {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  #conversationView .message,
+  #conversationView .message-bubble {
+    max-width: 88%;
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  #conversationView .keyboard-row {
+    gap: 3px;
+  }
+
+  #conversationView .keyboard-key {
+    min-height: 33px;
+    border-radius: 6px;
+    font-size: 11px;
+  }
+}
+
+/* Menonaktifkan animasi transisi jika pengguna mengurangi gerakan. */
+@media (prefers-reduced-motion: reduce) {
+  #conversationView .message,
+  #conversationView .keyboard-key {
+    animation: none;
+    transition: none;
+  }
+}
+

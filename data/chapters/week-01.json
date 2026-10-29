@@ -1,0 +1,580 @@
+{
+  "chapter": "week-01",
+  "title": "Minggu Pertama — Interlude",
+  "type": "history",
+  "date_range": "2025-09-01 to 2025-09-07",
+  "chat_history": [
+    {
+      "id": "m1_001",
+      "date": "2025-09-01",
+      "time": "08:15",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sayang, udah nyampe kantor belum? Jangan lupa sarapan ya, itu roti lapisnya dimakan yg di tas."
+    },
+    {
+      "id": "m1_002",
+      "date": "2025-09-01",
+      "time": "08:20",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Udah. Berisik bgt lu kaya emak-emak. Lagian gua eneg makan roti jam segini."
+    },
+    {
+      "id": "m1_003",
+      "date": "2025-09-01",
+      "time": "08:21",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Dimakan sikit aja, Sweetheart. Ntar maag lu kambuh, ribet ngamuk-ngamuk ke gua."
+    },
+    {
+      "id": "m1_004",
+      "date": "2025-09-01",
+      "time": "08:22",
+      "sender": "Shaqil Naraya",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-middle-finger.png"
+    },
+    {
+      "id": "m1_005",
+      "date": "2025-09-01",
+      "time": "12:40",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Panji."
+    },
+    {
+      "id": "m1_006",
+      "date": "2025-09-01",
+      "time": "12:41",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Sialan bgt ni klien lantai 3. Minta denah diubah total padahal beton udah naik. Mau gua adukan ke tukang pukul lu skrg."
+    },
+    {
+      "id": "m1_007",
+      "date": "2025-09-01",
+      "time": "12:42",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sini kirim alamat kliennya. Biar gw samperin pake kunci inggris."
+    },
+    {
+      "id": "m1_008",
+      "date": "2025-09-01",
+      "time": "12:43",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Halah bacot. Urusin tuh oli tumpah di celana lu dlu."
+    },
+    {
+      "id": "m1_009",
+      "date": "2025-09-01",
+      "time": "19:00",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Udah di apartemen blm? Gw otw bawa makanan padang."
+    },
+    {
+      "id": "m1_010",
+      "date": "2025-09-01",
+      "time": "19:05",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih siapa suruh kesini?"
+    },
+    {
+      "id": "m1_011",
+      "date": "2025-09-01",
+      "time": "19:06",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Ga usah sok gengsi mau nolak, gw udh di basemen. Buka pintu."
+    },
+    {
+      "id": "m1_012",
+      "date": "2025-09-02",
+      "time": "10:10",
+      "sender": "Panji Tiyasa",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-cat-peeking.png"
+    },
+    {
+      "id": "m1_013",
+      "date": "2025-09-02",
+      "time": "10:11",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sayang?"
+    },
+    {
+      "id": "m1_014",
+      "date": "2025-09-02",
+      "time": "10:15",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sibuk bgt ya?"
+    },
+    {
+      "id": "m1_015",
+      "date": "2025-09-02",
+      "time": "10:30",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "APA SIH SPAM MULU. LAGI RAPAT NYET."
+    },
+    {
+      "id": "m1_016",
+      "date": "2025-09-02",
+      "time": "10:31",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Oh lg rapat. Maaf sayang. Semangat ya, nanti malem gw jemput."
+    },
+    {
+      "id": "m1_017",
+      "date": "2025-09-02",
+      "time": "10:32",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih PD bgt. Gw mau lembur."
+    },
+    {
+      "id": "m1_018",
+      "date": "2025-09-02",
+      "time": "10:33",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Lembur apa jalan sama yg lain? Gw samperin loh ya."
+    },
+    {
+      "id": "m1_019",
+      "date": "2025-09-02",
+      "time": "10:34",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Najis posesif bgt. Awas aja lu dateng, gw gampar pake maket gedung."
+    },
+    {
+      "id": "m1_020",
+      "date": "2025-09-02",
+      "time": "14:20",
+      "sender": "Panji Tiyasa",
+      "type": "image",
+      "content": "(foto)",
+      "asset_placeholder": "img/coffee-ojol-day2.jpg"
+    },
+    {
+      "id": "m1_021",
+      "date": "2025-09-02",
+      "time": "14:21",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Nih gw pesenin es kopi susu lewat ojol, disogok dlu biar mukanya ga ditekuk mulu kaya lipetan gorden."
+    },
+    {
+      "id": "m1_022",
+      "date": "2025-09-02",
+      "time": "14:23",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "... dari mana tau gw ngantuk?"
+    },
+    {
+      "id": "m1_023",
+      "date": "2025-09-02",
+      "time": "14:24",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Hafal gw muka kucel lu kalo kurang kafen. Diminum gih."
+    },
+    {
+      "id": "m1_024",
+      "date": "2025-09-02",
+      "time": "14:25",
+      "sender": "Shaqil Naraya",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-eye-roll.png"
+    },
+    {
+      "id": "m1_025",
+      "date": "2025-09-02",
+      "time": "14:26",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "tq."
+    },
+    {
+      "id": "m1_026",
+      "date": "2025-09-03",
+      "time": "11:15",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Panji, lu sibuk bgt ga di bengkel?"
+    },
+    {
+      "id": "m1_027",
+      "date": "2025-09-03",
+      "time": "11:18",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Lagi ganti oli matic nih. Kenapa, Sweetheart? Butuh bantuan apa?"
+    },
+    {
+      "id": "m1_028",
+      "date": "2025-09-03",
+      "time": "11:20",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Nanti sore antar gua ninjau site proyek di PIK ya. Sopir kantor lagi dipake bos."
+    },
+    {
+      "id": "m1_029",
+      "date": "2025-09-03",
+      "time": "11:22",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Siap boss. Jam berapa mau berangkat? Gw siapin mobil."
+    },
+    {
+      "id": "m1_030",
+      "date": "2025-09-03",
+      "time": "11:25",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Jam 4 sore. Awas lu telat 1 menit gw tinggal naik taksi."
+    },
+    {
+      "id": "m1_031",
+      "date": "2025-09-03",
+      "time": "15:45",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Gw udah di lobi PIK ya, Santai aja, selesein dlu site-nya. Gw nunggu sambil ngopi di mobil."
+    },
+    {
+      "id": "m1_032",
+      "date": "2025-09-03",
+      "time": "15:50",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Hah? Cepet bgt lu datengnya? Padahal gua masih di lantai atas."
+    },
+    {
+      "id": "m1_033",
+      "date": "2025-09-03",
+      "time": "21:00",
+      "sender": "Shaqil Naraya",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-hello-kitty-cry.png"
+    },
+    {
+      "id": "m1_034",
+      "date": "2025-09-03",
+      "time": "21:01",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Panjiiii, Kaki gw pegel bgt pake heels seharian ninjau site proyek. Sialan bgt arsitektur lapangan gini amat."
+    },
+    {
+      "id": "m1_035",
+      "date": "2025-09-03",
+      "time": "21:02",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Makanya gw udah stanby dari sore nungguin lu kelar. Sini turun ke lobi, gw bawain balsam otot di mobil."
+    },
+    {
+      "id": "m1_036",
+      "date": "2025-09-03",
+      "time": "21:05",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Ih, tau gitu tadi gua langsung turun cepet. Yaudah tunggu bentar gua beresin tablet."
+    },
+    {
+      "id": "m1_037",
+      "date": "2025-09-03",
+      "time": "21:06",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Santai, Sweetheart. Pelan-pelan jalannya, ga usah buru-buru nanti kaki lu makin sakit."
+    },
+    {
+      "id": "m1_038",
+      "date": "2025-09-04",
+      "time": "09:00",
+      "sender": "Shaqil Naraya",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-dog-smile.png"
+    },
+    {
+      "id": "m1_039",
+      "date": "2025-09-04",
+      "time": "09:01",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Kesambet apa pagi-pagi nge-chat kirim stiker gt? Mau minta apa lu?"
+    },
+    {
+      "id": "m1_040",
+      "date": "2025-09-04",
+      "time": "09:02",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih dibilangin baik-baik malah curigaan. Sialan emang."
+    },
+    {
+      "id": "m1_041",
+      "date": "2025-09-04",
+      "time": "09:03",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Hahaha. Candanya kurang asem ya? Mau dibawain apa siang ini?"
+    },
+    {
+      "id": "m1_042",
+      "date": "2025-09-04",
+      "time": "09:04",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Terserah, asal jangan makanan bengkel lu yg bau oli."
+    },
+    {
+      "id": "m1_043",
+      "date": "2025-09-04",
+      "time": "13:00",
+      "sender": "Shaqil Naraya",
+      "type": "image",
+      "content": "(foto)",
+      "asset_placeholder": "img/lunch-bento-shaqil.jpg"
+    },
+    {
+      "id": "m1_044",
+      "date": "2025-09-04",
+      "time": "13:01",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Makan siang sushi gw dateng. Tq ya."
+    },
+    {
+      "id": "m1_045",
+      "date": "2025-09-04",
+      "time": "13:05",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sama-sama manis. Dihabisin, jgn nyisa."
+    },
+    {
+      "id": "m1_046",
+      "date": "2025-09-05",
+      "time": "16:45",
+      "sender": "Panji Tiyasa",
+      "type": "missed_call",
+      "content": "(Panggilan tak terjawab - 1x)"
+    },
+    {
+      "id": "m1_047",
+      "date": "2025-09-05",
+      "time": "16:46",
+      "sender": "Panji Tiyasa",
+      "type": "missed_call",
+      "content": "(Panggilan tak terjawab - 2x)"
+    },
+    {
+      "id": "m1_048",
+      "date": "2025-09-05",
+      "time": "16:50",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sayang? Diangkat dlu telponnya, kangen nih."
+    },
+    {
+      "id": "m1_049",
+      "date": "2025-09-05",
+      "time": "16:52",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Read doang. Awas ya kalo keciduk flirting sama berondong kantor."
+    },
+    {
+      "id": "m1_050",
+      "date": "2025-09-05",
+      "time": "17:15",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "APAAN SIH SPAM TELPON MULU. Orang gw pake hp buat presentasi klien! Gila ya lu!"
+    },
+    {
+      "id": "m1_051",
+      "date": "2025-09-05",
+      "time": "17:16",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Maaf Sweetheart, gw kangen makanya nelfon. Biarin pacar gw kan galak, hrs dipantau ketat biar ga diambil orang."
+    },
+    {
+      "id": "m1_052",
+      "date": "2025-09-05",
+      "time": "17:18",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Bacot. Gw otw pulang, jemput di basement 10 menit lg."
+    },
+    {
+      "id": "m1_053",
+      "date": "2025-09-06",
+      "time": "11:00",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Bangun woy, ke bengkel gw temenin makan mie instan cup."
+    },
+    {
+      "id": "m1_054",
+      "date": "2025-09-06",
+      "time": "11:30",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Ogah bgt. Hari libur malah disuruh ke kandang monyet bau oli. Malas pake helm bikin rambut lepek."
+    },
+    {
+      "id": "m1_055",
+      "date": "2025-09-06",
+      "time": "11:31",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Gw bawa helm fullface biar rambut mahal lu aman. Minta dicium emang mulutnya galak bgt. Gw jemput pake vespa, otw 10 menit dari skrg."
+    },
+    {
+      "id": "m1_056",
+      "date": "2025-09-06",
+      "time": "11:35",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Bawain jaket kulit lu yg wangi kayu manis itu. Di luar dingin."
+    },
+    {
+      "id": "m1_057",
+      "date": "2025-09-06",
+      "time": "11:36",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Siap, Ratu."
+    },
+    {
+      "id": "m1_058",
+      "date": "2025-09-07",
+      "time": "14:00",
+      "sender": "Shaqil Naraya",
+      "type": "image",
+      "content": "(foto)",
+      "asset_placeholder": "img/hello-kitty-bed-shaqil.jpg"
+    },
+    {
+      "id": "m1_059",
+      "date": "2025-09-07",
+      "time": "14:01",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Nih liat kasur baru gw, jangan diomelin ya."
+    },
+    {
+      "id": "m1_060",
+      "date": "2025-09-07",
+      "time": "14:02",
+      "sender": "Panji Tiyasa",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-thumbs-up.png"
+    },
+    {
+      "id": "m1_061",
+      "date": "2025-09-07",
+      "time": "14:03",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Kaya kamar anak TK Hello Kitty semua, padahal yg punya doyan misuh-misuh. Tapi lucu kok mirip yg punya."
+    },
+    {
+      "id": "m1_062",
+      "date": "2025-09-07",
+      "time": "14:05",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "BACOT. Lucu tau. Jgn dihina-hina boneka kesayangan gw atau lu ga dapet jatah telpon seminggu."
+    },
+    {
+      "id": "m1_063",
+      "date": "2025-09-07",
+      "time": "14:06",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Iya ampun, Sweetheart. Lucu kok, mirip yg punya galaknya pas minta meluk."
+    },
+    {
+      "id": "m1_064",
+      "date": "2025-09-07",
+      "time": "14:07",
+      "sender": "Shaqil Naraya",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-middle-finger.png"
+    },
+    {
+      "id": "m1_065",
+      "date": "2025-09-07",
+      "time": "21:30",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Malam, Sayang. Besok udah senin lagi nih. Jangan lupa minum vitamin yg gw taro di meja minibar kemaren malem."
+    },
+    {
+      "id": "m1_066",
+      "date": "2025-09-07",
+      "time": "21:32",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Iya udah gw minum dari tadi, bawel."
+    },
+    {
+      "id": "m1_067",
+      "date": "2025-09-07",
+      "time": "21:33",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Kalo bos lu rewel besok, bilang gw. Ntar gw samperin bawa kunci inggris."
+    },
+    {
+      "id": "m1_068",
+      "date": "2025-09-07",
+      "time": "21:35",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih gangster bgt laki gw. Dah ah mau tidur, capek."
+    },
+    {
+      "id": "m1_069",
+      "date": "2025-09-07",
+      "time": "21:36",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Met tidur Sweetheart. Mimpiin gw ya."
+    },
+    {
+      "id": "m1_070",
+      "date": "2025-09-07",
+      "time": "21:37",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Ogah, ntar mimpi buruk bau oli. Night."
+    }
+  ]
+}
+
+

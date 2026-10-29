@@ -1,0 +1,305 @@
+{
+  "chapter": "week-02",
+  "title": "Minggu Kedua — Interlude",
+  "type": "history",
+  "date_range": "2025-09-08 to 2025-09-14",
+  "chat_history": [
+    {
+      "id": "m2_001",
+      "date": "2025-09-08",
+      "time": "09:00",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Panji, lu sibuk bgt emang hari ini?"
+    },
+    {
+      "id": "m2_002",
+      "date": "2025-09-08",
+      "time": "09:15",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Lagi bongkar mesin truk langganan nih, Sayang. Kenapa? Kangen ya?"
+    },
+    {
+      "id": "m2_003",
+      "date": "2025-09-08",
+      "time": "09:16",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih najis. Orang mau nitip jemputan dokumen ke client daerah arteri."
+    },
+    {
+      "id": "m2_004",
+      "date": "2025-09-08",
+      "time": "09:18",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Oh suruh kurir anak bengkel gw aja yg kesana. Lu diem aja di ruangan AC, jangan kelyaran panas-panasan."
+    },
+    {
+      "id": "m2_005",
+      "date": "2025-09-08",
+      "time": "09:20",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Iya bawel."
+    },
+    {
+      "id": "m2_006",
+      "date": "2025-09-08",
+      "time": "21:34",
+      "sender": "Panji Tiyasa",
+      "type": "voice_note",
+      "content": "",
+      "duration_seconds": 12,
+      "audio_src": null,
+      "transcript": "Sayang, gue udah di depan. Lama banget, sih. Jangan bilang lo masih milih baju."
+    },
+    {
+      "id": "m2_007",
+      "date": "2025-09-08",
+      "time": "21:36",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Bentar, ngadi-ngadi lu! Ini gua lagi pakai sepatu."
+    },
+    {
+      "id": "m2_008",
+      "date": "2025-09-09",
+      "time": "13:30",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Sayang, nanti malem gw telat ya. Ada mobil masuk darurat di bengkel."
+    },
+    {
+      "id": "m2_009",
+      "date": "2025-09-09",
+      "time": "14:00",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Oh. Terserah."
+    },
+    {
+      "id": "m2_010",
+      "date": "2025-09-09",
+      "time": "14:01",
+      "sender": "Panji Tiyasa",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-cat-confused.png"
+    },
+    {
+      "id": "m2_011",
+      "date": "2025-09-09",
+      "time": "14:02",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Kok 'terserah' doang? Ngambek ya?"
+    },
+    {
+      "id": "m2_012",
+      "date": "2025-09-09",
+      "time": "14:05",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Siapa juga yg ngambek. Urusin aja tuh mobil lu sampe pagi."
+    },
+    {
+      "id": "m2_013",
+      "date": "2025-09-10",
+      "time": "18:30",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Panji."
+    },
+    {
+      "id": "m2_014",
+      "date": "2025-09-10",
+      "time": "18:31",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Lu di mana sih? Dari siang di-chat ga dibales-bales!"
+    },
+    {
+      "id": "m2_015",
+      "date": "2025-09-10",
+      "time": "19:00",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Sialan bgt emang. Dihubungin susah bgt kaya pejabat negara."
+    },
+    {
+      "id": "m2_016",
+      "date": "2025-09-10",
+      "time": "19:05",
+      "sender": "Shaqil Naraya",
+      "type": "call",
+      "call_type": "voice",
+      "status": "missed",
+      "duration_seconds": null,
+      "content": "Panggilan suara tak terjawab"
+    },
+    {
+      "id": "m2_017",
+      "date": "2025-09-10",
+      "time": "19:10",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Bego ya lu, panji! Kalau ga mau ngabarin bilang dari awal, jangan bikin orang nungguin di apartemen sendirian!"
+    },
+    {
+      "id": "m2_018",
+      "date": "2025-09-10",
+      "time": "19:20",
+      "sender": "Panji Tiyasa",
+      "type": "voice_note",
+      "content": "",
+      "duration_seconds": 18,
+      "audio_src": null,
+      "transcript": "Maaf banget, Sayang. HP gue tadi mati di bawah kolong mesin truk, gak dengar apa-apa. Ini gue udah di lobi bawa martabak kesukaan lo."
+    },
+    {
+      "id": "m2_019",
+      "date": "2025-09-10",
+      "time": "19:22",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "... (read doang VN bariton rendah Panji, diem langsung)"
+    },
+    {
+      "id": "m2_020",
+      "date": "2025-09-10",
+      "time": "19:25",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Buka pintu ya, Sweetheart? Jangan ngambek lagi."
+    },
+    {
+      "id": "m2_021",
+      "date": "2025-09-11",
+      "time": "08:00",
+      "sender": "Shaqil Naraya",
+      "type": "sticker",
+      "content": "(stiker)",
+      "asset_placeholder": "img/sticker-cat-cross.png"
+    },
+    {
+      "id": "m2_022",
+      "date": "2025-09-11",
+      "time": "08:02",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Masih ngambek toh ratu galak kita? Semalem kan udah disuapin martabak manis."
+    },
+    {
+      "id": "m2_023",
+      "date": "2025-09-11",
+      "time": "08:05",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Bacot. Pokoknya lu traktir kopi starbucks sebulan sebagai ganti rugi."
+    },
+    {
+      "id": "m2_024",
+      "date": "2025-09-11",
+      "time": "08:06",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Berangkat kerja dulu, nanti siang gw kirim kartu kredit gw khusus buat lu jajan kopi."
+    },
+    {
+      "id": "m2_025",
+      "date": "2025-09-12",
+      "time": "15:10",
+      "sender": "Shaqil Naraya",
+      "type": "image",
+      "content": "(foto)",
+      "asset_placeholder": "img/office-outfit-shaqil.jpg"
+    },
+    {
+      "id": "m2_026",
+      "date": "2025-09-12",
+      "time": "15:11",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Outfit hari ini gila sih, klien puji terus. Tapi cape bgt."
+    },
+    {
+      "id": "m2_027",
+      "date": "2025-09-12",
+      "time": "15:12",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Kemeja sutra lu emang paling bener bikin mata gw khilaf. Pulang kerja lurus ke bengkel gw."
+    },
+    {
+      "id": "m2_028",
+      "date": "2025-09-12",
+      "time": "15:15",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Ogah, bau oli."
+    },
+    {
+      "id": "m2_029",
+      "date": "2025-09-12",
+      "time": "20:30",
+      "sender": "Panji Tiyasa",
+      "type": "call",
+      "call_type": "video",
+      "status": "completed",
+      "duration_seconds": 642,
+      "content": "Video call · 10 menit 42 detik"
+    },
+    {
+      "id": "m2_030",
+      "date": "2025-09-13",
+      "time": "12:00",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Jemput skrg ya. Gw tunggu di lobby."
+    },
+    {
+      "id": "m2_031",
+      "date": "2025-09-13",
+      "time": "12:05",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih maksa bgt. Iya ni lagi turun lift."
+    },
+    {
+      "id": "m2_032",
+      "date": "2025-09-14",
+      "time": "20:00",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Besok senin lagi. Males bgt ketemu bos sinting."
+    },
+    {
+      "id": "m2_033",
+      "date": "2025-09-14",
+      "time": "20:01",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Tenang, ada pawang galak yg siap belain lu kalau dia macam-macam."
+    },
+    {
+      "id": "m2_034",
+      "date": "2025-09-14",
+      "time": "20:03",
+      "sender": "Shaqil Naraya",
+      "type": "text",
+      "content": "Dih sok pahlawan kesiangan. Dah mau tidur, jangan ganggu."
+    },
+    {
+      "id": "m2_035",
+      "date": "2025-09-14",
+      "time": "20:05",
+      "sender": "Panji Tiyasa",
+      "type": "text",
+      "content": "Selamat tidur, Ratu Galak. Mimpiin gw ya."
+    }
+  ]
+}
+
+

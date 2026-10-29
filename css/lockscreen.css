@@ -1,0 +1,640 @@
+
+/* =========================================================
+   INTERLUDE AU — LOCKSCREEN & PASSCODE
+   Android-first • Shaqil wallpaper • Existing HTML preserved
+   ========================================================= */
+
+/* 1. LOCKSCREEN BASE */
+#lockView {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  background: #100f15;
+  color: #fff;
+  padding:
+    env(safe-area-inset-top, 0px)
+    0
+    env(safe-area-inset-bottom, 0px);
+}
+
+#lockView.active {
+  display: flex;
+  flex-direction: column;
+}
+
+#lockView,
+#lockView * {
+  box-sizing: border-box;
+}
+
+/* 2. LOCKSCREEN WALLPAPER */
+#lockView .wallpaper,
+#lockView .lockscreen-wallpaper {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  background-image: url("https://cdn.rapidfile.cc/4K9nRIONqE/lockscreen-shaqil.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: scale(1.015);
+}
+
+#lockView .lockscreen-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 7, 12, 0.32) 0%,
+      rgba(8, 7, 12, 0.04) 28%,
+      rgba(8, 7, 12, 0.10) 53%,
+      rgba(8, 7, 12, 0.62) 100%
+    );
+}
+
+#lockView::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 35%,
+    rgba(0, 0, 0, 0.18) 100%
+  );
+}
+
+/* 3. STATUS BAR */
+#lockView .status-bar {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  min-height: 38px;
+  padding: 5px 25px 0;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+#lockView .status-time {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+#lockView .status-icons {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  min-width: 0;
+}
+
+#lockView .status-icons svg {
+  display: block;
+  width: 15px;
+  height: 13px;
+  flex: 0 0 auto;
+}
+
+/* Dynamic Island tetap menggunakan elemen dari main.css. */
+
+/* 4. MAIN LOCK CONTENT */
+#lockView .lock-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  padding: clamp(24px, 5vh, 48px) 22px 0;
+}
+
+#lockView .lock-owner {
+  display: none !important;
+}
+
+#lockView .lock-date {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.19em;
+  line-height: 1.5;
+  text-align: center;
+  text-transform: uppercase;
+  text-shadow: 0 1px 12px rgba(0, 0, 0, 0.3);
+}
+
+#lockView .lock-clock {
+  margin: 5px 0 0;
+  color: #fff;
+  font-size: clamp(68px, 20vw, 88px);
+  font-weight: 300;
+  letter-spacing: -0.075em;
+  line-height: 1.04;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 3px 28px rgba(0, 0, 0, 0.2);
+}
+
+/* 5. NOTIFICATION STACK */
+#lockView .lock-notifications {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 100%;
+  max-width: 340px;
+  margin: clamp(24px, 5vh, 44px) auto 0;
+}
+
+#lockView .lock-notification {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  width: 100%;
+  min-width: 0;
+  padding: 12px 13px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 17px;
+  background: rgba(27, 25, 34, 0.48);
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.12);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+#lockView .notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 31px;
+  height: 31px;
+  flex: 0 0 31px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+#lockView .notification-content {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#lockView .notification-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin: 0 0 4px;
+}
+
+#lockView .notification-title {
+  overflow: hidden;
+  color: rgba(255, 255, 255, 0.96);
+  font-size: 11px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#lockView .notification-time {
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.56);
+  font-size: 9px;
+}
+
+#lockView .notification-message {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.91);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+/* 6. BOTTOM CONTROLS */
+#lockView .lock-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: auto;
+  padding: 12px 22px 10px;
+}
+
+#lockView .lock-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 340px;
+  margin: 0 auto 20px;
+}
+
+#lockView .lock-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 49px;
+  height: 49px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.19);
+  border-radius: 50%;
+  background: rgba(28, 26, 33, 0.48);
+  color: #fff;
+  box-shadow: 0 5px 18px rgba(0, 0, 0, 0.14);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 130ms ease,
+    background 130ms ease;
+}
+
+#lockView .lock-control svg {
+  display: block;
+  width: 21px;
+  height: 21px;
+}
+
+#lockView .lock-control:active {
+  transform: scale(0.92);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#lockView .lock-swipe-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 150px;
+  min-height: 42px;
+  padding: 4px 12px 0;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.83);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#lockView .swipe-line {
+  display: block;
+  width: 37px;
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.2);
+}
+
+#lockView .lock-swipe-hint:active .swipe-line {
+  transform: translateY(2px);
+}
+
+/* 7. PASSCODE SCREEN BASE */
+#passcodeView {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  background: #121017;
+  color: #fff;
+}
+
+#passcodeView.active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#passcodeView::before {
+  content: "";
+  position: absolute;
+  inset: -18px;
+  z-index: -2;
+  background-image: url("https://cdn.rapidfile.cc/4K9nRIONqE/lockscreen-shaqil.jpg");
+  background-position: center;
+  background-size: cover;
+  filter: blur(16px);
+  transform: scale(1.06);
+}
+
+#passcodeView::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(12, 10, 17, 0.57);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
+  pointer-events: none;
+}
+
+#passcodeView,
+#passcodeView * {
+  box-sizing: border-box;
+}
+
+#passcodeView .passcode-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 360px;
+  max-height: 100%;
+  overflow-y: auto;
+  padding:
+    max(28px, env(safe-area-inset-top, 0px))
+    28px
+    max(18px, env(safe-area-inset-bottom, 0px));
+  scrollbar-width: none;
+}
+
+#passcodeView .passcode-content::-webkit-scrollbar {
+  display: none;
+}
+
+#passcodeView .eyebrow {
+  margin: 0 0 12px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 9px;
+  font-weight: 650;
+  letter-spacing: 0.2em;
+  text-align: center;
+}
+
+#passcodeView h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(25px, 7vw, 31px);
+  font-weight: 400;
+  letter-spacing: -0.045em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+#passcodeView .muted {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 8. PASSCODE DOTS */
+#passcodeView .passcode-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 17px;
+  min-height: 15px;
+  margin: 30px 0 28px;
+}
+
+#passcodeView .passcode-dots span {
+  display: block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 50%;
+  background: transparent;
+  transition:
+    background 150ms ease,
+    transform 150ms ease,
+    border-color 150ms ease;
+}
+
+#passcodeView .passcode-dots span.filled {
+  transform: scale(1.08);
+  border-color: #fff;
+  background: #fff;
+}
+
+/* 9. PASSCODE KEYPAD */
+#passcodeView .passcode-pad {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px 21px;
+  width: min(100%, 270px);
+  margin: 0 auto;
+}
+
+#passcodeView .passcode-pad button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  max-height: 68px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.23);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.09);
+  color: #fff;
+  font-family: inherit;
+  font-size: 23px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 100ms ease,
+    background 100ms ease,
+    border-color 100ms ease,
+    box-shadow 100ms ease;
+}
+
+#passcodeView .passcode-pad button:active {
+  transform: translateY(3px) scale(0.96);
+  border-color: rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.23);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.16);
+}
+
+#passcodeView .passcode-pad button[data-passcode="clear"],
+#passcodeView .passcode-pad button[data-passcode="enter"] {
+  border-color: transparent;
+  background: rgba(255, 255, 255, 0.035);
+  font-size: 21px;
+}
+
+#passcodeView .passcode-pad button:focus-visible,
+#passcodeView .text-button:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.8);
+  outline-offset: 3px;
+}
+
+/* 10. BACK BUTTON AND ERROR */
+#passcodeView .text-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin: 18px 0 0;
+  padding: 8px 14px;
+  border: 0;
+  border-radius: 99px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.82);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#passcodeView .text-button:active {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+#passcodeView .passcode-error {
+  min-height: 17px;
+  margin: 4px 0 0;
+  color: #ffc1cb;
+  font-size: 11px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* 11. SHORT SCREENS */
+@media (max-height: 740px) {
+  #lockView .lock-content {
+    padding-top: 20px;
+  }
+
+  #lockView .lock-clock {
+    font-size: clamp(58px, 17vw, 74px);
+  }
+
+  #lockView .lock-notifications {
+    gap: 7px;
+    margin-top: 18px;
+  }
+
+  #lockView .lock-notification {
+    padding: 9px 11px;
+    border-radius: 14px;
+  }
+
+  #lockView .lock-controls {
+    margin-bottom: 10px;
+  }
+
+  #lockView .lock-control {
+    width: 43px;
+    height: 43px;
+  }
+
+  #lockView .lock-bottom {
+    padding-bottom: 5px;
+  }
+
+  #passcodeView .passcode-content {
+    padding-top: 18px;
+    padding-bottom: 12px;
+  }
+
+  #passcodeView .passcode-dots {
+    margin: 18px 0;
+  }
+
+  #passcodeView .passcode-pad {
+    gap: 9px 18px;
+    width: min(100%, 240px);
+  }
+
+  #passcodeView .passcode-pad button {
+    max-height: 59px;
+    font-size: 21px;
+  }
+
+  #passcodeView .text-button {
+    min-height: 34px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-height: 620px) {
+  #lockView .lock-content {
+    padding-top: 12px;
+  }
+
+  #lockView .lock-clock {
+    font-size: 54px;
+  }
+
+  #lockView .lock-notifications {
+    margin-top: 12px;
+  }
+
+  #lockView .lock-notification:nth-child(3) {
+    display: none;
+  }
+
+  #passcodeView .eyebrow {
+    margin-bottom: 7px;
+  }
+
+  #passcodeView h2 {
+    font-size: 23px;
+  }
+
+  #passcodeView .muted {
+    margin-top: 5px;
+  }
+
+  #passcodeView .passcode-dots {
+    margin: 12px 0;
+  }
+
+  #passcodeView .passcode-pad {
+    gap: 6px 15px;
+    width: min(100%, 210px);
+  }
+
+  #passcodeView .passcode-pad button {
+    max-height: 48px;
+    font-size: 19px;
+  }
+
+  #passcodeView .text-button {
+    margin-top: 6px;
+  }
+}
+
+/* 12. REDUCED MOTION */
+@media (prefers-reduced-motion: reduce) {
+  #lockView *,
+  #passcodeView * {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
