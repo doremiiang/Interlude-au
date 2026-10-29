@@ -22,17 +22,70 @@ import {
   window.__interludeAppInitialized = true;
 
   // Kontak ini mengikuti ID yang tersedia di HTML saat ini.
-  const CONTACTS = {
-    shaq: {
-      name: "Shaq",
-      status: "",
-      avatar: "S"
-    },
-    kris: {
-      name: "Kris",
-      status: "",
-      avatar: "K"
-    }
+  
+const CONTACTS = {
+  panji: {
+    name: "Panji Tiyasa",
+    status: "Online",
+    avatar: "P"
+  },
+  elvian: {
+    name: "Bang Pian",
+    status: "Online",
+    avatar: "E"
+  },
+  esta: {
+    name: "Bang Esta",
+    status: "Online",
+    avatar: "E"
+  },
+  anta: {
+    name: "Anta",
+    status: "Online",
+    avatar: "A"
+  },
+  samara: {
+    name: "Mara",
+    status: "Online",
+    avatar: "M"
+  },
+  helio: {
+    name: "Helio",
+    status: "Online",
+    avatar: "H"
+  },
+  theo: {
+    name: "Theo",
+    status: "Online",
+    avatar: "T"
+  },
+  kenan: {
+    name: "Kenan",
+    status: "Online",
+    avatar: "K"
+  },
+  januar: {
+    name: "Januar",
+    status: "Online",
+    avatar: "J"
+  },
+  marka: {
+    name: "Marka",
+    status: "Online",
+    avatar: "M"
+  },
+  feri: {
+    name: "Papa",
+    status: "Online",
+    avatar: "F"
+  },
+  bian: {
+    name: "Papi",
+    status: "Online",
+    avatar: "B"
+  }
+};
+
   
     return true;
   }
