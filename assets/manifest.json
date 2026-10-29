@@ -1,0 +1,19 @@
+{
+  "wallpapers": {
+    "home": {
+      "src": "https://cdn.rapidfile.cc/Eya8KhktLW/wpp-shaqil.jpg",
+      "fit": "cover",
+      "position": "center"
+    },
+    "lockscreen": {
+      "src": "https://cdn.rapidfile.cc/4K9nRIONqE/lockscreen-shaqil.jpg",
+      "fit": "cover",
+      "position": "center"
+    },
+    "passcode": {
+      "src": "https://cdn.rapidfile.cc/4K9nRIONqE/lockscreen-shaqil.jpg",
+      "fit": "cover",
+      "position": "center"
+    }
+  }
+}
