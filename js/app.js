@@ -21,8 +21,6 @@ import {
   if (window.__interludeAppInitialized) return;
   window.__interludeAppInitialized = true;
 
-  const DEMO_PIN = "1201";
-
   const VIEW_IDS = [
     "lockView",
     "passcodeView",
