@@ -98,23 +98,25 @@
 }
 
 /* Menampilkan tanggal tepat di atas jam besar. */
+
+/* Tanggal: lebih dekat ke jam, tetap proporsional di layar kecil */
 #lockView .lock-date {
-  margin-top: clamp(42px, 9vh, 84px);
+  margin-top: clamp(32px, 6vh, 58px);
   color: rgba(255, 255, 255, 0.82);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.025em;
   text-align: center;
 }
 
-/* Membuat jam menjadi elemen visual utama pada lockscreen. */
+/* Jam utama: ukuran lebih terkendali */
 #lockView .lock-clock {
-  margin-top: 2px;
+  margin-top: 4px;
   color: #fff;
-  font-size: clamp(68px, 20vw, 100px);
-  font-weight: 250;
-  line-height: 0.98;
-  letter-spacing: -0.075em;
+  font-size: clamp(54px, 15vw, 76px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.065em;
   text-align: center;
   font-variant-numeric: tabular-nums;
   text-shadow: 0 4px 32px rgba(0, 0, 0, 0.16);
