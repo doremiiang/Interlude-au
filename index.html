@@ -15,6 +15,24 @@
   <link rel="stylesheet" href="./css/lockscreen.css">
   <link rel="stylesheet" href="./css/home.css">
   <link rel="stylesheet" href="./css/apps.css">
+  
+<style>
+  /* Pastikan hanya layar aktif yang terlihat. */
+  #phoneScreen > .view {
+    display: none;
+  }
+
+  #phoneScreen > .view.active {
+    display: flex;
+  }
+
+  /* Tampilan awal dan keypad mengikuti status aktif. */
+  #phoneScreen > #lockView.active,
+  #phoneScreen > #passcodeView.active {
+    display: flex;
+  }
+</style>
+
 </head>
 
 <body>
