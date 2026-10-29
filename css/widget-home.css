@@ -1,0 +1,363 @@
+/* Interlude AU — Claude-inspired home widgets */
+/* Semua selector dibuat khusus agar tidak merusak view lama. */
+
+#homeView {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+#homeView > .home-wallpaper {
+  z-index: 0;
+}
+
+#homeView .home-header,
+#homeView > .home-widget,
+#homeView > .app-grid,
+#homeView > .home-page-indicator,
+#homeView > .home-dock {
+  display: none !important;
+}
+
+#homeView .claude-home {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  overflow-y: auto;
+  padding: max(46px, env(safe-area-inset-top)) 18px 26px;
+  color: #fff;
+  scrollbar-width: none;
+}
+
+#homeView .claude-home::-webkit-scrollbar {
+  display: none;
+}
+
+.cl-home-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 24px;
+  font-size: 13px;
+  font-weight: 700;
+  text-shadow: 0 1px 5px #0005;
+}
+
+.cl-home-status-icons {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.cl-home-heading {
+  padding: 4px 2px 0;
+}
+
+.cl-home-eyebrow {
+  margin-bottom: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  opacity: .75;
+}
+
+.cl-home-heading h2 {
+  font-size: 24px;
+  line-height: 1.2;
+  font-weight: 650;
+  letter-spacing: -.7px;
+}
+
+.cl-home-heading h2 span {
+  display: block;
+  font-weight: 350;
+}
+
+.cl-home-widgets {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.cl-widget {
+  min-width: 0;
+  min-height: 168px;
+  padding: 15px;
+  border: 1px solid #ffffff35;
+  border-radius: 23px;
+  text-align: left;
+  box-shadow: 0 8px 24px #0002;
+  overflow: hidden;
+}
+
+.cl-calendar {
+  background: linear-gradient(145deg, #fffdf8, #f5e8e9);
+  color: #30252c;
+}
+
+.cl-widget-kicker {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  opacity: .7;
+}
+
+.cl-calendar .cl-day {
+  margin-top: 12px;
+  color: #e45f83;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cl-calendar .cl-date {
+  margin-top: 1px;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1.08;
+}
+
+.cl-calendar .cl-event {
+  margin-top: 9px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #766570;
+}
+
+.cl-weather {
+  position: relative;
+  background: linear-gradient(150deg, #9daed7, #8278b5 65%, #bd8cb9);
+  color: white;
+}
+
+.cl-weather .cl-weather-city {
+  margin-top: 13px;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.cl-weather .cl-weather-temp {
+  margin-top: 2px;
+  font-size: 43px;
+  font-weight: 300;
+  line-height: 1.15;
+}
+
+.cl-weather .cl-weather-desc {
+  margin-top: 7px;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.cl-weather .cl-weather-range {
+  margin-top: 4px;
+  font-size: 10px;
+  opacity: .85;
+}
+
+.cl-find {
+  display: grid;
+  grid-template-columns: 78px minmax(0, 1fr);
+  align-items: center;
+  gap: 13px;
+  padding: 13px;
+  border: 1px solid #ffffff40;
+  border-radius: 23px;
+  background: #ffffff24;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 8px 24px #0002;
+}
+
+.cl-find-map {
+  position: relative;
+  height: 78px;
+  border-radius: 17px;
+  overflow: hidden;
+  background:
+    linear-gradient(30deg, transparent 42%, #ffffff90 43% 47%, transparent 48%),
+    linear-gradient(120deg, transparent 30%, #ffffff70 31% 36%, transparent 37%),
+    linear-gradient(145deg, #d5e6d2, #c6d8ed 60%, #e8d7df);
+}
+
+.cl-find-map::before,
+.cl-find-map::after {
+  content: "";
+  position: absolute;
+  background: #ffffffa0;
+  border-radius: 10px;
+  transform: rotate(-24deg);
+}
+
+.cl-find-map::before {
+  width: 130%;
+  height: 7px;
+  left: -10%;
+  top: 40%;
+}
+
+.cl-find-map::after {
+  width: 7px;
+  height: 130%;
+  left: 55%;
+  top: -15%;
+}
+
+.cl-find-pin {
+  position: absolute;
+  z-index: 1;
+  left: 36%;
+  top: 23%;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: 2px solid #fff;
+  border-radius: 50% 50% 50% 8px;
+  background: #d98aa9;
+  transform: rotate(-45deg);
+  box-shadow: 0 2px 7px #0002;
+}
+
+.cl-find-pin span {
+  transform: rotate(45deg);
+}
+
+.cl-find-copy {
+  min-width: 0;
+}
+
+.cl-find-copy .cl-widget-kicker {
+  margin-bottom: 5px;
+  color: #ffffffc9;
+}
+
+.cl-find-copy h3 {
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cl-find-copy p {
+  margin-top: 3px;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #ffffffd9;
+}
+
+.cl-apps-title {
+  margin: 1px 2px -3px;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: .8;
+}
+
+.cl-app-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px 8px;
+}
+
+.cl-app-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  color: #fff;
+}
+
+.cl-app-icon {
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border: 1px solid #ffffff40;
+  border-radius: 17px;
+  background: #ffffff25;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 5px 13px #0002;
+  font-size: 25px;
+  transition: transform .15s ease;
+}
+
+.cl-app-item:active .cl-app-icon {
+  transform: scale(.9);
+}
+
+.cl-app-label {
+  max-width: 100%;
+  font-size: 11px;
+  text-align: center;
+  text-shadow: 0 1px 4px #0006;
+}
+
+.cl-home-dock {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: auto;
+  padding: 12px;
+  border: 1px solid #ffffff35;
+  border-radius: 25px;
+  background: #ffffff29;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.cl-dock-item {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  border-radius: 17px;
+  background: #ffffffd9;
+  color: #54445e;
+  font-size: 24px;
+  transition: transform .15s ease;
+}
+
+.cl-dock-item:active {
+  transform: scale(.9);
+}
+
+@media (max-height: 720px) {
+  #homeView .claude-home {
+    gap: 10px;
+    padding-top: 38px;
+  }
+
+  .cl-widget {
+    min-height: 145px;
+    padding: 12px;
+  }
+
+  .cl-calendar .cl-date {
+    font-size: 40px;
+  }
+
+  .cl-find-map {
+    height: 65px;
+  }
+
+  .cl-app-grid {
+    gap: 10px 8px;
+  }
+
+  .cl-app-icon {
+    width: 47px;
+    height: 47px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cl-app-icon,
+  .cl-dock-item {
+    transition: none;
+  }
+  }
