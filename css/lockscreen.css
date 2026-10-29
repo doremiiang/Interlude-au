@@ -370,3 +370,20 @@
 
 /* ===== END FIX 06 ===== */
 
+
+/* FIX 09 — REMOVE TINY CLOCK DECORATIONS */
+
+/* Hilangkan dekorasi pseudo-element di area status bar */
+#lockView .status-bar::before,
+#lockView .status-icons::before,
+#lockView .status-icons::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Hilangkan elemen dekoratif kecil di sekitar jam */
+#lockView .status-icons .dot,
+#lockView .status-icons .indicator,
+#lockView .status-icons .status-dot {
+  display: none !important;
+}
