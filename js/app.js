@@ -86,10 +86,6 @@ const CONTACTS = {
   }
 };
 
-  
-    return true;
-  }
-
   function showToast(message) {
     const toast = byId("toast");
     if (!toast) return;
