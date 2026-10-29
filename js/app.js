@@ -3,6 +3,17 @@
    Bagian 1/3: Konfigurasi, utilitas, dan navigasi
    ========================================================= */
 
+import {
+  DEMO_PIN,
+  VIEW_IDS,
+  $,
+  $$,
+  byId,
+  state,
+  getViews,
+  showView
+} from "./state.js";
+
 (() => {
   "use strict";
 
