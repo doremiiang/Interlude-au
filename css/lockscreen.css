@@ -559,3 +559,89 @@
     transition: none;
   }
 }
+
+
+/* =========================================
+   INTERLUDE FIX — LOCKSCREEN ANDROID
+   Fix posisi notifikasi + ikon kontrol bawah
+   ========================================= */
+
+/* 1. Turunkan kartu notifikasi sedikit */
+#lockView #lockNotifications {
+  position: relative;
+  top: 22px;
+  z-index: 5;
+}
+
+/* 2. Pastikan area kontrol bawah tetap terlihat */
+#lockView .lock-bottom {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: max(24px, env(safe-area-inset-bottom));
+  width: 100%;
+  padding: 0 20px;
+  z-index: 20;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 3. Posisi tombol flashlight dan kamera */
+#lockView .lock-controls {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 24px;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 4. Tampilan lingkaran tombol */
+#lockView .lock-control {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 54px;
+  width: 54px;
+  height: 54px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.13);
+  color: #ffffff !important;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* 5. Paksa ikon SVG tampil */
+#lockView .lock-control svg {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px;
+  flex-shrink: 0;
+  color: #ffffff !important;
+  stroke: currentColor !important;
+  overflow: visible;
+}
+
+/* 6. Pastikan garis swipe tetap terlihat */
+#lockView .lock-swipe-hint {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  color: #ffffff;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
