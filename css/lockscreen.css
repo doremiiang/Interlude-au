@@ -567,10 +567,13 @@
    ========================================= */
 
 /* 1. Turunkan kartu notifikasi sedikit */
+
 #lockView #lockNotifications {
   position: relative;
-  top: 22px;
+  top: 0;
   z-index: 5;
+  margin-top: 64px !important;
+  transform: translateY(0);
 }
 
 /* 2. Pastikan area kontrol bawah tetap terlihat */
